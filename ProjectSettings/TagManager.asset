@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Ground
   - InstantDeath
+  - EndPole
   layers:
   - Default
   - TransparentFX
@@ -42,6 +43,9 @@ TagManager:
   m_SortingLayers:
   - name: Background
     uniqueID: 58556075
+    locked: 0
+  - name: Start Pole
+    uniqueID: 708651059
     locked: 0
   - name: Default
     uniqueID: 0

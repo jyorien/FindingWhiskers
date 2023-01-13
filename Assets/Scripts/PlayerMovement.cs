@@ -37,12 +37,9 @@ public class PlayerMovement : MonoBehaviour
     {
         switch (collision.collider.tag)
         {
+            // reset jump count so player can jump / double jump again
             case "Ground":
                 jumpCount = 0;
-                break;
-
-            case "InstantDeath":
-                Debug.Log("Player dies");
                 break;
         }
         
