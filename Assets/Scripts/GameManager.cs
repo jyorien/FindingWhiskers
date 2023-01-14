@@ -16,6 +16,7 @@ public class GameManager : MonoBehaviour
             {
                 Debug.LogError("GameManager is null");
             }
+            // persist GameManager throughout the scenes
             DontDestroyOnLoad(_instance);
             return _instance;
         }

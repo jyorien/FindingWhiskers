@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
+    public bool isFacingRight = false;
+
     float horizontalMovement;
     bool isJump;
     int jumpCount = 0;
@@ -18,6 +20,14 @@ public class PlayerMovement : MonoBehaviour
     {
         // get movement input to detect which direction player wants to move
         horizontalMovement = Input.GetAxisRaw("Horizontal");
+        if (horizontalMovement == 1)
+        {
+            isFacingRight = true;
+        } else if (horizontalMovement == -1)
+        {
+            isFacingRight = false;
+        }
+
         isJump = Input.GetButtonDown("Jump");
         if (isJump && jumpCount < 2)
         {
