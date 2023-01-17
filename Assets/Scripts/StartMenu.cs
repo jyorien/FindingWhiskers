@@ -9,6 +9,7 @@ public class StartMenu : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        // start the game
         startButton.onClick.AddListener(() => {
             GameManager.Instance.OnGameWin();
         });

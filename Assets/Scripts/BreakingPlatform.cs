@@ -6,6 +6,7 @@ public class BreakingPlatform : MonoBehaviour
 {
     BoxCollider2D platformCollider;
     SpriteRenderer spriteRenderer;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -18,8 +19,7 @@ public class BreakingPlatform : MonoBehaviour
         switch (collision.collider.tag)
         {
             case "Player":
-                Debug.Log("start breaking");
-                //  break platform after a second and respawn after two seconds
+                // start timer to break platform when player is on it
                 StartCoroutine(BreakPlatform());
                 break;
         }
@@ -27,15 +27,17 @@ public class BreakingPlatform : MonoBehaviour
 
     IEnumerator BreakPlatform()
     {
+        // break platform after a second
         yield return new WaitForSeconds(1);
-        Debug.Log("break");
         SetPlatformActive(false);
+        // respawn after two seconds
         yield return new WaitForSeconds(2);
         SetPlatformActive(true);
     }
 
     void SetPlatformActive(bool isActive)
     {
+        // set state of collider and sprite to give platform's "breaking" effect
         platformCollider.enabled = isActive;
         spriteRenderer.enabled = isActive;
     }

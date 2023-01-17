@@ -4,18 +4,26 @@ using UnityEngine;
 
 public class MovingPlatform : MonoBehaviour
 {
+    // can select Horizontal / Vertical movement in inspector
     [SerializeField] Axis axis;
+
+    // adjust how fast the platform moves in inspector
     [SerializeField] float speed;
+
+    /* store whether the platform should move forward or backward
+    to keep within the boundaries of the start and end point */
     bool isReverse = false;
 
     private void Update()
     {
+        //  determines if platform moves forward or backward
         float velocity = isReverse ? speed * -1 : speed;
+
+        // platform is only allowed to move around the x or y axis
         switch (axis)
         {
             case Axis.Horizontal:
                 transform.Translate(new Vector3(velocity * Time.deltaTime, 0, 0));
-
                 break;
             case Axis.Vertical:
                 transform.Translate(new Vector3(0, velocity * Time.deltaTime, 0));
@@ -25,10 +33,10 @@ public class MovingPlatform : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        
-        Debug.Log(name);
         switch (collision.collider.tag)
         {
+            /* detach player from platform
+            and let the player go back to moving independently */
             case "Player":
                 collision.collider.transform.SetParent(transform);
                 break;
@@ -39,6 +47,7 @@ public class MovingPlatform : MonoBehaviour
     {
         switch (collision.collider.tag)
         {
+            // make player move with platform
             case "Player":
                 collision.collider.transform.SetParent(null);
                 break;
@@ -47,17 +56,19 @@ public class MovingPlatform : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        // store into variable for easy reference
         string collisionName = collision.name;
+
+        // change direction of platform movement when it hits the start or end
         if (collisionName == "Start Point" || collisionName == "End Point")
         {
-            Debug.Log($"Collided with {collisionName}");
             isReverse = !isReverse;
-            Debug.Log(isReverse);
         }
     }
 
 }
 
+// create enum to get dropdown list in inspector
 enum Axis
 {
     Horizontal,

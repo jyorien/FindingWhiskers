@@ -30,9 +30,10 @@ public class GameManager : MonoBehaviour
         _instance = this;
     }
 
-    // if player wins, go to next level
     public void OnGameWin()
     {
+        // if player wins, go to next level
+
         int buildIndex = SceneManager.GetActiveScene().buildIndex;
         if (buildIndex < sceneCount + 1)
         {
@@ -40,9 +41,10 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    // if player loses, restart level
     public void OnGameLose()
     {
+        // if player loses, restart level
+
         Debug.Log("L");
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
