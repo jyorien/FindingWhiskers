@@ -148,7 +148,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isFacingRight: 0
-  jumpForce: 10
+  jumpForce: 7
   speed: 7
   rb: {fileID: 2329090686332615481}
   playerCollider: {fileID: 2329090686332615480}
@@ -167,4 +167,4 @@ MonoBehaviour:
   playerCollider: {fileID: 2329090686332615480}
   rb: {fileID: 2329090686332615481}
   movement: {fileID: 2329090686332615483}
-  slipperyForce: 0
+  slipperyForce: 300

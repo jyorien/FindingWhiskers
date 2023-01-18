@@ -69,6 +69,7 @@ public class GameManager : MonoBehaviour
 
     public void OnGameLose()
     {
+        Debug.Log(SceneManager.GetActiveScene().buildIndex);
         // if player loses, restart level
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
