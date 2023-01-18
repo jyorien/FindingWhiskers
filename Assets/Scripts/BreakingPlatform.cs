@@ -22,8 +22,8 @@ public class BreakingPlatform : MonoBehaviour
 
         float yPositionOffPlatform = gameObject.transform.position.y;
 
-        // only start to break if player IF player is not jumping (y velocity = 0)
-        // AND IF the player is on top of the platform (y position of player above y position of platform)
+        // only start to break IF object is not jumping (y velocity = 0)
+        // AND IF the object is on top of the platform (y position of object above y position of platform)
         if (yVelocityOfIncomingCollider == 0 && yPositionOfIncomingCollider > yPositionOffPlatform)
         {
             switch (collision.collider.tag)

@@ -33,13 +33,23 @@ public class MovingPlatform : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        switch (collision.collider.tag)
-        {
+        float yVelocityOfIncomingCollider = collision.rigidbody.velocity.y;
+        float yPositionOfIncomingCollider = collision.transform.position.y;
 
-            // make player move with platform
-            case "Player":
-                collision.collider.transform.SetParent(transform);
-                break;
+        float yPositionOffPlatform = gameObject.transform.position.y;
+
+        // only set object's parent to platform IF object is not jumping (y velocity = 0)
+        // AND IF the object is on top of the platform (y position of object above y position of platform)
+        if (yVelocityOfIncomingCollider == 0 && yPositionOfIncomingCollider > yPositionOffPlatform)
+        {
+            switch (collision.collider.tag)
+            {
+                // make player move with platform
+                case "Player":
+                    collision.collider.transform.SetParent(transform);
+                    break;
+            }
+            
         }
     }
 
