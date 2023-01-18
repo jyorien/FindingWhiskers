@@ -9,6 +9,7 @@ TagManager:
   - EndPole
   - Enemy
   - Ice
+  - Clue
   layers:
   - Default
   - TransparentFX
@@ -46,7 +47,7 @@ TagManager:
   - name: Background
     uniqueID: 58556075
     locked: 0
-  - name: Start Pole
+  - name: Background Item
     uniqueID: 708651059
     locked: 0
   - name: Default

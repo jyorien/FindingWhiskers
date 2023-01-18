@@ -16,13 +16,25 @@ public class BreakingPlatform : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        switch (collision.collider.tag)
+        
+        float yVelocityOfIncomingCollider = collision.rigidbody.velocity.y;
+        float yPositionOfIncomingCollider = collision.transform.position.y;
+
+        float yPositionOffPlatform = gameObject.transform.position.y;
+
+        // only start to break if player IF player is not jumping (y velocity = 0)
+        // AND IF the player is on top of the platform (y position of player above y position of platform)
+        if (yVelocityOfIncomingCollider == 0 && yPositionOfIncomingCollider > yPositionOffPlatform)
         {
-            case "Player":
+            switch (collision.collider.tag)
+            {
                 // start timer to break platform when player is on it
-                StartCoroutine(BreakPlatform());
-                break;
+                case "Player":
+                    StartCoroutine(BreakPlatform());
+                    break;
+            }
         }
+        
     }
 
     IEnumerator BreakPlatform()

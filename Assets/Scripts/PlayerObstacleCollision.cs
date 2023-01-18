@@ -45,7 +45,12 @@ public class PlayerObstacleCollision : MonoBehaviour
         switch (collision.tag)
         {
             case "EndPole":
-                GameManager.Instance.OnGameWin();
+                GameManager.Instance.OnFinishPoleTouched();
+                break;
+
+            case "Clue":
+                GameManager.Instance.OnClueFound();
+                Destroy(collision.gameObject);
                 break;
         }
     }

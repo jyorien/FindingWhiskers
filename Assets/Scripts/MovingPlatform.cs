@@ -35,8 +35,8 @@ public class MovingPlatform : MonoBehaviour
     {
         switch (collision.collider.tag)
         {
-            /* detach player from platform
-            and let the player go back to moving independently */
+
+            // make player move with platform
             case "Player":
                 collision.collider.transform.SetParent(transform);
                 break;
@@ -47,7 +47,8 @@ public class MovingPlatform : MonoBehaviour
     {
         switch (collision.collider.tag)
         {
-            // make player move with platform
+            /* detach player from platform
+            and let the player go back to moving independently */
             case "Player":
                 collision.collider.transform.SetParent(null);
                 break;

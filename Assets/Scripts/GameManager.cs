@@ -22,30 +22,54 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    int sceneCount;
+    private int sceneCount;
+    private bool isClueFound = false;
 
     private void Awake()
     {
-        sceneCount = SceneManager.sceneCount;
+        sceneCount = SceneManager.sceneCountInBuildSettings;
         _instance = this;
     }
 
-    public void OnGameWin()
+    public void GoNextScene()
     {
-        // if player wins, go to next level
-
+        // go to next scene based on index
         int buildIndex = SceneManager.GetActiveScene().buildIndex;
-        if (buildIndex < sceneCount + 1)
+
+        if (buildIndex < sceneCount)
         {
             SceneManager.LoadScene(buildIndex + 1);
         }
     }
 
+    public void OnClueFound()
+    {
+        isClueFound = true;
+    }
+
+
+    public void OnFinishPoleTouched()
+    {
+        // determine if user completed the stage yet
+        // based on whether he has collected the clue
+        if (!isClueFound)
+            return;
+
+        OnGameWin();
+    }
+
+    public void OnGameWin()
+    {
+        /* if player wins, go to next level and reset the "clue found" state
+        for the next level */
+        isClueFound = false;
+        GoNextScene();
+
+    }
+
     public void OnGameLose()
     {
         // if player loses, restart level
-
-        Debug.Log("L");
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 }
