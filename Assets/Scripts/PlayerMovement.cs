@@ -58,22 +58,30 @@ public class PlayerMovement : MonoBehaviour
         
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    /* As the colliders are children of the GameObject, 
+     pass this method to each child to handle their collisions here.
+    ColliderSide will be used to identify which child the collision was from
+     */
+    public void OnCollisionDetected(ColliderSide childColliderSide, Collision2D collision)
     {
         switch (collision.collider.tag)
         {
-            // reset jump count so player can jump again
             case "Ground":
+                // reset jump when player lands on ground
                 isGrounded = true;
                 break;
             case "Ice":
-                if (rb.velocity.y == 0)
-                {
+                // only reset jump if player lands on ice ground (touching ice wall does not reset)
+                if (childColliderSide == ColliderSide.Bottom)
                     isGrounded = true;
-
-                }
                 break;
         }
-        
+
     }
+}
+
+public enum ColliderSide
+{
+    Bottom,
+    Side
 }
