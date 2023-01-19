@@ -8,7 +8,7 @@ public class PlayerMovement : MonoBehaviour
 
     float horizontalMovement;
     bool isJump;
-    int jumpCount = 0;
+    bool isGrounded = false;
     [SerializeField] float jumpForce;
     [SerializeField] float gravityScale;
     [SerializeField] float fallGravityScale;
@@ -32,17 +32,14 @@ public class PlayerMovement : MonoBehaviour
 
         isJump = Input.GetButtonDown("Jump");
             
-        if (isJump && jumpCount < 2)
+        if (isJump && isGrounded)
         {
-
+            isGrounded = false;
             rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
-            jumpCount += 1;
         }
 
         /* to achieve faster falling, change gravity to a higher value than
         when jumping up */
-
-        
         if (rb.velocity.y > 0)
         {
             rb.gravityScale = gravityScale;
@@ -50,6 +47,7 @@ public class PlayerMovement : MonoBehaviour
         {
             rb.gravityScale = fallGravityScale;
         }
+       
 
     }
 
@@ -62,18 +60,16 @@ public class PlayerMovement : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        Debug.Log(collision.gameObject.name);
         switch (collision.collider.tag)
         {
             // reset jump count so player can jump again
             case "Ground":
-                Debug.Log("reset");
-                jumpCount = 0;
+                isGrounded = true;
                 break;
             case "Ice":
-                if (collision.rigidbody.velocity.y == 0)
+                if (rb.velocity.y == 0)
                 {
-                    jumpCount = 0;
+                    isGrounded = true;
 
                 }
                 break;

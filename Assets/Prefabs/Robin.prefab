@@ -148,10 +148,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isFacingRight: 0
-  jumpForce: 20
-  secondJumpForce: 16
+  jumpForce: 13
   gravityScale: 4
-  fallGravityScale: 12
+  fallGravityScale: 6
   speed: 7
   rb: {fileID: 2329090686332615481}
   playerCollider: {fileID: 2329090686332615480}
