@@ -10,6 +10,8 @@ public class PlayerMovement : MonoBehaviour
     bool isJump;
     int jumpCount = 0;
     [SerializeField] float jumpForce;
+    [SerializeField] float gravityScale;
+    [SerializeField] float fallGravityScale;
     [SerializeField] float speed;
     [SerializeField] Rigidbody2D rb;
     [SerializeField] BoxCollider2D playerCollider;
@@ -29,11 +31,26 @@ public class PlayerMovement : MonoBehaviour
         }
 
         isJump = Input.GetButtonDown("Jump");
+            
         if (isJump && jumpCount < 2)
         {
-            rb.velocity = new Vector2(rb.velocity.x, jumpForce);
+
+            rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
             jumpCount += 1;
         }
+
+        /* to achieve faster falling, change gravity to a higher value than
+        when jumping up */
+
+        
+        if (rb.velocity.y > 0)
+        {
+            rb.gravityScale = gravityScale;
+        } else
+        {
+            rb.gravityScale = fallGravityScale;
+        }
+
     }
 
     private void FixedUpdate()
@@ -45,11 +62,20 @@ public class PlayerMovement : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
+        Debug.Log(collision.gameObject.name);
         switch (collision.collider.tag)
         {
-            // reset jump count so player can jump / double jump again
+            // reset jump count so player can jump again
             case "Ground":
+                Debug.Log("reset");
                 jumpCount = 0;
+                break;
+            case "Ice":
+                if (collision.rigidbody.velocity.y == 0)
+                {
+                    jumpCount = 0;
+
+                }
                 break;
         }
         
