@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using System.Diagnostics;
 
 public class GameManager : MonoBehaviour
 {
@@ -14,7 +15,7 @@ public class GameManager : MonoBehaviour
         {
             if (_instance == null)
             {
-                Debug.LogError("GameManager is null");
+                UnityEngine.Debug.LogError("GameManager is null");
             }
             // persist GameManager throughout the scenes
             DontDestroyOnLoad(_instance);
@@ -22,23 +23,36 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private int sceneCount;
     private bool isClueFound = false;
+    // create timer to record time taken to complete a level
+    // timer will be managed in the GameManager to easily manage the data throughout the scenes
+    private Stopwatch timer;
+    // track the current level
+    private int currentLevelBuildIndex = 0;
+    // store time taken to complete a level here (formatted)
+    private string lastTimingSaved;
 
     private void Awake()
     {
-        sceneCount = SceneManager.sceneCountInBuildSettings;
         _instance = this;
+
+        timer = new Stopwatch();
     }
 
-    public void GoNextScene()
+    public void GoNextLevel()
     {
-        // go to next scene based on index
-        int buildIndex = SceneManager.GetActiveScene().buildIndex;
+        // reset timer every level and get ready to track new level's timing
+        timer.Reset();
+        // store index of next scene
+        currentLevelBuildIndex += 1;
 
-        if (buildIndex < sceneCount)
+        // TODO: Levels 1 - 3 only, need to add condition for boss level
+        if (currentLevelBuildIndex > 0 && currentLevelBuildIndex < 4)
         {
-            SceneManager.LoadScene(buildIndex + 1);
+            SceneManager.LoadScene(currentLevelBuildIndex);
+
+            // start tracking the time for the player to complete the level
+            timer.Start();
         }
     }
 
@@ -52,6 +66,7 @@ public class GameManager : MonoBehaviour
     {
         // determine if user completed the stage yet
         // based on whether he has collected the clue
+        // TODO: need to add condition for boss level
         if (!isClueFound)
             return;
 
@@ -63,14 +78,40 @@ public class GameManager : MonoBehaviour
         /* if player wins, go to next level and reset the "clue found" state
         for the next level */
         isClueFound = false;
-        GoNextScene();
 
+        // stop timer every level
+        timer.Stop();
+        // format into 00:00:000 to display in Level Complete Scene
+        lastTimingSaved = Utils.formatMillisecondsToDisplayTime(timer.ElapsedMilliseconds);
+        // check if user beat their personal best, if so store new personal best
+        if (timer.ElapsedMilliseconds < Utils.GetLevelBestTiming(currentLevelBuildIndex) || Utils.GetLevelBestTiming(currentLevelBuildIndex) == 0)
+        {
+            Utils.SaveLevelBestTiming(currentLevelBuildIndex, (int)timer.ElapsedMilliseconds);
+        }
+
+        SceneManager.LoadScene("Level Complete", LoadSceneMode.Additive);
     }
 
     public void OnGameLose()
     {
-        Debug.Log(SceneManager.GetActiveScene().buildIndex);
         // if player loses, restart level
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
+
+    public long GetGameTimeElapsedInMiliseconds()
+    {
+        return timer.ElapsedMilliseconds;
+    }
+
+    public string GetLastTimingRecorded()
+    {
+        return lastTimingSaved;
+    }
+
+    public int GetLastLevelPlayed()
+    {
+        return currentLevelBuildIndex;
+    }
+
+
 }

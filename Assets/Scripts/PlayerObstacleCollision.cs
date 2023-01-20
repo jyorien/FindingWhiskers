@@ -46,6 +46,8 @@ public class PlayerObstacleCollision : MonoBehaviour
         {
             case "EndPole":
                 GameManager.Instance.OnFinishPoleTouched();
+                // disable player movement when they touch the End Pole
+                movement.canMove = false;
                 break;
 
             case "Clue":

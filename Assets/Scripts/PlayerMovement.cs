@@ -5,6 +5,10 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
     public bool isFacingRight = false;
+    // check whether player should be able to move
+    /* player should not be able to move after they touch the End Pole 
+    so that they do not move when the Level Complete Scene is loaded */
+    public bool canMove = true;
 
     float horizontalMovement;
     bool isJump;
@@ -20,6 +24,7 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (!canMove) return;
         // get movement input to detect which direction player wants to move
         horizontalMovement = Input.GetAxisRaw("Horizontal");
         if (horizontalMovement == 1)
@@ -53,6 +58,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (!canMove) return;
         // move player horizontally based on speed in inspector
         rb.velocity = new Vector2(horizontalMovement * speed, rb.velocity.y);
         
