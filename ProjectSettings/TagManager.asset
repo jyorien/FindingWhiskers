@@ -10,6 +10,7 @@ TagManager:
   - Enemy
   - Ice
   - Clue
+  - Campfire
   layers:
   - Default
   - TransparentFX

@@ -13,13 +13,34 @@ public class PlayerMovement : MonoBehaviour
     float horizontalMovement;
     bool isJump;
     bool isGrounded = false;
-    [SerializeField] float jumpForce;
+
+    /* store max attributes. player will always start off with max values
+    and gradually decrease to min */
+    [SerializeField] float maxJumpForce;
+    [SerializeField] float maxSpeed;
+    // max size will always stay the same
+    const float maxSizeScale = 1.3f;
+
+    // store min attributes. This will put a cap on how much the values can decrease
+    [SerializeField] float minJumpForce;
+    [SerializeField] float minSpeed;
+    // min size will always stay the same
+    const float minSizeScale = 0.6f;
+
     [SerializeField] float gravityScale;
     [SerializeField] float fallGravityScale;
-    [SerializeField] float speed;
     [SerializeField] Rigidbody2D rb;
     [SerializeField] BoxCollider2D playerCollider;
 
+    // actual values being used for each attribute
+    private float currentJumpForce;
+    private float currentSpeed;
+    private float currentSizeScale;
+
+    private void Start()
+    {
+        ResetToMaxAttributeValues();
+    }
 
     // Update is called once per frame
     void Update()
@@ -40,7 +61,7 @@ public class PlayerMovement : MonoBehaviour
         if (isJump && isGrounded)
         {
             isGrounded = false;
-            rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
+            rb.AddForce(Vector2.up * currentJumpForce, ForceMode2D.Impulse);
         }
 
         /* to achieve faster falling, change gravity to a higher value than
@@ -52,23 +73,30 @@ public class PlayerMovement : MonoBehaviour
         {
             rb.gravityScale = fallGravityScale;
         }
-       
-
     }
 
     private void FixedUpdate()
     {
         if (!canMove) return;
         // move player horizontally based on speed in inspector
-        rb.velocity = new Vector2(horizontalMovement * speed, rb.velocity.y);
+        rb.velocity = new Vector2(horizontalMovement * currentSpeed, rb.velocity.y);
         
     }
 
-    /* As the colliders are children of the GameObject, 
+    public void ResetToMaxAttributeValues()
+    {
+        /* when starting the game or touching a campfire,
+        reset jump force, speed and size */
+        currentJumpForce = maxJumpForce;
+        currentSpeed = maxSpeed;
+        currentSizeScale = maxSizeScale;
+    }
+
+    /* As some colliders are children of the GameObject, 
      pass this method to each child to handle their collisions here.
     ColliderSide will be used to identify which child the collision was from
      */
-    public void OnCollisionDetected(ColliderSide childColliderSide, Collision2D collision)
+    public void OnChildCollisionDetected(ColliderSide childColliderSide, Collision2D collision)
     {
         switch (collision.collider.tag)
         {

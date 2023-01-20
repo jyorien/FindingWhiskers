@@ -1,7 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
+
 public class PlayerObstacleCollision : MonoBehaviour
 {
     [SerializeField] BoxCollider2D playerCollider;
@@ -53,6 +51,10 @@ public class PlayerObstacleCollision : MonoBehaviour
             case "Clue":
                 GameManager.Instance.OnClueFound();
                 Destroy(collision.gameObject);
+                break;
+
+            case "Campfire":
+                movement.ResetToMaxAttributeValues();
                 break;
         }
     }

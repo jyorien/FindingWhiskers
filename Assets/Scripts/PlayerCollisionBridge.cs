@@ -10,6 +10,6 @@ public class PlayerCollisionBridge : MonoBehaviour
         /* pass into PlayerMovement to handle collisions there
          pass colliderSide to identify which side the collider is at.
          colliderSide can be modified in the inspector */
-        transform.parent.GetComponent<PlayerMovement>().OnCollisionDetected(colliderSide, collision);
+        transform.parent.GetComponent<PlayerMovement>().OnChildCollisionDetected(colliderSide, collision);
     }
 }
