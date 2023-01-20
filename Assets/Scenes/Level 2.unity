@@ -187,6 +187,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 5127985094906783728, guid: f4bbd9bafd3d942b8bcf82699bed3650, type: 3}
+      propertyPath: maxJumpForce
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 5127985094906783728, guid: f4bbd9bafd3d942b8bcf82699bed3650, type: 3}
+      propertyPath: minJumpForce
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 5127985094906783729, guid: f4bbd9bafd3d942b8bcf82699bed3650, type: 3}
       propertyPath: m_Name
       value: Robin
@@ -564,7 +572,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4488266088317191404, guid: fd738eb0a866a43ffa05f3034cce37de, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -1.18
+      value: -5.14
       objectReference: {fileID: 0}
     - target: {fileID: 4488266088317191404, guid: fd738eb0a866a43ffa05f3034cce37de, type: 3}
       propertyPath: m_LocalPosition.y

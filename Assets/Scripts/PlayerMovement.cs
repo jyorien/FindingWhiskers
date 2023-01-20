@@ -5,40 +5,47 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
     public bool isFacingRight = false;
-    // check whether player should be able to move
-    /* player should not be able to move after they touch the End Pole 
-    so that they do not move when the Level Complete Scene is loaded */
+
+    /* check whether player should be able to move.
+     * 
+     * player should not be able to move after they touch the End Pole 
+     * so that they do not move when the Level Complete Scene is loaded
+     */
     public bool canMove = true;
 
     float horizontalMovement;
     bool isJump;
     bool isGrounded = false;
 
-    /* store max attributes. player will always start off with max values
-    and gradually decrease to min */
+    /* store max and min attributes. player will always start off with max values
+     * and gradually decrease to min. 
+     */
     [SerializeField] float maxJumpForce;
-    [SerializeField] float maxSpeed;
-    // max size will always stay the same
-    const float maxSizeScale = 1.3f;
-
-    // store min attributes. This will put a cap on how much the values can decrease
     [SerializeField] float minJumpForce;
+
+    [SerializeField] float maxSpeed;
     [SerializeField] float minSpeed;
-    // min size will always stay the same
+
+    // min and max scale will always stay the same
+    const float maxSizeScale = 1.3f;
     const float minSizeScale = 0.6f;
 
     [SerializeField] float gravityScale;
     [SerializeField] float fallGravityScale;
     [SerializeField] Rigidbody2D rb;
     [SerializeField] BoxCollider2D playerCollider;
+    [SerializeField] int timeTakenToReachMinimum = 5;
 
     // actual values being used for each attribute
     private float currentJumpForce;
     private float currentSpeed;
-    private float currentSizeScale;
+
+    // store coroutine in variable so we can control start/stopping it
+    private IEnumerator decreaseValueAttributesOverTime;
 
     private void Start()
     {
+        decreaseValueAttributesOverTime = DecreaseAttributeValuesOverTime(timeTakenToReachMinimum);
         ResetToMaxAttributeValues();
     }
 
@@ -65,7 +72,8 @@ public class PlayerMovement : MonoBehaviour
         }
 
         /* to achieve faster falling, change gravity to a higher value than
-        when jumping up */
+         * when jumping up 
+         */
         if (rb.velocity.y > 0)
         {
             rb.gravityScale = gravityScale;
@@ -78,6 +86,7 @@ public class PlayerMovement : MonoBehaviour
     private void FixedUpdate()
     {
         if (!canMove) return;
+
         // move player horizontally based on speed in inspector
         rb.velocity = new Vector2(horizontalMovement * currentSpeed, rb.velocity.y);
         
@@ -85,16 +94,50 @@ public class PlayerMovement : MonoBehaviour
 
     public void ResetToMaxAttributeValues()
     {
+        // reset the coroutine
+        StopCoroutine(decreaseValueAttributesOverTime);
+        decreaseValueAttributesOverTime = DecreaseAttributeValuesOverTime(timeTakenToReachMinimum);
+
         /* when starting the game or touching a campfire,
-        reset jump force, speed and size */
+         * reset jump force, speed and size
+         */
         currentJumpForce = maxJumpForce;
         currentSpeed = maxSpeed;
-        currentSizeScale = maxSizeScale;
+        transform.localScale = new Vector3(maxSizeScale, maxSizeScale, 1);
+
+        // restart the coroutine
+        StartCoroutine(decreaseValueAttributesOverTime);
     }
 
-    /* As some colliders are children of the GameObject, 
-     pass this method to each child to handle their collisions here.
-    ColliderSide will be used to identify which child the collision was from
+    IEnumerator DecreaseAttributeValuesOverTime(int durationInSeconds)
+    {
+        float timePassed = 0f;
+        Vector3 maxScaleVector3 = new Vector3(maxSizeScale, maxSizeScale, 1);
+        Vector3 minScaleVector3 = new Vector3(minSizeScale, minSizeScale, 1);
+
+        while (timePassed <= durationInSeconds)
+        {
+            timePassed += Time.deltaTime;
+
+            /* scale the attribute logarithmically based on how far the time passed is to how long its supposed
+             * to take to reach the minimum of the attribute.
+             *
+             * scaling it logarithmically makes it decrease faster at the start 
+             * and decrease slower towards the end
+             */
+            float t = Mathf.Log10(1 + timePassed) / Mathf.Log10(1 + durationInSeconds);
+
+            transform.localScale = Vector3.Lerp(maxScaleVector3, minScaleVector3, t);
+            currentJumpForce = Mathf.Lerp(maxJumpForce, minJumpForce, t);
+            currentSpeed = Mathf.Lerp(maxSpeed, minSpeed, t);
+            yield return null;
+        }
+    }
+
+    /* As some colliders are children of the GameObject,
+     * pass this method to each child to handle their collisions here.
+     * 
+     * ColliderSide will be used to identify which child the collision was from
      */
     public void OnChildCollisionDetected(ColliderSide childColliderSide, Collision2D collision)
     {

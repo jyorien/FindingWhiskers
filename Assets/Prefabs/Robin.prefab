@@ -151,14 +151,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isFacingRight: 0
   canMove: 1
-  maxJumpForce: 12
-  maxSpeed: 7
+  maxJumpForce: 15
+  maxSpeed: 12
   minJumpForce: 8
-  minSpeed: 4
+  minSpeed: 5
   gravityScale: 4
   fallGravityScale: 6
   rb: {fileID: 5127985094906783730}
   playerCollider: {fileID: 5127985094906783731}
+  timeTakenToReachMinimum: 15
 --- !u!114 &5127985094906783735
 MonoBehaviour:
   m_ObjectHideFlags: 0
