@@ -116,6 +116,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   stopwatchText: {fileID: 3229392983342786959}
+  lives:
+  - {fileID: 3229392982126277974}
+  - {fileID: 3229392983321422865}
+  - {fileID: 3229392982198704568}
 --- !u!1001 &529713909342686265
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -329,5 +333,20 @@ PrefabInstance:
 --- !u!224 &3229392981631861890 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 4853014569102798050, guid: 255081c1d82f74322a0f5706f508af26, type: 3}
+  m_PrefabInstance: {fileID: 8036749157863811168}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &3229392982126277974 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4853014569697860918, guid: 255081c1d82f74322a0f5706f508af26, type: 3}
+  m_PrefabInstance: {fileID: 8036749157863811168}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &3229392982198704568 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4853014569610883544, guid: 255081c1d82f74322a0f5706f508af26, type: 3}
+  m_PrefabInstance: {fileID: 8036749157863811168}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &3229392983321422865 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4853014568485995633, guid: 255081c1d82f74322a0f5706f508af26, type: 3}
   m_PrefabInstance: {fileID: 8036749157863811168}
   m_PrefabAsset: {fileID: 0}

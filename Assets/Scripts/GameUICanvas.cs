@@ -8,17 +8,9 @@ public class GameUICanvas : MonoBehaviour
     [SerializeField] GameObject[] lives;
     private void Start()
     {
-        /* since the scene reloads when the player loses, the lives only need to be
-         * rendered once in Start()
-         */
+        // render number of lives left for the level when scene starts
         int livesLeft = GameManager.Instance.GetLivesLeft();
-  
-        int livesUsed = 3 - livesLeft;
-        for (int i = 0; i < livesUsed; i++)
-        {
-
-            lives[i].SetActive(false);
-        }
+        DisplayLivesLeft(livesLeft);
     }
 
     // Update is called once per frame
@@ -26,5 +18,20 @@ public class GameUICanvas : MonoBehaviour
     {
         // get stopwatch timing and format every frame
         stopwatchText.text = Utils.formatMillisecondsToDisplayTime(GameManager.Instance.GetGameTimeElapsedInMiliseconds());
+    }
+
+    public void DisplayLivesLeft(int livesLeft)
+    {
+        // get how many hearts to hide
+        int livesUsed = 3 - livesLeft;
+
+        // in case lives go over 3, set it to 3 to avoid making index out of bounds
+        if (livesUsed > 3) livesUsed = 3;
+
+        // disable the hearts based on index
+        for (int i = 0; i < livesUsed; i++)
+        {
+            lives[i].SetActive(false);
+        }
     }
 }

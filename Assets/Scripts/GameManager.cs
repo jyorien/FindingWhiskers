@@ -6,8 +6,9 @@ using System.Diagnostics;
 
 public class GameManager : MonoBehaviour
 {
-    // make GameManager a singleton so that only one exists throughout the game
-    // we can reference GameManager from other classes without instantiating it
+    /* make GameManager a singleton so that only one exists throughout the game
+     * we can reference GameManager from other classes without instantiating it
+     */
     private static GameManager _instance;
     public static GameManager Instance
     {
@@ -24,11 +25,15 @@ public class GameManager : MonoBehaviour
     }
 
     private bool isClueFound = false;
-    // create timer to record time taken to complete a level
-    // timer will be managed in the GameManager to easily manage the data throughout the scenes
+
+    /* create timer to record time taken to complete a level
+     * timer will be managed in the GameManager to easily manage the data throughout the scenes
+     */
     private Stopwatch timer;
+
     // track the current level
     private int currentLevelBuildIndex = 0;
+
     // store time taken to complete a level here (formatted)
     private string lastTimingSaved;
 
@@ -49,8 +54,7 @@ public class GameManager : MonoBehaviour
         // store index of next scene
         currentLevelBuildIndex += 1;
 
-        // TODO: Levels 1 - 3 only, need to add condition for boss level
-        if (currentLevelBuildIndex > 0 && currentLevelBuildIndex < 4)
+        if (currentLevelBuildIndex > 0 && currentLevelBuildIndex < 5)
         {
             SceneManager.LoadScene(currentLevelBuildIndex);
 
@@ -64,13 +68,11 @@ public class GameManager : MonoBehaviour
         isClueFound = true;
     }
 
-
     public void OnFinishPoleTouched()
     {
         UnityEngine.Debug.Log($"Lives Left: {livesLeft}");
 
-        // determine if user completed the stage yet
-        // based on whether he has collected the clue
+        // determine if user completed the stage yet based on whether he has collected the clue
         // TODO: need to add condition for boss level
         if (!isClueFound)
             return;
@@ -80,8 +82,7 @@ public class GameManager : MonoBehaviour
 
     public void OnGameWin()
     {
-        /* if player wins, go to next level and reset states
-        for the next level */
+        // if player wins, go to next level and reset states for the next level
         isClueFound = false;
 
         // stop timer every level
@@ -99,9 +100,44 @@ public class GameManager : MonoBehaviour
 
     public void OnGameLose()
     {
-        // if player loses, restart level
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         livesLeft -= 1;
+
+        // get the GameUICanvas of the current level to make the last life disappear
+        GameUICanvas gameUICanvas = GameObject.Find("GameCanvas").GetComponent<GameUICanvas>();
+        gameUICanvas.DisplayLivesLeft(livesLeft);
+
+        /* timer will continue even if player loses lives.
+         * it will only stop when the player loses the entire game
+         */
+        if (livesLeft == 0)
+        {
+            // if player loses all 3 lives, end the game
+            timer.Stop();
+            SceneManager.LoadScene("Game Over", LoadSceneMode.Additive);
+        } else
+        {
+            // if player loses a life, restart level
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        }
+
+    }
+
+    public void ResetGameFromLevelOne()
+    {
+        // reset timer and lives for next level
+        timer.Reset();
+        livesLeft = 3;
+
+        // reset the index to load and increment from level one
+        currentLevelBuildIndex = 1;
+
+        if (currentLevelBuildIndex > 0 && currentLevelBuildIndex < 4)
+        {
+            SceneManager.LoadScene(currentLevelBuildIndex);
+
+            // start tracking the time for the player to complete the level
+            timer.Start();
+        }
     }
 
     public long GetGameTimeElapsedInMiliseconds()

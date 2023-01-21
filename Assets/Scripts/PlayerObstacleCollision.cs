@@ -13,6 +13,7 @@ public class PlayerObstacleCollision : MonoBehaviour
         {
             // if player touches an instant-death obstacle, restart level
             case "InstantDeath":
+                Destroy(gameObject);
                 GameManager.Instance.OnGameLose();
                 break;
             // if player touches an enemy, the enemy gets destroyed and the player bounces off
