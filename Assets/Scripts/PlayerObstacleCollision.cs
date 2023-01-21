@@ -16,12 +16,6 @@ public class PlayerObstacleCollision : MonoBehaviour
                 Destroy(gameObject);
                 GameManager.Instance.OnGameLose();
                 break;
-            // if player touches an enemy, the enemy gets destroyed and the player bounces off
-            // TODO: only defeat enemy if collide on top, otherwise player loses by touching enemy
-            case "Enemy":
-                Destroy(collision.gameObject);
-                Debug.Log("enemy");
-                break;
         }
         
     }

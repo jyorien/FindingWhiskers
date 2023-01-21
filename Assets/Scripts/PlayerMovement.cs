@@ -119,8 +119,8 @@ public class PlayerMovement : MonoBehaviour
         {
             timePassed += Time.deltaTime;
 
-            /* scale the attribute logarithmically based on how far the time passed is to how long its supposed
-             * to take to reach the minimum of the attribute.
+            /* scale the attribute logarithmically based on how much the time has passed compared to how long its supposed
+             * to take to reach the minimum value of the attribute.
              *
              * scaling it logarithmically makes it decrease faster at the start 
              * and decrease slower towards the end
@@ -155,10 +155,4 @@ public class PlayerMovement : MonoBehaviour
         }
 
     }
-}
-
-public enum ColliderSide
-{
-    Bottom,
-    Side
 }

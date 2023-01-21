@@ -189,7 +189,7 @@ GameObject:
   - component: {fileID: 7455943266980137833}
   m_Layer: 0
   m_Name: BottomCollider
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -262,7 +262,7 @@ GameObject:
   - component: {fileID: 7455943267076344679}
   m_Layer: 0
   m_Name: SideCollider
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

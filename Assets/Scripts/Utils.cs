@@ -28,3 +28,16 @@ public static class Utils
         return PlayerPrefs.GetInt(keyName);
     }
 }
+
+public enum ColliderSide
+{
+    Bottom,
+    Side,
+    Top
+}
+
+public enum Direction
+{
+    Left,
+    Right
+}

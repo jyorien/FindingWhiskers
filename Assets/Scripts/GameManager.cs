@@ -70,7 +70,6 @@ public class GameManager : MonoBehaviour
 
     public void OnFinishPoleTouched()
     {
-        UnityEngine.Debug.Log($"Lives Left: {livesLeft}");
 
         // determine if user completed the stage yet based on whether he has collected the clue
         // TODO: need to add condition for boss level
