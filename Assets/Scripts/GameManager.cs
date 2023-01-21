@@ -32,17 +32,20 @@ public class GameManager : MonoBehaviour
     // store time taken to complete a level here (formatted)
     private string lastTimingSaved;
 
+    // store player's lives that will reset every level
+    private int livesLeft = 3;
+
     private void Awake()
     {
         _instance = this;
-
         timer = new Stopwatch();
     }
 
     public void GoNextLevel()
     {
-        // reset timer every level and get ready to track new level's timing
+        // reset timer and lives for next level
         timer.Reset();
+        livesLeft = 3;
         // store index of next scene
         currentLevelBuildIndex += 1;
 
@@ -64,6 +67,8 @@ public class GameManager : MonoBehaviour
 
     public void OnFinishPoleTouched()
     {
+        UnityEngine.Debug.Log($"Lives Left: {livesLeft}");
+
         // determine if user completed the stage yet
         // based on whether he has collected the clue
         // TODO: need to add condition for boss level
@@ -75,7 +80,7 @@ public class GameManager : MonoBehaviour
 
     public void OnGameWin()
     {
-        /* if player wins, go to next level and reset the "clue found" state
+        /* if player wins, go to next level and reset states
         for the next level */
         isClueFound = false;
 
@@ -96,6 +101,7 @@ public class GameManager : MonoBehaviour
     {
         // if player loses, restart level
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        livesLeft -= 1;
     }
 
     public long GetGameTimeElapsedInMiliseconds()
@@ -113,5 +119,8 @@ public class GameManager : MonoBehaviour
         return currentLevelBuildIndex;
     }
 
-
+    public int GetLivesLeft()
+    {
+        return livesLeft;
+    }
 }
