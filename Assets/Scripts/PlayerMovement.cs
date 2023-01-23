@@ -26,9 +26,8 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] float maxSpeed;
     [SerializeField] float minSpeed;
 
-    // min and max scale will always stay the same
-    const float maxSizeScale = 1.3f;
-    const float minSizeScale = 0.6f;
+    [SerializeField] float maxSizeScale = 1.3f;
+    [SerializeField] float minSizeScale = 0.6f;
 
     [SerializeField] float gravityScale;
     [SerializeField] float fallGravityScale;
@@ -151,6 +150,8 @@ public class PlayerMovement : MonoBehaviour
                 // only reset jump if player lands on ice ground (touching ice wall does not reset)
                 if (childColliderSide == ColliderSide.Bottom)
                     isGrounded = true;
+                break;
+            default:
                 break;
         }
 

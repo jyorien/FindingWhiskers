@@ -61,7 +61,7 @@ public class TrunkEnemy : MonoBehaviour
                     break;
             }
         }
-        if (colliderTag == "Ground" || colliderTag == "InstantDeath")
+        if (colliderTag == "Ground" || colliderTag == "InstantDeath" || colliderTag == "Ice")
         {
             // flip the horizontal direction if Trunk bumps into wall or spikes
             horizontalDirection = horizontalDirection == Direction.Left ? Direction.Right : Direction.Left;
