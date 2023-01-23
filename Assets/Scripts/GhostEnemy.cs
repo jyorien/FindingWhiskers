@@ -9,6 +9,7 @@ public class GhostEnemy : MonoBehaviour
     [SerializeField] GameObject ghostProjectileToSpawn;
     [SerializeField] GameObject iceCubeProjectileToSpawn;
     [SerializeField] float projectileSpeed;
+    [SerializeField] GameObject pathToWhiskers;
 
     private GameObject projectileSpawnPoint;
     private int layerMask;
@@ -16,7 +17,10 @@ public class GhostEnemy : MonoBehaviour
     private bool isFiring;
     private Direction horizontalDirection = Direction.Left;
     private Rigidbody2D rb;
-
+    // keep track of how many times the player hit Ghost
+    private int hitCount = 0;
+    // Ghost will be given 3 lives
+    private const int livesCount = 3;
     // Start is called before the first frame update
     void Start()
     {
@@ -156,9 +160,19 @@ public class GhostEnemy : MonoBehaviour
         {
             switch (childColliderSide)
             {
-                // if player touches enemy on top collider, enemy gets destroyed and the player bounces off
+                /* if player touches enemy on top collider, count as a hit
+                 * if Ghost gets hit 3 times, the platforms leading to whiskers show up
+                 * for the player to complete the level
+                 */
                 case ColliderSide.Top:
-                    Destroy(gameObject);
+                    hitCount += 1;
+
+                    if (hitCount > livesCount-1)
+                    {
+                        collision.rigidbody.AddForce(new Vector3(100, 0,0));
+                        Destroy(gameObject);
+                        pathToWhiskers.SetActive(true);
+                    }
                     break;
 
                 // if player touches enemy by the sides, player loses a life
