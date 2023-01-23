@@ -5,7 +5,7 @@ using UnityEngine;
 public class TrunkEnemy : MonoBehaviour
 {
     [SerializeField] float speed;
-    [SerializeField] Rigidbody2D rb;
+    private Rigidbody2D rb;
 
     // use enum to make direction more readable
     private Direction horizontalDirection = Direction.Left;
@@ -13,7 +13,7 @@ public class TrunkEnemy : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-      
+        rb = gameObject.GetComponent<Rigidbody2D>();
     }
 
     // Update is called once per frame

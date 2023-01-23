@@ -11,6 +11,7 @@ TagManager:
   - Ice
   - Clue
   - Campfire
+  - Freeze
   layers:
   - Default
   - TransparentFX
