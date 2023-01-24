@@ -53,13 +53,18 @@ public class PlayerObstacleCollision : MonoBehaviour
         switch (collision.tag)
         {
             case "EndPole":
-                GameManager.Instance.OnFinishPoleTouched();
-                // disable player from moving when they finish the level
-                movement.canMove = false;
+                // only complete level if player collected clue / defeated boss
+                if (GameManager.Instance.isLevelCompleteRequirementMet)
+                {
+                    GameManager.Instance.OnGameWin();
+                    // disable player from moving when they finish the level
+                    movement.canMove = false;
+                }
                 break;
 
             case "Clue":
-                GameManager.Instance.OnClueFound();
+                // flag as clue collected
+                GameManager.Instance.isLevelCompleteRequirementMet = true;
                 // destroy the GameObject since we don't need it anymore
                 Destroy(collision.gameObject);
                 break;

@@ -24,7 +24,8 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private bool isClueFound = false;
+    // store condition to complete level
+    public bool isLevelCompleteRequirementMet;
 
     /* create timer to record time taken to complete a level
      * timer will be managed in the GameManager to easily manage the data throughout the scenes
@@ -32,18 +33,25 @@ public class GameManager : MonoBehaviour
     private Stopwatch timer;
 
     // track the current level
-    private int currentLevelBuildIndex = 0;
+    public int currentLevelBuildIndex { get; private set; }
 
-    // store time taken to complete a level here (formatted)
-    private string lastTimingSaved;
+    /* store time taken to complete a level here (formatted)
+     * only allow variable's getter to be called outside of this class
+     */
+    public string lastTimingSaved { get; private set; }
 
     // store player's lives that will reset every level
-    private int livesLeft = 3;
+    public int livesLeft { get; private set; }
 
     private void Awake()
     {
         _instance = this;
+
+        // initalise variables
         timer = new Stopwatch();
+        isLevelCompleteRequirementMet = false;
+        livesLeft = 3;
+        currentLevelBuildIndex = 0;
     }
 
     public void GoNextLevel()
@@ -54,7 +62,7 @@ public class GameManager : MonoBehaviour
         // store index of next scene
         currentLevelBuildIndex += 1;
 
-        if (currentLevelBuildIndex > 0 && currentLevelBuildIndex < 5)
+        if (currentLevelBuildIndex > 0 && currentLevelBuildIndex < 6)
         {
             SceneManager.LoadScene(currentLevelBuildIndex);
 
@@ -63,33 +71,18 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void OnClueFound()
-    {
-        isClueFound = true;
-    }
-
-    public void OnFinishPoleTouched()
-    {
-
-        // determine if user completed the stage yet based on whether he has collected the clue
-        // TODO: need to add condition for boss level
-        if (!isClueFound)
-            return;
-
-        OnGameWin();
-    }
-
     public void OnGameWin()
     {
         // if player wins, go to next level and reset states for the next level
-        isClueFound = false;
-
+        isLevelCompleteRequirementMet = false;
         // stop timer every level
         timer.Stop();
         // format into 00:00:000 to display in Level Complete Scene
         lastTimingSaved = Utils.formatMillisecondsToDisplayTime(timer.ElapsedMilliseconds);
-        // check if user beat their personal best, if so store new personal best
-        if (timer.ElapsedMilliseconds < Utils.GetLevelBestTiming(currentLevelBuildIndex) || Utils.GetLevelBestTiming(currentLevelBuildIndex) == 0)
+
+        // check if user beat their personal best or does not have one yet, if so store new personal best
+        if (timer.ElapsedMilliseconds < Utils.GetLevelBestTiming(currentLevelBuildIndex) ||
+            Utils.GetLevelBestTiming(currentLevelBuildIndex) == 0)
         {
             Utils.SaveLevelBestTiming(currentLevelBuildIndex, (int)timer.ElapsedMilliseconds);
         }
@@ -108,7 +101,7 @@ public class GameManager : MonoBehaviour
         /* timer will continue even if player loses lives.
          * it will only stop when the player loses the entire game
          */
-        if (livesLeft == 0)
+        if (livesLeft < 1)
         {
             // if player loses all 3 lives, end the game
             timer.Stop();
@@ -118,12 +111,11 @@ public class GameManager : MonoBehaviour
             // if player loses a life, restart level
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
-
     }
 
     public void ResetGameFromLevelOne()
     {
-        // reset timer and lives for next level
+        // reset timer and lives
         timer.Reset();
         livesLeft = 3;
 
@@ -133,29 +125,14 @@ public class GameManager : MonoBehaviour
         if (currentLevelBuildIndex > 0 && currentLevelBuildIndex < 4)
         {
             SceneManager.LoadScene(currentLevelBuildIndex);
-
             // start tracking the time for the player to complete the level
             timer.Start();
         }
     }
 
+    // only expose ElapsedMilliseconds from timer
     public long GetGameTimeElapsedInMiliseconds()
     {
         return timer.ElapsedMilliseconds;
-    }
-
-    public string GetLastTimingRecorded()
-    {
-        return lastTimingSaved;
-    }
-
-    public int GetLastLevelPlayed()
-    {
-        return currentLevelBuildIndex;
-    }
-
-    public int GetLivesLeft()
-    {
-        return livesLeft;
     }
 }

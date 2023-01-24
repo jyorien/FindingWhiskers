@@ -9,7 +9,7 @@ public class GameUICanvas : MonoBehaviour
     private void Start()
     {
         // render number of lives left for the level when scene starts
-        int livesLeft = GameManager.Instance.GetLivesLeft();
+        int livesLeft = GameManager.Instance.livesLeft;
         DisplayLivesLeft(livesLeft);
     }
 

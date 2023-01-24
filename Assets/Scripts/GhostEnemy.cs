@@ -167,9 +167,10 @@ public class GhostEnemy : MonoBehaviour
                 case ColliderSide.Top:
                     hitCount += 1;
 
-                    if (hitCount > livesCount-1)
+                    // if Ghost has been defeated
+                    if (hitCount > livesCount - 1)
                     {
-                        collision.rigidbody.AddForce(new Vector3(100, 0,0));
+                        GameManager.Instance.isLevelCompleteRequirementMet = true;
                         Destroy(gameObject);
                         pathToWhiskers.SetActive(true);
                     }

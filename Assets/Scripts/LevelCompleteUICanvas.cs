@@ -12,12 +12,12 @@ public class LevelCompleteUICanvas : MonoBehaviour
 
     private void Start()
     {
-        int lastLevelPlayed = GameManager.Instance.GetLastLevelPlayed();
+        int lastLevelPlayed = GameManager.Instance.currentLevelBuildIndex;
         int personalBest = Utils.GetLevelBestTiming(lastLevelPlayed);
 
         // format text and display on screen
         levelCompleteText.text = $"Level {lastLevelPlayed} Complete";
-        timeTakenText.text = $"Time Taken:\n{GameManager.Instance.GetLastTimingRecorded()}";
+        timeTakenText.text = $"Time Taken:\n{GameManager.Instance.lastTimingSaved}";
         personalBestTimeText.text = $"Personal Best:\n{Utils.formatMillisecondsToDisplayTime(personalBest)}";
         btnContinue.onClick.AddListener(() =>
         {
