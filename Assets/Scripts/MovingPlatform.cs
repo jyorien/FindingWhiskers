@@ -46,7 +46,7 @@ public class MovingPlatform : MonoBehaviour
             {
                 // make player move with platform
                 case "Player":
-                    collision.collider.transform.parent.SetParent(transform);
+                    collision.collider.transform.SetParent(transform);
                     break;
             }
             
