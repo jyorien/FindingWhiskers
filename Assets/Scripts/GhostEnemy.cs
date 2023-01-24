@@ -42,6 +42,8 @@ public class GhostEnemy : MonoBehaviour
     {
        if (isPlayerInSight())
         {
+            // force Ghost to stop moving when firing
+            rb.velocity = new Vector2(0, rb.velocity.y);
             // if already firing, don't start the coroutine
             if (isFiring) return;
 
@@ -77,7 +79,6 @@ public class GhostEnemy : MonoBehaviour
                     break;
             }
             rb.velocity = new Vector2(horizontalMovement * moveSpeed, rb.velocity.y);
-
         }
     }
 

@@ -6551,7 +6551,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5098012327460974819, guid: a2b5a8fd1bec04a3d8c323b09163e7cc, type: 3}
       propertyPath: moveSpeed
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5098012327460974819, guid: a2b5a8fd1bec04a3d8c323b09163e7cc, type: 3}
       propertyPath: pathToWhiskers
@@ -6563,7 +6563,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5098012327460974819, guid: a2b5a8fd1bec04a3d8c323b09163e7cc, type: 3}
       propertyPath: raycastDistance
-      value: 7
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 5098012327460974819, guid: a2b5a8fd1bec04a3d8c323b09163e7cc, type: 3}
       propertyPath: projectileToSpawn
