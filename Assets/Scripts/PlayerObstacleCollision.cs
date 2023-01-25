@@ -8,7 +8,7 @@ public class PlayerObstacleCollision : MonoBehaviour
     [SerializeField] float slipperyForce;
 
     private GameObject iceCubeOverlay;
-    private Rigidbody2D rb;
+    [SerializeField] Rigidbody2D rb;
 
     // keep track of whether player is frozen to activate/deactivate certain behaviours
     private bool isFrozen = false;
@@ -16,8 +16,8 @@ public class PlayerObstacleCollision : MonoBehaviour
     private void Start()
     {
         // get reference to the GameObject that shows Robin frozen
-        iceCubeOverlay = gameObject.transform.GetChild(2).gameObject;
-        rb = gameObject.GetComponent<Rigidbody2D>();
+        iceCubeOverlay = gameObject.transform.GetChild(0).gameObject;
+        //rb = gameObject.GetComponent<Rigidbody2D>();
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -41,8 +41,7 @@ public class PlayerObstacleCollision : MonoBehaviour
             // don't apply force when player is frozen
             case "Ice":
                 if (isFrozen) return;
-                Vector3 direction = movement.isFacingRight ? Vector3.right : Vector3.left;
-                rb.AddForce(direction * slipperyForce);
+                rb.AddForce(transform.right * slipperyForce);
                 break;
         }
     }

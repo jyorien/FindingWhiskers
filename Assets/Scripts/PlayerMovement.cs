@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    public bool isFacingRight = true;
+    private bool isFacingRight = true;
     private float horizontalMovement;
 
     // store coroutine in variable so we can control start/stopping it
