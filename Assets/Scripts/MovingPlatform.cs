@@ -16,7 +16,7 @@ public class MovingPlatform : MonoBehaviour
 
     private void Update()
     {
-        //  determines if platform moves forward or backward
+        // determines if platform moves forward or backward
         float velocity = isReverse ? speed * -1 : speed;
 
         // platform is only allowed to move around the x or y axis
@@ -38,9 +38,10 @@ public class MovingPlatform : MonoBehaviour
 
         float yPositionOffPlatform = gameObject.transform.position.y;
 
-        // only set object's parent to platform IF object is not jumping (y velocity = 0)
-        // AND IF the object is on top of the platform (y position of object above y position of platform)
-        if (yVelocityOfIncomingCollider == 0 && yPositionOfIncomingCollider > yPositionOffPlatform)
+        /* only set player's parent to platform if player is walking horizontally (zero y velocity)
+         * or falling downwards(negative y velocity)
+         */
+        if (yVelocityOfIncomingCollider <= 0 && yPositionOfIncomingCollider > yPositionOffPlatform)
         {
             switch (collision.collider.tag)
             {
