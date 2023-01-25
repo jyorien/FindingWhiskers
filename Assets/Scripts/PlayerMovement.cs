@@ -83,10 +83,9 @@ public class PlayerMovement : MonoBehaviour
         WallSlide();
         WallJump();
 
-        // dont let player control flipping when they wall jump
+        // dont let player input control flipping when they wall jump
         if (!isWallJumping)
         {
-            Debug.Log($"horizontalMovement: {horizontalMovement}, isFacingRight: {isFacingRight}");
             // if facing right but going left or facing left but going right, flip player transform
             if (isFacingRight && horizontalMovement < 0f || !isFacingRight && horizontalMovement > 0f)
             {
@@ -201,10 +200,16 @@ public class PlayerMovement : MonoBehaviour
         {
             isWallJumping = true;
             rb.velocity = new Vector2(wallJumpingDirection * wallJumpingPower.x, wallJumpingPower.y);
-            // set to 0 to prevent wall jumping more than once
+            // set to 0 to prevent wall jumping more than once without touching another wall
             wallJumpingCounter = 0f;
-            
-             FlipHorizontally();
+
+            /* if not facing where its supposed to, flip the object
+             * flipping will only be controlled here while wall jumping
+             */
+            if (wallJumpingDirection == 1 && transform.localRotation.y == -1 || wallJumpingDirection == -1 && transform.localRotation.y == 0)
+            {
+                FlipHorizontally();
+            }
             
             Invoke(nameof(StopWallJumping), wallJumpingDuration);
         }

@@ -60,7 +60,7 @@ public class MovingPlatform : MonoBehaviour
             /* detach player from platform
             and let the player go back to moving independently */
             case "Player":
-                collision.collider.transform.parent.SetParent(null);
+                collision.collider.transform.SetParent(null);
                 break;
         }
     }

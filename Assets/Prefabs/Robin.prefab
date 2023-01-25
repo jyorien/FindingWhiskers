@@ -228,8 +228,8 @@ MonoBehaviour:
   wallLayerMask:
     serializedVersion: 2
     m_Bits: 256
-  wallJumpingPower: {x: 8, y: 12}
-  wallJumpingTime: 0.3
+  wallJumpingPower: {x: 9, y: 12}
+  wallJumpingTime: 0.5
   wallJumpingDuration: 0.4
 --- !u!114 &4594095206625168809
 MonoBehaviour:
