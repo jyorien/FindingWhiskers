@@ -33,7 +33,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 1
+    filterMode: 0
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -91,6 +91,18 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
     buildTarget: Server
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: WebGL
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
@@ -3141,11 +3153,12 @@ TextureImporter:
     nameFileIdTable:
       Terrain (16x16)_128: -1329154182
       Terrain (16x16)_136: -394755752
+      Terrain (16x16)_0: 2116197647
       Terrain (16x16)_89: -556944073
-      Terrain (16x16)_119: -888145792
-      Terrain (16x16)_99: 1395600492
+      Terrain (16x16)_74: -221012094
+      Terrain (16x16)_53: 1578733707
       Terrain (16x16)_85: 359414904
-      Terrain (16x16)_139: 766536543
+      Terrain (16x16)_102: -1470834175
       Terrain (16x16)_4: -10999977
       Terrain (16x16)_80: -416160330
       Terrain (16x16)_33: 460177604
@@ -3158,7 +3171,6 @@ TextureImporter:
       Terrain (16x16)_27: 298099565
       Terrain (16x16)_75: 238974539
       Terrain (16x16)_132: -759330339
-      Terrain (16x16)_131: -2085134242
       Terrain (16x16)_44: 303219357
       Terrain (16x16)_37: -1812350364
       Terrain (16x16)_21: 1715385891
@@ -3278,11 +3290,11 @@ TextureImporter:
       Terrain (16x16)_126: 489071891
       Terrain (16x16)_86: 919136826
       Terrain (16x16)_40: 1789047321
-      Terrain (16x16)_53: 1578733707
-      Terrain (16x16)_0: 2116197647
+      Terrain (16x16)_99: 1395600492
+      Terrain (16x16)_131: -2085134242
       Terrain (16x16)_91: 714716392
-      Terrain (16x16)_74: -221012094
-      Terrain (16x16)_102: -1470834175
+      Terrain (16x16)_119: -888145792
+      Terrain (16x16)_139: 766536543
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

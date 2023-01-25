@@ -33,7 +33,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 1
+    filterMode: 0
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -91,6 +91,18 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
     buildTarget: Server
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: WebGL
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
@@ -939,8 +951,7 @@ TextureImporter:
       Sand Mud Ice (16x6)_20: -803958336
       Sand Mud Ice (16x6)_12: 828380312
       Sand Mud Ice (16x6)_19: 1249396800
-      Sand Mud Ice (16x6)_32: -149480719
-      Sand Mud Ice (16x6)_38: -1119897904
+      Sand Mud Ice (16x6)_13: -1331733335
       Sand Mud Ice (16x6)_36: 1694958901
       Sand Mud Ice (16x6)_26: -28163947
       Sand Mud Ice (16x6)_3: -1707676372
@@ -965,14 +976,15 @@ TextureImporter:
       Sand Mud Ice (16x6)_18: 821937324
       Sand Mud Ice (16x6)_1: -304219892
       Sand Mud Ice (16x6)_29: -976544009
+      Sand Mud Ice (16x6)_38: -1119897904
       Sand Mud Ice (16x6)_7: 737127038
       Sand Mud Ice (16x6)_9: 1658445216
       Sand Mud Ice (16x6)_6: 1232052924
-      Sand Mud Ice (16x6)_13: -1331733335
+      Sand Mud Ice (16x6)_32: -149480719
       Sand Mud Ice (16x6)_28: 1169282638
-      Sand Mud Ice (16x6)_10: 2001875462
       Sand Mud Ice (16x6)_22: 745686506
       Sand Mud Ice (16x6)_30: 963454022
+      Sand Mud Ice (16x6)_10: 2001875462
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0
