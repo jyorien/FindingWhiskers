@@ -207,7 +207,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 641e9cfe136b249b7af5e8bd9ecc3935, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isFacingRight: 0
   canMove: 1
   maxJumpForce: 15
   minJumpForce: 10
@@ -246,6 +245,7 @@ MonoBehaviour:
   playerCollider: {fileID: 8713271732185426517}
   movement: {fileID: 4594095206625168814}
   slipperyForce: 300
+  rb: {fileID: 4594095206625168812}
 --- !u!61 &8713271732185426517
 BoxCollider2D:
   m_ObjectHideFlags: 0

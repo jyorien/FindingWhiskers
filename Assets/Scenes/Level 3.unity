@@ -18518,7 +18518,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2132624107
 MonoBehaviour:
@@ -18561,6 +18561,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 4594095206625168814, guid: f4bbd9bafd3d942b8bcf82699bed3650, type: 3}
+      propertyPath: minJumpForce
+      value: 12
+      objectReference: {fileID: 0}
     - target: {fileID: 5127985094906783729, guid: f4bbd9bafd3d942b8bcf82699bed3650, type: 3}
       propertyPath: m_Name
       value: Robin
@@ -18613,6 +18617,6 @@ PrefabInstance:
   m_SourcePrefab: {fileID: 100100000, guid: f4bbd9bafd3d942b8bcf82699bed3650, type: 3}
 --- !u!4 &7455943267027424246 stripped
 Transform:
-  m_CorrespondingSourceObject: {fileID: 5127985094906783732, guid: f4bbd9bafd3d942b8bcf82699bed3650, type: 3}
+  m_CorrespondingSourceObject: {fileID: 4594095206625168810, guid: f4bbd9bafd3d942b8bcf82699bed3650, type: 3}
   m_PrefabInstance: {fileID: 7455943267027424245}
   m_PrefabAsset: {fileID: 0}

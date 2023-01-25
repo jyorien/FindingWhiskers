@@ -1015,6 +1015,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4594095206625168810, guid: f4bbd9bafd3d942b8bcf82699bed3650, type: 3}
   m_PrefabInstance: {fileID: 8713271731748559948}
   m_PrefabAsset: {fileID: 0}
+--- !u!50 &5127985095074157034 stripped
+Rigidbody2D:
+  m_CorrespondingSourceObject: {fileID: 4594095206625168812, guid: f4bbd9bafd3d942b8bcf82699bed3650, type: 3}
+  m_PrefabInstance: {fileID: 8713271731748559948}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &7416216515110044230
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -41247,6 +41252,10 @@ PrefabInstance:
       value: 65535
       objectReference: {fileID: 0}
     - target: {fileID: 7416216516070122272, guid: b2e93ec4958c447259128f7dfbf4cb07, type: 3}
+      propertyPath: m_GeometryType
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7416216516070122272, guid: b2e93ec4958c447259128f7dfbf4cb07, type: 3}
       propertyPath: m_CompositePaths.m_Paths.Array.size
       value: 6
       objectReference: {fileID: 0}
@@ -44495,6 +44504,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 4594095206625168809, guid: f4bbd9bafd3d942b8bcf82699bed3650, type: 3}
+      propertyPath: rb
+      value: 
+      objectReference: {fileID: 5127985095074157034}
     - target: {fileID: 4594095206625168810, guid: f4bbd9bafd3d942b8bcf82699bed3650, type: 3}
       propertyPath: m_RootOrder
       value: 1
@@ -44540,8 +44553,20 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4594095206625168814, guid: f4bbd9bafd3d942b8bcf82699bed3650, type: 3}
+      propertyPath: maxJumpForce
+      value: 16
+      objectReference: {fileID: 0}
+    - target: {fileID: 4594095206625168814, guid: f4bbd9bafd3d942b8bcf82699bed3650, type: 3}
+      propertyPath: minJumpForce
+      value: 13
+      objectReference: {fileID: 0}
+    - target: {fileID: 4594095206625168814, guid: f4bbd9bafd3d942b8bcf82699bed3650, type: 3}
       propertyPath: wallSlidingSpeed
       value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4594095206625168814, guid: f4bbd9bafd3d942b8bcf82699bed3650, type: 3}
+      propertyPath: timeTakenToReachMinimum
+      value: 18
       objectReference: {fileID: 0}
     - target: {fileID: 4594095206625168815, guid: f4bbd9bafd3d942b8bcf82699bed3650, type: 3}
       propertyPath: m_Name

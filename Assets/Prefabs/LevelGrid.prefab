@@ -203,7 +203,7 @@ GameObject:
   - component: {fileID: 7416216515238304438}
   - component: {fileID: 7416216515238304425}
   - component: {fileID: 7416216515238304424}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Tilemap_Wall
   m_TagString: Ground
   m_Icon: {fileID: 0}
@@ -698,7 +698,7 @@ GameObject:
   - component: {fileID: 7416216515694807759}
   - component: {fileID: 7416216515694807755}
   - component: {fileID: 7416216515694807754}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Tilemap_Floor
   m_TagString: Ground
   m_Icon: {fileID: 0}
@@ -6962,7 +6962,7 @@ GameObject:
   - component: {fileID: 7416216516070122286}
   - component: {fileID: 7416216516070122273}
   - component: {fileID: 7416216516070122272}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Tilemap_Ice
   m_TagString: Ice
   m_Icon: {fileID: 0}
