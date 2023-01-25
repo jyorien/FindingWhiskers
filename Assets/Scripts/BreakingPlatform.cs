@@ -12,29 +12,32 @@ public class BreakingPlatform : MonoBehaviour
     {
         platformCollider = GetComponent<BoxCollider2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
+
+        // make collider isTrigger to let player pass through
+        platformCollider.isTrigger = true;
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    private void OnTriggerEnter2D(Collider2D collision)
     {
-        
-        float yVelocityOfIncomingCollider = collision.rigidbody.velocity.y;
-        float yPositionOfIncomingCollider = collision.transform.position.y;
+        float yVelocityOfIncomingCollider = collision.attachedRigidbody.velocity.y;
+        float yPositionOfIncomingCollider = collision.attachedRigidbody.position.y;
 
         float yPositionOffPlatform = gameObject.transform.position.y;
 
-        // only start to break IF object is not jumping (y velocity = 0)
-        // AND IF the object is on top of the platform (y position of object above y position of platform)
-        if (yVelocityOfIncomingCollider == 0 && yPositionOfIncomingCollider > yPositionOffPlatform)
+        /* only enable collider for player to stand on platform if player is walking horizontally (zero y velocity)
+         * or falling downwards (negative y velocity)
+         */
+        if (yVelocityOfIncomingCollider <= 0 && yPositionOfIncomingCollider > yPositionOffPlatform)
         {
-            switch (collision.collider.tag)
+            switch (collision.tag)
             {
-                // start timer to break platform when player is on it
                 case "Player":
+                    platformCollider.isTrigger = false;
+                // start timer to break platform when player is on it
                     StartCoroutine(BreakPlatform());
                     break;
             }
         }
-        
     }
 
     IEnumerator BreakPlatform()
@@ -52,5 +55,12 @@ public class BreakingPlatform : MonoBehaviour
         // set state of collider and sprite to give platform's "breaking" effect
         platformCollider.enabled = isActive;
         spriteRenderer.enabled = isActive;
+    }
+
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        // make platform unable to pass through again when player leaves platform
+        platformCollider.isTrigger = true;
+
     }
 }
