@@ -1088,7 +1088,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7416216514655537301, guid: b2e93ec4958c447259128f7dfbf4cb07, type: 3}
       propertyPath: m_Tiles.Array.data[12].first.x
-      value: 55
+      value: 50
       objectReference: {fileID: 0}
     - target: {fileID: 7416216514655537301, guid: b2e93ec4958c447259128f7dfbf4cb07, type: 3}
       propertyPath: m_Tiles.Array.data[12].first.y
@@ -9496,7 +9496,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7416216515694807754, guid: b2e93ec4958c447259128f7dfbf4cb07, type: 3}
       propertyPath: m_CompositePaths.m_Paths.Array.data[1].Array.data[0].x
-      value: 81.99997
+      value: 80.99997
       objectReference: {fileID: 0}
     - target: {fileID: 7416216515694807754, guid: b2e93ec4958c447259128f7dfbf4cb07, type: 3}
       propertyPath: m_CompositePaths.m_Paths.Array.data[1].Array.data[0].y
@@ -9504,7 +9504,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7416216515694807754, guid: b2e93ec4958c447259128f7dfbf4cb07, type: 3}
       propertyPath: m_CompositePaths.m_Paths.Array.data[1].Array.data[1].x
-      value: 81.99997
+      value: 80.99997
       objectReference: {fileID: 0}
     - target: {fileID: 7416216515694807754, guid: b2e93ec4958c447259128f7dfbf4cb07, type: 3}
       propertyPath: m_CompositePaths.m_Paths.Array.data[1].Array.data[1].y
@@ -11088,7 +11088,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7416216515694807754, guid: b2e93ec4958c447259128f7dfbf4cb07, type: 3}
       propertyPath: m_ColliderPaths.Array.data[0].m_ColliderPaths.Array.data[2].Array.data[0].X
-      value: 820000000
+      value: 810000000
       objectReference: {fileID: 0}
     - target: {fileID: 7416216515694807754, guid: b2e93ec4958c447259128f7dfbf4cb07, type: 3}
       propertyPath: m_ColliderPaths.Array.data[0].m_ColliderPaths.Array.data[2].Array.data[0].Y
@@ -11112,7 +11112,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7416216515694807754, guid: b2e93ec4958c447259128f7dfbf4cb07, type: 3}
       propertyPath: m_ColliderPaths.Array.data[0].m_ColliderPaths.Array.data[2].Array.data[3].X
-      value: 820000000
+      value: 810000000
       objectReference: {fileID: 0}
     - target: {fileID: 7416216515694807754, guid: b2e93ec4958c447259128f7dfbf4cb07, type: 3}
       propertyPath: m_ColliderPaths.Array.data[0].m_ColliderPaths.Array.data[2].Array.data[3].Y
@@ -51128,6 +51128,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4594095206625168814, guid: f4bbd9bafd3d942b8bcf82699bed3650, type: 3}
+      propertyPath: speedOnIce
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 4594095206625168814, guid: f4bbd9bafd3d942b8bcf82699bed3650, type: 3}
       propertyPath: maxJumpForce
       value: 16
       objectReference: {fileID: 0}
@@ -51136,8 +51140,16 @@ PrefabInstance:
       value: 13
       objectReference: {fileID: 0}
     - target: {fileID: 4594095206625168814, guid: f4bbd9bafd3d942b8bcf82699bed3650, type: 3}
+      propertyPath: maxSpeedOnIce
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4594095206625168814, guid: f4bbd9bafd3d942b8bcf82699bed3650, type: 3}
       propertyPath: wallSlidingSpeed
       value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4594095206625168814, guid: f4bbd9bafd3d942b8bcf82699bed3650, type: 3}
+      propertyPath: speedDecreaseRateOnIce
+      value: 0.01
       objectReference: {fileID: 0}
     - target: {fileID: 4594095206625168814, guid: f4bbd9bafd3d942b8bcf82699bed3650, type: 3}
       propertyPath: timeTakenToReachMinimum

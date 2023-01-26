@@ -215,12 +215,14 @@ MonoBehaviour:
     m_Bits: 128
   maxSpeed: 12
   minSpeed: 5
+  maxExtraSpeedOnIce: 5
   maxSizeScale: 1.3
   minSizeScale: 0.6
   gravityScale: 4
   fallGravityScale: 6
   rb: {fileID: 4594095206625168812}
   playerCollider: {fileID: 8713271732185426517}
+  playerObstacleCollision: {fileID: 4594095206625168809}
   timeTakenToReachMinimum: 15
   wallSlidingSpeed: 0.5
   wallCheck: {fileID: 8713271732654611806}
@@ -244,7 +246,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerCollider: {fileID: 8713271732185426517}
   movement: {fileID: 4594095206625168814}
-  slipperyForce: 300
   rb: {fileID: 4594095206625168812}
 --- !u!61 &8713271732185426517
 BoxCollider2D:

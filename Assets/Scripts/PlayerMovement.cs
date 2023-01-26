@@ -32,6 +32,9 @@ public class PlayerMovement : MonoBehaviour
     [Header("Movement Speed")]
     [SerializeField] float maxSpeed;
     [SerializeField] float minSpeed;
+    [SerializeField] float maxExtraSpeedOnIce;
+    private float currentSpeedOnIce = 0;
+
 
     [Header("Size Scale")]
     [SerializeField] float maxSizeScale = 1.3f;
@@ -44,6 +47,7 @@ public class PlayerMovement : MonoBehaviour
     [Header("Components")]
     [SerializeField] Rigidbody2D rb;
     [SerializeField] BoxCollider2D playerCollider;
+    [SerializeField] PlayerObstacleCollision playerObstacleCollision;
 
     [Header("Time to Minimum")]
     [SerializeField] int timeTakenToReachMinimum = 5;
@@ -74,9 +78,10 @@ public class PlayerMovement : MonoBehaviour
         if (!canMove) return;
         // get movement input to detect which direction player wants to move
         horizontalMovement = Input.GetAxisRaw("Horizontal");
-        
+     
         // get whether player wants to jump
         isJump = Input.GetButtonDown("Jump");
+   
         // jumps if player presses jump button and is touching the ground
         Jump();
         // detect if player is wall sliding or wall jumping
@@ -98,12 +103,45 @@ public class PlayerMovement : MonoBehaviour
     private void FixedUpdate()
     {
         if (!canMove) return;
-        // move player horizontally based on speed in inspector
+        // dont let player input control flipping when they wall jump
         if (!isWallJumping)
         {
-            rb.velocity = new Vector2(horizontalMovement * currentSpeed, rb.velocity.y);
+            /* player has different speed on ground and on ice.
+             *  On ice, player does not stop moving immediately, but slowly comes to a stop
+             *  just like how ice behaves in real life
+             */
+            if (horizontalMovement != 0)
+            {
+                // if player presses on a key to move left or right, add velocity
+                rb.velocity = new Vector2(horizontalMovement * currentSpeed, rb.velocity.y);
+
+                if (playerObstacleCollision.isOnIce)
+                {
+                    // constant acceleration until maximum velocity
+                    if (currentSpeedOnIce  < maxExtraSpeedOnIce)
+                    {
+                        currentSpeedOnIce += 0.5f;
+                    }
+                    // if player is on ice, make player go faster since ice has "less friction" in real life
+                    rb.velocity += new Vector2(horizontalMovement * currentSpeedOnIce, 0);
+                }
+
+            }
+
+            // when player is not trying to move, reset velocity to 0 if not on ice
+            // if on ice, let the Ice PhysicsMaterial handle the deceleration
+            else 
+            {
+                currentSpeedOnIce = 0;
+                // reset the speed to accelerate again when player moves
+                if (!playerObstacleCollision.isOnIce && isGrounded())
+                {
+                    // player doesnt move on surfaces other than ice when horizontalMovement == 0
+                    rb.velocity = new Vector2(horizontalMovement * currentSpeed, rb.velocity.y);
+
+                }
+            }
         }
-        
     }
 
     private void FlipHorizontally()
@@ -152,6 +190,30 @@ public class PlayerMovement : MonoBehaviour
         Debug.DrawRay(playerCollider.bounds.center - new Vector3(playerCollider.bounds.extents.x, 0), Vector2.down * (playerCollider.bounds.extents.y + heightOffset), rayColor);
         Debug.DrawRay(playerCollider.bounds.center - new Vector3(playerCollider.bounds.extents.x, playerCollider.bounds.extents.y + heightOffset), Vector2.right * playerCollider.bounds.extents.x * 2, rayColor);
         return raycastHit2D.collider != null;
+    }
+
+    private bool isOnDirt()
+    {
+        // use raycasting to do a ground check from the middle of the player to the bottom
+
+        // add extra height to detect a bit below the player
+        float heightOffset = 0.2f;
+
+        // only allow 1 result to be returned by BoxCast
+        RaycastHit2D[] raycastHits = new RaycastHit2D[1];
+
+        /* create a ContactFilter2D so that the BoxCast only detects objects on the 'Player' layer
+         * and ignore trigger collisions so the player cannot jump when touching platforms that are in isTrigger
+         */
+        ContactFilter2D contactFilter = new ContactFilter2D();
+        contactFilter.SetLayerMask(groundLayerMask);
+        contactFilter.useTriggers = false;
+
+        Physics2D.BoxCast(playerCollider.bounds.center, playerCollider.bounds.size, 0f, Vector2.down, contactFilter, raycastHits, heightOffset);
+        // store the only result returned into a variable for easy reference
+        RaycastHit2D raycastHit2D = raycastHits[0];
+
+        return raycastHit2D.collider.tag == "Ground";
     }
 
     private bool isTouchingWall()

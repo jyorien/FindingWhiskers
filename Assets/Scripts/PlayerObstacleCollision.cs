@@ -5,14 +5,17 @@ public class PlayerObstacleCollision : MonoBehaviour
 {
     [SerializeField] BoxCollider2D playerCollider;
     [SerializeField] PlayerMovement movement;
-    [SerializeField] float slipperyForce;
+    [SerializeField] Rigidbody2D rb;
 
     private GameObject iceCubeOverlay;
-    [SerializeField] Rigidbody2D rb;
 
     // keep track of whether player is frozen to activate/deactivate certain behaviours
     private bool isFrozen = false;
 
+    /* keep track of whether player is on ice.
+     * only allow this class to manage the state
+     */
+    public bool isOnIce { private set; get; }
     private void Start()
     {
         // get reference to the GameObject that shows Robin frozen
@@ -37,11 +40,22 @@ public class PlayerObstacleCollision : MonoBehaviour
     {
         switch (collision.collider.tag)
         {
-            // add constant force to player if he stands on ice to make the surface seem slippery
             // don't apply force when player is frozen
             case "Ice":
                 if (isFrozen) return;
-                rb.AddForce(transform.right * slipperyForce);
+                isOnIce = true;
+
+                break;
+        }
+    }
+
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        switch (collision.collider.tag)
+        {
+            case "Ice":
+                isOnIce = false;
+
                 break;
         }
     }
