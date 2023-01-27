@@ -21,6 +21,8 @@ public class GhostEnemy : MonoBehaviour
     private int hitCount = 0;
     // Ghost will be given 3 lives
     private const int livesCount = 3;
+    // Determines if Ghost can turn his transform upon colliding with a wall
+    private bool canTurn = true;
     // Start is called before the first frame update
     void Start()
     {
@@ -30,12 +32,6 @@ public class GhostEnemy : MonoBehaviour
         layerMask = 1 << LayerMask.NameToLayer("Player");
         // store the projectile spawn point's gameObject so we can access its position later
         projectileSpawnPoint = gameObject.transform.GetChild(0).gameObject;
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 
     private void FixedUpdate()
@@ -80,6 +76,16 @@ public class GhostEnemy : MonoBehaviour
             }
             rb.velocity = new Vector2(horizontalMovement * moveSpeed, rb.velocity.y);
         }
+    }
+
+    IEnumerator TurningCooldown()
+    {
+        /* when player turns, it might trigger another OnCollisionEnter2D event which might cause Ghost to turn endlessly
+         * set a cooldown period so Ghost can move away from the wall before turning again
+         */
+        canTurn = false;
+        yield return new WaitForSeconds(0.5f);
+        canTurn = true;
     }
 
     bool isPlayerInSight()
@@ -157,8 +163,6 @@ public class GhostEnemy : MonoBehaviour
     public void OnChildCollisionDetected(ColliderSide childColliderSide, Collision2D collision)
     {
         string colliderTag = collision.collider.tag;
-        if (colliderTag == "Player")
-        {
             switch (childColliderSide)
             {
                 /* if player touches enemy on top collider, count as a hit
@@ -166,40 +170,51 @@ public class GhostEnemy : MonoBehaviour
                  * for the player to complete the level
                  */
                 case ColliderSide.Top:
-                    hitCount += 1;
-
-                    // if Ghost has been defeated
-                    if (hitCount > livesCount - 1)
+                    if (colliderTag == "Player")
                     {
-                        GameManager.Instance.isLevelCompleteRequirementMet = true;
-                        Destroy(gameObject);
-                        pathToWhiskers.SetActive(true);
+                        hitCount += 1;
+
+                        // if Ghost has been defeated
+                        if (hitCount > livesCount - 1)
+                        {
+                            GameManager.Instance.isLevelCompleteRequirementMet = true;
+                            Destroy(gameObject);
+                            pathToWhiskers.SetActive(true);
+                        }
                     }
                     break;
 
                 // if player touches enemy by the sides, player loses a life
                 case ColliderSide.Side:
-                    Destroy(collision.gameObject);
-                    GameManager.Instance.OnGameLose();
+                    if (colliderTag == "Player")
+                    {
+                        Destroy(collision.gameObject);
+                        GameManager.Instance.OnGameLose();
+                    }
+                    if (colliderTag == "Ice")
+                    {
+                    if (canTurn)
+                    {
+                        // flip the horizontal direction if Ghost bumps into wall
+                        horizontalDirection = horizontalDirection == Direction.Left ? Direction.Right : Direction.Left;
+                        switch (horizontalDirection)
+                        {
+                            // rotate transform when changing directions
+                            case Direction.Left:
+                            default:
+                                transform.localRotation = Quaternion.Euler(0, 0, 0);
+                                break;
+                            case Direction.Right:
+                                transform.localRotation = Quaternion.Euler(0, 180, 0);
+                                break;
+                        }
+                        StartCoroutine(TurningCooldown());
+                    }
+                    
+                    }
                     break;
             }
-        }
-        if (colliderTag == "Ground" || colliderTag == "InstantDeath" || colliderTag == "Ice")
-        {
-            // flip the horizontal direction if Ghost bumps into wall
-            horizontalDirection = horizontalDirection == Direction.Left ? Direction.Right : Direction.Left;
-            switch (horizontalDirection)
-            {
-                // rotate transform when changing directions
-                case Direction.Left:
-                default:
-                    transform.localRotation = Quaternion.Euler(0, 0, 0);
-                    break;
-                case Direction.Right:
-                    transform.localRotation = Quaternion.Euler(0, 180, 0);
-                    break;
-            }
-        }
+       
 
 
     }
