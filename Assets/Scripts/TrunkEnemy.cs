@@ -13,6 +13,8 @@ public class TrunkEnemy : MonoBehaviour
 
     // use enum to make direction more readable
     private Direction horizontalDirection = Direction.Left;
+    // Determines if Trunk can turn his transform upon colliding with a wall
+    private bool canTurn = true;
 
     // Start is called before the first frame update
     void Start()
@@ -57,15 +59,18 @@ public class TrunkEnemy : MonoBehaviour
         bool isOnTop = false;
 
         Collider2D collider = Physics2D.OverlapBox(playerCheck.position, new Vector2(2f, 0.1f), 0, playerLayerMask);
-        Vector3 extentsOfTrunk = boxCollider2D.bounds.extents;
-        Vector3 centerOfTrunk = boxCollider2D.bounds.center;
-        Vector3 positionOfIncomingColider = collider.transform.position;
-
-        // if incoming collider touches the top of Trunk and is tagged Player, then player is on top
-        if (positionOfIncomingColider.y >= centerOfTrunk.y + extentsOfTrunk.y && collider.tag == "Player")
+        if (collider != null)
         {
-            isOnTop = true;
+            Vector3 extentsOfTrunk = boxCollider2D.bounds.extents;
+            Vector3 centerOfTrunk = boxCollider2D.bounds.center;
+            Vector3 positionOfIncomingColider = collider.transform.position;
 
+            // if incoming collider touches the top of Trunk and is tagged Player, then player is on top
+            if (positionOfIncomingColider.y >= centerOfTrunk.y + extentsOfTrunk.y && collider.tag == "Player")
+            {
+                isOnTop = true;
+
+            }
         }
         return isOnTop;
     }
@@ -74,6 +79,16 @@ public class TrunkEnemy : MonoBehaviour
     {
         Gizmos.color = Color.yellow;
         Gizmos.DrawCube(playerCheck.position,new Vector3(2f,0.1f,0));
+    }
+
+    IEnumerator TurningCooldown()
+    {
+        /* when Trunk turns, it might trigger another OnCollisionEnter2D event which might cause Trunk to turn endlessly
+         * set a cooldown period so Trunk can move away from the wall before turning again
+         */
+        canTurn = false;
+        yield return new WaitForSeconds(0.5f);
+        canTurn = true;
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -103,6 +118,24 @@ public class TrunkEnemy : MonoBehaviour
             case "Ice":
                 // flip the horizontal direction if Trunk bumps into wall or spikes
                 horizontalDirection = horizontalDirection == Direction.Left ? Direction.Right : Direction.Left;
+                if (canTurn)
+                {
+                    // flip the horizontal direction if Trunk bumps into something on the sides
+                    horizontalDirection = horizontalDirection == Direction.Left ? Direction.Right : Direction.Left;
+                    switch (horizontalDirection)
+                    {
+                        // rotate transform when changing directions
+                        case Direction.Left:
+                        default:
+                            transform.localRotation = Quaternion.Euler(0, 0, 0);
+                            break;
+                        case Direction.Right:
+                            transform.localRotation = Quaternion.Euler(0, 180, 0);
+                            break;
+                    }
+                    StartCoroutine(TurningCooldown());
+                }
+                StartCoroutine(TurningCooldown());
                 break;
         }
     }
