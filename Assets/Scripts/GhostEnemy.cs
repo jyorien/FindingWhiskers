@@ -80,7 +80,7 @@ public class GhostEnemy : MonoBehaviour
 
     IEnumerator TurningCooldown()
     {
-        /* when player turns, it might trigger another OnCollisionEnter2D event which might cause Ghost to turn endlessly
+        /* when Ghost turns, it might trigger another OnCollisionEnter2D event which might cause Ghost to turn endlessly
          * set a cooldown period so Ghost can move away from the wall before turning again
          */
         canTurn = false;
@@ -195,7 +195,7 @@ public class GhostEnemy : MonoBehaviour
                     {
                     if (canTurn)
                     {
-                        // flip the horizontal direction if Ghost bumps into wall
+                        // flip the horizontal direction if Ghost bumps into ice wall
                         horizontalDirection = horizontalDirection == Direction.Left ? Direction.Right : Direction.Left;
                         switch (horizontalDirection)
                         {
