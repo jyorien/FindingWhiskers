@@ -56,7 +56,7 @@ public class TrunkEnemy : MonoBehaviour
     {
         bool isOnTop = false;
 
-        Collider2D collider = Physics2D.OverlapBox(playerCheck.position, new Vector2(1.5f, 0.1f), 0, playerLayerMask);
+        Collider2D collider = Physics2D.OverlapBox(playerCheck.position, new Vector2(2f, 0.1f), 0, playerLayerMask);
         Vector3 extentsOfTrunk = boxCollider2D.bounds.extents;
         Vector3 centerOfTrunk = boxCollider2D.bounds.center;
         Vector3 positionOfIncomingColider = collider.transform.position;
