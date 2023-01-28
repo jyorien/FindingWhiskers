@@ -48,6 +48,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] Rigidbody2D rb;
     [SerializeField] BoxCollider2D playerCollider;
     [SerializeField] PlayerObstacleCollision playerObstacleCollision;
+    [SerializeField] Animator animator;
 
     [Header("Time to Minimum")]
     [SerializeField] int timeTakenToReachMinimum = 5;
@@ -78,7 +79,14 @@ public class PlayerMovement : MonoBehaviour
         if (!canMove) return;
         // get movement input to detect which direction player wants to move
         horizontalMovement = Input.GetAxisRaw("Horizontal");
-     
+        if (isGrounded())
+        {
+            animator.SetBool("Jumping", false);
+        } else
+        {
+            animator.SetBool("Jumping", true);
+        }
+
         // get whether player wants to jump
         isJump = Input.GetButtonDown("Jump");
    
@@ -125,6 +133,7 @@ public class PlayerMovement : MonoBehaviour
                     // if player is on ice, make player go faster since ice has "less friction" in real life
                     rb.velocity += new Vector2(horizontalMovement * currentSpeedOnIce, 0);
                 }
+                animator.SetBool("Walking", true);
 
             }
 
@@ -139,7 +148,9 @@ public class PlayerMovement : MonoBehaviour
                     // player doesnt move on dirt when horizontalMovement == 0
                     rb.velocity = new Vector2(horizontalMovement * currentSpeed, rb.velocity.y);
 
+
                 }
+                animator.SetBool("Walking", false);
             }
         }
     }
@@ -250,6 +261,7 @@ public class PlayerMovement : MonoBehaviour
         {
             isWallSliding = false;
         }
+        animator.SetBool("Wall Sliding", isWallSliding);
     }
 
     private void WallJump()

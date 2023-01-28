@@ -101,8 +101,10 @@ public class TrunkEnemy : MonoBehaviour
             case "Wall":
             case "InstantDeath":
             case "Ice":
+                Debug.Log("zztouch");
                 if (canTurn)
                 {
+                    Debug.Log("zzturn");
                     // flip the horizontal direction if Trunk bumps into wall or spikes
                     transform.rotation = transform.rotation * Quaternion.Euler(0, 180, 0);
                     StartCoroutine(TurningCooldown());
