@@ -91,7 +91,7 @@ public class PlayerMovement : MonoBehaviour
         // dont let player input control flipping when they wall jump
         if (!isWallJumping)
         {
-            // if facing right but going left or facing left but going right, flip player transform
+            // flip player if not facing where they're supposed to
             if (isFacingRight && horizontalMovement < 0f || !isFacingRight && horizontalMovement > 0f)
             {
                 FlipHorizontally();
@@ -103,12 +103,12 @@ public class PlayerMovement : MonoBehaviour
     private void FixedUpdate()
     {
         if (!canMove) return;
+        Debug.Log($"velocity: {rb.velocity}");
         // dont let player input control flipping when they wall jump
         if (!isWallJumping)
         {
             /* player has different speed on ground and on ice.
              *  On ice, player does not stop moving immediately, but slowly comes to a stop
-             *  just like how ice behaves in real life
              */
             if (horizontalMovement != 0)
             {
@@ -128,15 +128,15 @@ public class PlayerMovement : MonoBehaviour
 
             }
 
-            // when player is not trying to move, reset velocity to 0 if not on ice
+            // when player is not trying to move, reset velocity to 0 if on dirt
             // if on ice, let the Ice PhysicsMaterial handle the deceleration
             else 
             {
+                // reset the speed to accelerate when player moves again
                 currentSpeedOnIce = 0;
-                // reset the speed to accelerate again when player moves
-                if (!playerObstacleCollision.isOnIce && isGrounded())
+                if (isOnDirt())
                 {
-                    // player doesnt move on surfaces other than ice when horizontalMovement == 0
+                    // player doesnt move on dirt when horizontalMovement == 0
                     rb.velocity = new Vector2(horizontalMovement * currentSpeed, rb.velocity.y);
 
                 }
@@ -159,6 +159,7 @@ public class PlayerMovement : MonoBehaviour
     private bool isGrounded()
     {
         // use raycasting to do a ground check from the middle of the player to the bottom
+        // note: ground check checks for objects in "Ground" Layer (Dirt Floor, Ice)
 
         // add extra height to detect a bit below the player
         float heightOffset = 0.2f;
@@ -166,7 +167,7 @@ public class PlayerMovement : MonoBehaviour
         // only allow 1 result to be returned by BoxCast
         RaycastHit2D[] raycastHits = new RaycastHit2D[1];
 
-        /* create a ContactFilter2D so that the BoxCast only detects objects on the 'Player' layer
+        /* create a ContactFilter2D so that the BoxCast only detects objects on the 'Ground' layer
          * and ignore trigger collisions so the player cannot jump when touching platforms that are in isTrigger
          */
         ContactFilter2D contactFilter = new ContactFilter2D();
@@ -192,10 +193,35 @@ public class PlayerMovement : MonoBehaviour
         return raycastHit2D.collider != null;
     }
 
+    private bool isOnDirt()
+    {
+        // use raycasting to do a ground check from the middle of the player to the bottom
+        // note: dirt check checks for objects tagged with "Ground" (Dirt Floor, Dirt Wall)
+
+        // add extra height to detect a bit below the player
+        float heightOffset = 0.2f;
+
+        // only allow 1 result to be returned by BoxCast
+        RaycastHit2D[] raycastHits = new RaycastHit2D[1];
+
+        /* create a ContactFilter2D so that the BoxCast only detects objects on the 'Ground' layer
+         * and ignore trigger collisions so the player cannot jump when touching platforms that are in isTrigger
+         */
+        ContactFilter2D contactFilter = new ContactFilter2D();
+        contactFilter.SetLayerMask(groundLayerMask);
+        contactFilter.useTriggers = false;
+
+        Physics2D.BoxCast(playerCollider.bounds.center, playerCollider.bounds.size, 0f, Vector2.down, contactFilter, raycastHits, heightOffset);
+        // store the only result returned into a variable for easy reference
+        RaycastHit2D raycastHit2D = raycastHits[0];
+
+        return raycastHit2D.collider.tag == "Ground";
+    }
+
     private bool isTouchingWall()
     {
         /* determine if player is touching wall by checking colliders within a circlular area of Wall Check's transform.
-         * detects walls based on their layer mask
+         * detects walls based on their layer
          */
         return Physics2D.OverlapCircle(wallCheck.position, 0.2f, wallLayerMask);
     }
@@ -206,9 +232,7 @@ public class PlayerMovement : MonoBehaviour
         {
             rb.AddForce(Vector2.up * currentJumpForce, ForceMode2D.Impulse);
         }
-        /* to achieve faster falling, change gravity to a higher value than
-         * when jumping up 
-         */
+        // to achieve faster falling, change gravity to a higher value than when jumping up
         rb.gravityScale = rb.velocity.y > 0 ? rb.gravityScale : fallGravityScale;
     }
 
