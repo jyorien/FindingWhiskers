@@ -35,9 +35,3 @@ public enum ColliderSide
     Side,
     Top
 }
-
-public enum Direction
-{
-    Left,
-    Right
-}

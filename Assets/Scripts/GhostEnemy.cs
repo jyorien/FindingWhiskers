@@ -10,12 +10,12 @@ public class GhostEnemy : MonoBehaviour
     [SerializeField] GameObject iceCubeProjectileToSpawn;
     [SerializeField] float projectileSpeed;
     [SerializeField] GameObject pathToWhiskers;
+    [SerializeField] LayerMask layerMask;
 
     private GameObject projectileSpawnPoint;
-    private int layerMask;
+    // use a LayerMask for Ghost to only detect Player in his line of sight
     private IEnumerator fireAtPlayer;
     private bool isFiring;
-    private Direction horizontalDirection = Direction.Left;
     private Rigidbody2D rb;
     // keep track of how many times the player hit Ghost
     private int hitCount = 0;
@@ -28,8 +28,6 @@ public class GhostEnemy : MonoBehaviour
     {
         rb = gameObject.GetComponent<Rigidbody2D>();
 
-        // use a LayerMask for Ghost to only detect Player in his line of sight
-        layerMask = 1 << LayerMask.NameToLayer("Player");
         // store the projectile spawn point's gameObject so we can access its position later
         projectileSpawnPoint = gameObject.transform.GetChild(0).gameObject;
     }
@@ -58,23 +56,8 @@ public class GhostEnemy : MonoBehaviour
                 StopCoroutine(fireAtPlayer);
                 isFiring = false;
             }
-
-            int horizontalMovement;
-
-            // set value of the direction based on enum
-            switch (horizontalDirection)
-            {
-                // since Ghost's sprite is facing left, by default it will have negative velocity
-                case Direction.Left:
-                default:
-                    horizontalMovement = -1;
-                    break;
-                // positive velocity makes Trunk move to the right
-                case Direction.Right:
-                    horizontalMovement = 1;
-                    break;
-            }
-            rb.velocity = new Vector2(horizontalMovement * moveSpeed, rb.velocity.y);
+            // move forward
+            rb.velocity = -transform.right * moveSpeed;
         }
     }
 
@@ -90,7 +73,7 @@ public class GhostEnemy : MonoBehaviour
 
     bool isPlayerInSight()
     {
-        /* draw ray from Ghost towards the right and limit the ray's distance. 
+        /* draw ray from in front of Ghost and limit the ray's distance. 
          * The ray will only collide with objects in the Player layer since 
          * we only want the Ghost to be hostile when the player is in the Ghost's line of sight 
          */
@@ -124,19 +107,8 @@ public class GhostEnemy : MonoBehaviour
         // add force to push projectile forward
         Rigidbody2D projectileRb = newProjectile.GetComponent<Rigidbody2D>();
 
-        // determine direction the force should be applied to projectile based on where Ghost is facing
-        Vector2 forceDirection;
-        switch (horizontalDirection)
-        {
-            case Direction.Left:
-            default:
-                forceDirection = Vector2.left;
-                break;
-            case Direction.Right:
-                forceDirection = Vector2.right;
-                break;
-        }
-        projectileRb.AddForce(forceDirection * projectileSpeed);
+        // shoot projectile with force in the direction Ghost is facing
+        projectileRb.AddForce(-transform.right * projectileSpeed);
         
         // destroy projectile after a few seconds to avoid keeping too many unused GameObjects
         Destroy(newProjectile, 3);
@@ -186,38 +158,25 @@ public class GhostEnemy : MonoBehaviour
                     }
                     break;
 
-                // if player touches enemy by the sides, player loses a life
                 case ColliderSide.Side:
-                    if (colliderTag == "Player")
+                    switch (colliderTag)
                     {
+                        // if player touches enemy by the sides, player loses a life
+                        case "Player":
                         Destroy(collision.gameObject);
                         GameManager.Instance.OnGameLose();
-                    }
-                    if (colliderTag == "Ice")
-                    {
-                    if (canTurn)
-                    {
+                        break;
+
                         // flip the horizontal direction if Ghost bumps into ice wall
-                        horizontalDirection = horizontalDirection == Direction.Left ? Direction.Right : Direction.Left;
-                        switch (horizontalDirection)
+                        case "Ice":
+                        if (canTurn)
                         {
-                            // rotate transform when changing directions
-                            case Direction.Left:
-                            default:
-                                transform.localRotation = Quaternion.Euler(0, 0, 0);
-                                break;
-                            case Direction.Right:
-                                transform.localRotation = Quaternion.Euler(0, 180, 0);
-                                break;
+                           transform.rotation = transform.rotation * Quaternion.Euler(0, 180, 0);
+                           StartCoroutine(TurningCooldown());
                         }
-                        StartCoroutine(TurningCooldown());
-                    }
-                    
+                        break;
                     }
                     break;
             }
-       
-
-
     }
 }

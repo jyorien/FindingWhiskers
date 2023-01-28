@@ -129,6 +129,9 @@ MonoBehaviour:
   iceCubeProjectileToSpawn: {fileID: 1425879238570738911, guid: 3b7bdeaa8ee2f46dcb9af9ba45590224, type: 3}
   projectileSpeed: 100
   pathToWhiskers: {fileID: 0}
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 64
 --- !u!61 &1796501360778787680
 BoxCollider2D:
   m_ObjectHideFlags: 0

@@ -11,8 +11,6 @@ public class TrunkEnemy : MonoBehaviour
     private Rigidbody2D rb;
     private BoxCollider2D boxCollider2D;
 
-    // use enum to make direction more readable
-    private Direction horizontalDirection = Direction.Left;
     // Determines if Trunk can turn his transform upon colliding with a wall
     private bool canTurn = true;
 
@@ -36,22 +34,8 @@ public class TrunkEnemy : MonoBehaviour
 
     void FixedUpdate()
     {
-        int horizontalMovement;
-
-        // set value of the direction based on enum
-        switch (horizontalDirection)
-        {
-            // since Trunk's sprite is facing left, by default it will have negative velocity
-            case Direction.Left:
-            default:
-                horizontalMovement = -1;
-                break;
-            // positive velocity makes Trunk move to the right
-            case Direction.Right:
-                horizontalMovement = 1;
-                break;
-        }
-        rb.velocity = new Vector2(horizontalMovement * speed, rb.velocity.y);
+  
+        rb.velocity = -transform.right * speed;
     }
 
     private bool isPlayerOnTop()
@@ -99,6 +83,7 @@ public class TrunkEnemy : MonoBehaviour
                 Vector3 extentsOfTrunk = boxCollider2D.bounds.extents;
                 Vector3 centerOfTrunk = boxCollider2D.bounds.center;
                 Vector3 positionOfIncomingColider = collision.collider.transform.position;
+
                 /* if incoming collider touches the left and right edges of Trunk, player loses
                  * extents returns half the size of the collider.
                  * we are checking if player's x point is less than center position - half the length of Trunk
@@ -116,23 +101,10 @@ public class TrunkEnemy : MonoBehaviour
             case "Wall":
             case "InstantDeath":
             case "Ice":
-                // flip the horizontal direction if Trunk bumps into wall or spikes
-                horizontalDirection = horizontalDirection == Direction.Left ? Direction.Right : Direction.Left;
                 if (canTurn)
                 {
-                    // flip the horizontal direction if Trunk bumps into something on the sides
-                    horizontalDirection = horizontalDirection == Direction.Left ? Direction.Right : Direction.Left;
-                    switch (horizontalDirection)
-                    {
-                        // rotate transform when changing directions
-                        case Direction.Left:
-                        default:
-                            transform.localRotation = Quaternion.Euler(0, 0, 0);
-                            break;
-                        case Direction.Right:
-                            transform.localRotation = Quaternion.Euler(0, 180, 0);
-                            break;
-                    }
+                    // flip the horizontal direction if Trunk bumps into wall or spikes
+                    transform.rotation = transform.rotation * Quaternion.Euler(0, 180, 0);
                     StartCoroutine(TurningCooldown());
                 }
                 StartCoroutine(TurningCooldown());
