@@ -6,12 +6,14 @@ public class BreakingPlatform : MonoBehaviour
 {
     BoxCollider2D platformCollider;
     SpriteRenderer spriteRenderer;
+    Animator animator;
 
     // Start is called before the first frame update
     void Start()
     {
         platformCollider = GetComponent<BoxCollider2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
+        animator = GetComponent<Animator>();
 
         // make collider isTrigger to let player pass through
         platformCollider.isTrigger = true;
@@ -42,11 +44,13 @@ public class BreakingPlatform : MonoBehaviour
 
     IEnumerator BreakPlatform()
     {
+        animator.SetBool("Breaking", true);
         // break platform after a second
         yield return new WaitForSeconds(1);
         SetPlatformActive(false);
         // respawn after two seconds
         yield return new WaitForSeconds(2);
+        animator.SetBool("Breaking", false);
         SetPlatformActive(true);
     }
 
