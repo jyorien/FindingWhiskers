@@ -144,14 +144,16 @@ public class GhostEnemy : MonoBehaviour
 
     IEnumerator FireAtPlayer()
     {
+        /* add a short delay before the loop so when player jumps to re-enter the line of sight,
+         * Ghost doesn't immediately start firing
+         */
+        yield return new WaitForSeconds(0.5f);
         // keep firing infinitely with a set delay
         while (true)
         {
-            /* put the delay first so projectiles don't spam
-             * when player keeps re-entering the line of sight
-             */
-            yield return new WaitForSeconds(1.5f);
+            // randomly spawn normal or ice cube projectile every 1.5s until coroutine gets stopped
             FireProjectile();
+            yield return new WaitForSeconds(1.5f);
         }
     }
 
