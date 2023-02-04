@@ -111,7 +111,6 @@ public class PlayerMovement : MonoBehaviour
     private void FixedUpdate()
     {
         if (!canMove) return;
-        Debug.Log($"velocity: {rb.velocity}");
         // dont let player input control flipping when they wall jump
         if (!isWallJumping)
         {
@@ -226,7 +225,16 @@ public class PlayerMovement : MonoBehaviour
         // store the only result returned into a variable for easy reference
         RaycastHit2D raycastHit2D = raycastHits[0];
 
-        return raycastHit2D.collider.tag == "Ground";
+        // to avoid NullPointerException, check whether collider is null first
+        if (raycastHit2D.collider != null)
+        {
+            return raycastHit2D.collider.tag == "Ground";
+
+        } else
+        {
+            // if null, immediately return false as player is definitely not on dirt
+            return false;
+        }
     }
 
     private bool isTouchingWall()
