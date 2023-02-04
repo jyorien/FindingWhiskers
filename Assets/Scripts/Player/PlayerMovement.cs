@@ -128,7 +128,7 @@ public class PlayerMovement : MonoBehaviour
                     // constant acceleration until maximum velocity
                     if (currentSpeedOnIce  < maxExtraSpeedOnIce)
                     {
-                        currentSpeedOnIce += 0.5f;
+                        currentSpeedOnIce += 0.2f;
                     }
                     // if player is on ice, make player go faster since ice has "less friction" in real life
                     rb.velocity += new Vector2(horizontalMovement * currentSpeedOnIce, 0);
