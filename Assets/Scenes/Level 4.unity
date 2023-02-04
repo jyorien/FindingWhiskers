@@ -144,7 +144,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 129733387975736622, guid: bc64185524736476bafb1c81dbab70bc, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.68
+      value: 0.13
       objectReference: {fileID: 0}
     - target: {fileID: 129733387975736622, guid: bc64185524736476bafb1c81dbab70bc, type: 3}
       propertyPath: m_LocalPosition.z
@@ -201,7 +201,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 129733387975736622, guid: bc64185524736476bafb1c81dbab70bc, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -1.18
+      value: -1.59
       objectReference: {fileID: 0}
     - target: {fileID: 129733387975736622, guid: bc64185524736476bafb1c81dbab70bc, type: 3}
       propertyPath: m_LocalPosition.z
@@ -465,7 +465,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 129733387975736622, guid: bc64185524736476bafb1c81dbab70bc, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.25
+      value: 1.033
       objectReference: {fileID: 0}
     - target: {fileID: 129733387975736622, guid: bc64185524736476bafb1c81dbab70bc, type: 3}
       propertyPath: m_LocalPosition.z
@@ -867,7 +867,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 129733387975736622, guid: bc64185524736476bafb1c81dbab70bc, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -1.61
+      value: -1.719
       objectReference: {fileID: 0}
     - target: {fileID: 129733387975736622, guid: bc64185524736476bafb1c81dbab70bc, type: 3}
       propertyPath: m_LocalPosition.z
@@ -1017,19 +1017,23 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4594095206625168814, guid: f4bbd9bafd3d942b8bcf82699bed3650, type: 3}
       propertyPath: minSpeed
-      value: 7
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 4594095206625168814, guid: f4bbd9bafd3d942b8bcf82699bed3650, type: 3}
       propertyPath: maxJumpForce
-      value: 18
+      value: 16
       objectReference: {fileID: 0}
     - target: {fileID: 4594095206625168814, guid: f4bbd9bafd3d942b8bcf82699bed3650, type: 3}
       propertyPath: minJumpForce
-      value: 14
+      value: 13
+      objectReference: {fileID: 0}
+    - target: {fileID: 4594095206625168814, guid: f4bbd9bafd3d942b8bcf82699bed3650, type: 3}
+      propertyPath: wallJumpingTime
+      value: 0.4
       objectReference: {fileID: 0}
     - target: {fileID: 4594095206625168814, guid: f4bbd9bafd3d942b8bcf82699bed3650, type: 3}
       propertyPath: timeTakenToReachMinimum
-      value: 18
+      value: 25
       objectReference: {fileID: 0}
     - target: {fileID: 5127985094906783728, guid: f4bbd9bafd3d942b8bcf82699bed3650, type: 3}
       propertyPath: minSpeed
@@ -1123,7 +1127,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 129733387975736622, guid: bc64185524736476bafb1c81dbab70bc, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.07
+      value: -0.44
       objectReference: {fileID: 0}
     - target: {fileID: 129733387975736622, guid: bc64185524736476bafb1c81dbab70bc, type: 3}
       propertyPath: m_LocalPosition.z
