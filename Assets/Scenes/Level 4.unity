@@ -910,6 +910,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2677010957836640825, guid: 571b0d131d69845d0b81045f2e9c4318, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: -2052330726, guid: 3b1b6ba79e4f2479191a7955764bb186, type: 3}
     - target: {fileID: 3229392982498550122, guid: 571b0d131d69845d0b81045f2e9c4318, type: 3}
       propertyPath: m_Name
       value: GameCanvas
@@ -997,6 +1001,14 @@ PrefabInstance:
     - target: {fileID: 3229392982498550126, guid: 571b0d131d69845d0b81045f2e9c4318, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6666233275677330904, guid: 571b0d131d69845d0b81045f2e9c4318, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 44
+      objectReference: {fileID: 0}
+    - target: {fileID: 6666233275677330904, guid: 571b0d131d69845d0b81045f2e9c4318, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 30
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 571b0d131d69845d0b81045f2e9c4318, type: 3}

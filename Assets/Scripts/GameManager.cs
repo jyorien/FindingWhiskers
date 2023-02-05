@@ -56,9 +56,11 @@ public class GameManager : MonoBehaviour
 
     public void GoNextLevel()
     {
-        // reset timer and lives for next level
+        // if player wins, go to next level and reset states for the next level
+        isLevelCompleteRequirementMet = false;
         timer.Reset();
         livesLeft = 3;
+
         // store index of next scene
         currentLevelBuildIndex += 1;
 
@@ -73,8 +75,6 @@ public class GameManager : MonoBehaviour
 
     public void OnGameWin()
     {
-        // if player wins, go to next level and reset states for the next level
-        isLevelCompleteRequirementMet = false;
         // stop timer every level
         timer.Stop();
         // format into 00:00:000 to display in Level Complete Scene
@@ -93,6 +93,7 @@ public class GameManager : MonoBehaviour
     public void OnGameLose()
     {
         livesLeft -= 1;
+        isLevelCompleteRequirementMet = false;
 
         // get the GameUICanvas of the current level to make the last life disappear
         GameUICanvas gameUICanvas = GameObject.Find("GameCanvas").GetComponent<GameUICanvas>();

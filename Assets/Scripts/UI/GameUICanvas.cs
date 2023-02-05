@@ -5,6 +5,7 @@ using TMPro;
 public class GameUICanvas : MonoBehaviour
 {
     [SerializeField] TMP_Text stopwatchText;
+    [SerializeField] TMP_Text requirementText;
     [SerializeField] GameObject[] lives;
     private void Start()
     {
@@ -18,6 +19,13 @@ public class GameUICanvas : MonoBehaviour
     {
         // get stopwatch timing and format every frame
         stopwatchText.text = Utils.formatMillisecondsToDisplayTime(GameManager.Instance.GetGameTimeElapsedInMiliseconds());
+        if (GameManager.Instance.isLevelCompleteRequirementMet)
+        {
+            requirementText.text = "1 / 1";
+        } else
+        {
+            requirementText.text = "0 / 1";
+        }
     }
 
     public void DisplayLivesLeft(int livesLeft)
