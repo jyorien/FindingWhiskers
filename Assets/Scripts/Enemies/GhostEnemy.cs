@@ -18,7 +18,7 @@ public class GhostEnemy : MonoBehaviour
     private bool isFiring;
     private Rigidbody2D rb;
     // keep track of how many times the player hit Ghost
-    private int hitCount = 0;
+    public static int hitCount { get; private set; }
     // Ghost will be given 3 lives
     private const int livesCount = 3;
     // Determines if Ghost can turn his transform upon colliding with a wall
@@ -27,7 +27,8 @@ public class GhostEnemy : MonoBehaviour
     void Start()
     {
         rb = gameObject.GetComponent<Rigidbody2D>();
-
+        // initialise variable to avoid null pointer
+        hitCount = 0;
         // store the projectile spawn point's gameObject so we can access its position later
         projectileSpawnPoint = gameObject.transform.GetChild(0).gameObject;
     }
@@ -151,8 +152,8 @@ public class GhostEnemy : MonoBehaviour
                         // if Ghost has been defeated
                         if (hitCount > livesCount - 1)
                         {
-                            GameManager.Instance.isLevelCompleteRequirementMet = true;
                             Destroy(gameObject);
+                            GameManager.Instance.isLevelCompleteRequirementMet = true;
                             pathToWhiskers.SetActive(true);
                         }
                     }
