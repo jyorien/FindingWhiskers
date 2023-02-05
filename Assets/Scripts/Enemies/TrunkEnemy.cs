@@ -6,7 +6,9 @@ public class TrunkEnemy : MonoBehaviour
 {
     [SerializeField] float speed;
     [SerializeField] Transform playerCheck;
+    [SerializeField] Transform wallCheck;
     [SerializeField] LayerMask playerLayerMask;
+    [SerializeField] LayerMask wallLayerMask;
 
     private Rigidbody2D rb;
     private BoxCollider2D boxCollider2D;
@@ -29,6 +31,12 @@ public class TrunkEnemy : MonoBehaviour
             // ensure player bounces before destroying gameObject
             // set a delay to ensure that player touches the Trunk's collider with Bouncy PhysicsMaterial
             Destroy(gameObject, 0.1f);
+        }
+        if (canTurn && isTouchingWall())
+        {
+            // flip the horizontal direction if Trunk bumps into wall or spikes
+            transform.rotation = transform.rotation * Quaternion.Euler(0, 180, 0);
+            StartCoroutine(TurningCooldown());
         }
     }
 
@@ -63,6 +71,12 @@ public class TrunkEnemy : MonoBehaviour
     {
         Gizmos.color = Color.yellow;
         Gizmos.DrawCube(playerCheck.position,new Vector3(2f,0.1f,0));
+    }
+
+    private bool isTouchingWall()
+    {
+        // determine if player is touching wall by checking colliders within a circlular area of Wall Check's transform.
+        return Physics2D.OverlapCircle(wallCheck.position, 0.2f, wallLayerMask);
     }
 
     IEnumerator TurningCooldown()
@@ -101,13 +115,13 @@ public class TrunkEnemy : MonoBehaviour
             case "Wall":
             case "InstantDeath":
             case "Ice":
-                if (canTurn)
-                {
-                    // flip the horizontal direction if Trunk bumps into wall or spikes
-                    transform.rotation = transform.rotation * Quaternion.Euler(0, 180, 0);
-                    StartCoroutine(TurningCooldown());
-                }
-                StartCoroutine(TurningCooldown());
+                //if (canTurn)
+                //{
+                //    // flip the horizontal direction if Trunk bumps into wall or spikes
+                //    transform.rotation = transform.rotation * Quaternion.Euler(0, 180, 0);
+                //    StartCoroutine(TurningCooldown());
+                //}
+                //StartCoroutine(TurningCooldown());
                 break;
         }
     }

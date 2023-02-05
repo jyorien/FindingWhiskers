@@ -12,6 +12,7 @@ TagManager:
   - Clue
   - Campfire
   - Freeze
+  - Platform
   layers:
   - Default
   - TransparentFX
@@ -21,7 +22,7 @@ TagManager:
   - UI
   - Player
   - Ground
-  - Wall
+  - 
   - 
   - 
   - 

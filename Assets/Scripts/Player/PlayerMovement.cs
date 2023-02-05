@@ -56,7 +56,6 @@ public class PlayerMovement : MonoBehaviour
     [Header("Wall Slide")]
     [SerializeField] float wallSlidingSpeed = 6f;
     [SerializeField] private Transform wallCheck;
-    [SerializeField] private LayerMask wallLayerMask;
     private bool isWallSliding;
 
     [Header("Wall Jump")]
@@ -239,12 +238,21 @@ public class PlayerMovement : MonoBehaviour
 
     private bool isTouchingWall()
     {
+        bool isTouchingWall = false;
         /* determine if player is touching wall by checking colliders within a circlular area of Wall Check's transform.
          * detects walls based on their layer
          */
-        return Physics2D.OverlapCircle(wallCheck.position, 0.2f, wallLayerMask);
-    }
+        Collider2D collider = Physics2D.OverlapCircle(wallCheck.position, 0.2f, groundLayerMask);
 
+        // We do not want player to wall slide or jump off ice or platforms, so make sure object in "Ground" layer is labelled "Ground" as all the dirt walls are tagged that
+        if (collider && collider.tag == "Ground")
+        {
+          isTouchingWall = true;
+            
+        }
+        return isTouchingWall;
+    }
+ 
     private void Jump()
     {
         if (isJump && isGrounded())

@@ -213,7 +213,7 @@ MonoBehaviour:
   minJumpForce: 10
   groundLayerMask:
     serializedVersion: 2
-    m_Bits: 128
+    m_Bits: 384
   maxSpeed: 12
   minSpeed: 5
   maxExtraSpeedOnIce: 5
