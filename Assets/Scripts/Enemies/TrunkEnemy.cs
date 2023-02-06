@@ -13,9 +13,6 @@ public class TrunkEnemy : MonoBehaviour
     private Rigidbody2D rb;
     private BoxCollider2D boxCollider2D;
 
-    // Determines if Trunk can turn his transform upon colliding with a wall
-    private bool canTurn = true;
-
     // Start is called before the first frame update
     void Start()
     {
@@ -26,17 +23,16 @@ public class TrunkEnemy : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
-        if (isPlayerOnTop())
+        if (IsPlayerOnTop())
         {
             // ensure player bounces before destroying gameObject
             // set a delay to ensure that player touches the Trunk's collider with Bouncy PhysicsMaterial
             Destroy(gameObject, 0.1f);
         }
-        if (canTurn && isTouchingWall())
+        if (IsTouchingWall())
         {
             // flip the horizontal direction if Trunk bumps into wall or spikes
             transform.rotation = transform.rotation * Quaternion.Euler(0, 180, 0);
-            StartCoroutine(TurningCooldown());
         }
     }
 
@@ -46,7 +42,7 @@ public class TrunkEnemy : MonoBehaviour
         rb.velocity = -transform.right * speed;
     }
 
-    private bool isPlayerOnTop()
+    private bool IsPlayerOnTop()
     {
         bool isOnTop = false;
 
@@ -73,20 +69,10 @@ public class TrunkEnemy : MonoBehaviour
         Gizmos.DrawCube(playerCheck.position,new Vector3(2f,0.1f,0));
     }
 
-    private bool isTouchingWall()
+    private bool IsTouchingWall()
     {
         // determine if player is touching wall by checking colliders within a circlular area of Wall Check's transform.
         return Physics2D.OverlapCircle(wallCheck.position, 0.2f, wallLayerMask);
-    }
-
-    IEnumerator TurningCooldown()
-    {
-        /* when Trunk turns, it might trigger another OnCollisionEnter2D event which might cause Trunk to turn endlessly
-         * set a cooldown period so Trunk can move away from the wall before turning again
-         */
-        canTurn = false;
-        yield return new WaitForSeconds(0.5f);
-        canTurn = true;
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -96,15 +82,15 @@ public class TrunkEnemy : MonoBehaviour
             case "Player":
                 Vector3 extentsOfTrunk = boxCollider2D.bounds.extents;
                 Vector3 centerOfTrunk = boxCollider2D.bounds.center;
-                Vector3 positionOfIncomingColider = collision.collider.transform.position;
+                Vector3 positionOfIncomingCollider = collision.collider.transform.position;
 
                 /* if incoming collider touches the left and right edges of Trunk, player loses
                  * extents returns half the size of the collider.
                  * we are checking if player's x point is less than center position - half the length of Trunk
                  * or if x point is greater than center position + half the length of Trunk
                  */
-                if (positionOfIncomingColider.x > centerOfTrunk.x + extentsOfTrunk.x ||
-                    positionOfIncomingColider.x < centerOfTrunk.x - extentsOfTrunk.x)
+                if (positionOfIncomingCollider.x > centerOfTrunk.x + extentsOfTrunk.x ||
+                    positionOfIncomingCollider.x < centerOfTrunk.x - extentsOfTrunk.x)
                 {
                     Destroy(collision.gameObject);
                     GameManager.Instance.OnGameLose();
@@ -115,13 +101,8 @@ public class TrunkEnemy : MonoBehaviour
             case "Wall":
             case "InstantDeath":
             case "Ice":
-                //if (canTurn)
-                //{
-                //    // flip the horizontal direction if Trunk bumps into wall or spikes
-                //    transform.rotation = transform.rotation * Quaternion.Euler(0, 180, 0);
-                //    StartCoroutine(TurningCooldown());
-                //}
-                //StartCoroutine(TurningCooldown());
+                // flip the horizontal direction if Trunk bumps into wall or spikes
+                transform.rotation = transform.rotation * Quaternion.Euler(0, 180, 0);
                 break;
         }
     }

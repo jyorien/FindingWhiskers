@@ -21,8 +21,7 @@ public class GhostEnemy : MonoBehaviour
     public static int hitCount { get; private set; }
     // Ghost will be given 3 lives
     private const int livesCount = 3;
-    // Determines if Ghost can turn his transform upon colliding with a wall
-    private bool canTurn = true;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -35,7 +34,7 @@ public class GhostEnemy : MonoBehaviour
 
     private void FixedUpdate()
     {
-       if (isPlayerInSight())
+       if (IsPlayerInSight())
         {
             // force Ghost to stop moving when firing
             rb.velocity = new Vector2(0, rb.velocity.y);
@@ -62,17 +61,7 @@ public class GhostEnemy : MonoBehaviour
         }
     }
 
-    IEnumerator TurningCooldown()
-    {
-        /* when Ghost turns, it might trigger another OnCollisionEnter2D event which might cause Ghost to turn endlessly
-         * set a cooldown period so Ghost can move away from the wall before turning again
-         */
-        canTurn = false;
-        yield return new WaitForSeconds(0.5f);
-        canTurn = true;
-    }
-
-    bool isPlayerInSight()
+    bool IsPlayerInSight()
     {
         /* draw ray from in front of Ghost and limit the ray's distance. 
          * The ray will only collide with objects in the Player layer since 
@@ -170,11 +159,7 @@ public class GhostEnemy : MonoBehaviour
 
                         // flip the horizontal direction if Ghost bumps into ice wall
                         case "Ice":
-                        if (canTurn)
-                        {
-                           transform.rotation = transform.rotation * Quaternion.Euler(0, 180, 0);
-                           StartCoroutine(TurningCooldown());
-                        }
+                          transform.rotation = transform.rotation * Quaternion.Euler(0, 180, 0);
                         break;
                     }
                     break;

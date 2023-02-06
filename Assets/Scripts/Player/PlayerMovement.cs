@@ -78,7 +78,7 @@ public class PlayerMovement : MonoBehaviour
         if (!canMove) return;
         // get movement input to detect which direction player wants to move
         horizontalMovement = Input.GetAxisRaw("Horizontal");
-        if (isGrounded())
+        if (IsGrounded())
         {
             animator.SetBool("Jumping", false);
         } else
@@ -146,7 +146,7 @@ public class PlayerMovement : MonoBehaviour
             {
                 // reset the speed to accelerate when player moves again
                 currentSpeedOnIce = 0;
-                if (isOnDirt())
+                if (IsOnDirt())
                 {
                     // player doesnt move on dirt when horizontalMovement == 0
                     rb.velocity = new Vector2(horizontalMovement * currentSpeed, rb.velocity.y);
@@ -168,7 +168,7 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    private bool isGrounded()
+    private bool IsGrounded()
     {
         // use raycasting to do a ground check from the middle of the player to the bottom
         // note: ground check checks for objects in "Ground" Layer (Dirt Floor, Ice)
@@ -205,7 +205,7 @@ public class PlayerMovement : MonoBehaviour
         return raycastHit2D.collider != null;
     }
 
-    private bool isOnDirt()
+    private bool IsOnDirt()
     {
         // use raycasting to do a ground check from the middle of the player to the bottom
         // note: dirt check checks for objects tagged with "Ground" (Dirt Floor, Dirt Wall)
@@ -239,7 +239,7 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    private bool isTouchingWall()
+    private bool IsTouchingWall()
     {
         bool isTouchingWall = false;
         /* determine if player is touching wall by checking colliders within a circlular area of Wall Check's transform.
@@ -258,7 +258,7 @@ public class PlayerMovement : MonoBehaviour
  
     private void Jump()
     {
-        if (isJump && isGrounded())
+        if (isJump && IsGrounded())
         {
             rb.AddForce(Vector2.up * currentJumpForce, ForceMode2D.Impulse);
         }
@@ -271,7 +271,7 @@ public class PlayerMovement : MonoBehaviour
         /* allow player to slide down walls slowly if they are pressing movement keys while clinging onto a wall.
          * this helps with wall jumping
          */
-        if (isTouchingWall() && !isGrounded() && horizontalMovement != 0f)
+        if (IsTouchingWall() && !IsGrounded() && horizontalMovement != 0f)
         {
             isWallSliding = true;
             // negative speed to slide downwards
