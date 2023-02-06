@@ -35,6 +35,7 @@ public class PlayerObstacleCollision : MonoBehaviour
                 groundType = GroundType.ICE;
                 break;
             case "Ground":
+            case "Platform":
                 groundType = GroundType.DIRT;
                 break;
         }

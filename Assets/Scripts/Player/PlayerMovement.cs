@@ -230,7 +230,7 @@ public class PlayerMovement : MonoBehaviour
         // to avoid NullPointerException, check whether collider is null first
         if (raycastHit2D.collider != null)
         {
-            return raycastHit2D.collider.tag == "Ground";
+            return raycastHit2D.collider.tag == "Ground" || raycastHit2D.collider.tag == "Platform";
 
         } else
         {
