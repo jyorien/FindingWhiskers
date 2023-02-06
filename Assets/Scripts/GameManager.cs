@@ -9,20 +9,8 @@ public class GameManager : MonoBehaviour
     /* make GameManager a singleton so that only one exists throughout the game
      * we can reference GameManager from other classes without instantiating it
      */
-    private static GameManager _instance;
-    public static GameManager Instance
-    {
-        get
-        {
-            if (_instance == null)
-            {
-                UnityEngine.Debug.LogError("GameManager is null");
-            }
-            // persist GameManager throughout the scenes
-            DontDestroyOnLoad(_instance);
-            return _instance;
-        }
-    }
+    //private static GameManager _instance;
+    public static GameManager Instance;
 
     // store condition to complete level
     public bool isLevelCompleteRequirementMet;
@@ -45,21 +33,38 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
-        _instance = this;
+        if (Instance == null)
+        {
+            Instance = this;
 
+        } else
+        {
+            Destroy(gameObject);
+        }
+        // persist GameManager throughout the scenes
+        DontDestroyOnLoad(Instance);
+    }
+
+    private void Start()
+    {
         // initalise variables
         timer = new Stopwatch();
-        isLevelCompleteRequirementMet = false;
-        livesLeft = 3;
+        ResetLevelStates();
         currentLevelBuildIndex = 0;
+    }
+
+    private void ResetLevelStates()
+    {
+        isLevelCompleteRequirementMet = false;
+        timer.Reset();
+        livesLeft = 3;
     }
 
     public void GoNextLevel()
     {
-        // if player wins, go to next level and reset states for the next level
-        isLevelCompleteRequirementMet = false;
-        timer.Reset();
-        livesLeft = 3;
+        // if player wins, go to next level based on the build index and reset states for the next level
+
+        ResetLevelStates();
 
         // store index of next scene
         currentLevelBuildIndex += 1;
@@ -68,6 +73,32 @@ public class GameManager : MonoBehaviour
         {
             SceneManager.LoadScene(currentLevelBuildIndex);
 
+            // start tracking the time for the player to complete the level
+            timer.Start();
+        }
+    }
+
+    public void GoToLevel(int level)
+    {
+        // go straight to a specific level
+
+        currentLevelBuildIndex = level;
+        ResetLevelStates();
+        SceneManager.LoadScene(level);
+        timer.Start();
+    }
+
+    public void ResetGameFromLevelOne()
+    {
+        // reset timer and lives
+        ResetLevelStates();
+
+        // reset the index to load and increment from level one
+        currentLevelBuildIndex = 1;
+
+        if (currentLevelBuildIndex > 0 && currentLevelBuildIndex < 4)
+        {
+            SceneManager.LoadScene(currentLevelBuildIndex);
             // start tracking the time for the player to complete the level
             timer.Start();
         }
@@ -114,25 +145,8 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void ResetGameFromLevelOne()
-    {
-        // reset timer and lives
-        timer.Reset();
-        livesLeft = 3;
-
-        // reset the index to load and increment from level one
-        currentLevelBuildIndex = 1;
-
-        if (currentLevelBuildIndex > 0 && currentLevelBuildIndex < 4)
-        {
-            SceneManager.LoadScene(currentLevelBuildIndex);
-            // start tracking the time for the player to complete the level
-            timer.Start();
-        }
-    }
-
     // only expose ElapsedMilliseconds from timer
-    public long GetGameTimeElapsedInMiliseconds()
+    public long GetGameTimeElapsedInMilliseconds()
     {
         return timer.ElapsedMilliseconds;
     }

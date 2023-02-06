@@ -18,7 +18,7 @@ public class GameUICanvas : MonoBehaviour
     void Update()
     {
         // get stopwatch timing and format every frame
-        stopwatchText.text = Utils.formatMillisecondsToDisplayTime(GameManager.Instance.GetGameTimeElapsedInMiliseconds());
+        stopwatchText.text = Utils.formatMillisecondsToDisplayTime(GameManager.Instance.GetGameTimeElapsedInMilliseconds());
         if (GameManager.Instance.isLevelCompleteRequirementMet)
         {
             requirementText.text = "1 / 1";
