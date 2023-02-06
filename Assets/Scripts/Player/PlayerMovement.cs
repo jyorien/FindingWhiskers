@@ -118,18 +118,23 @@ public class PlayerMovement : MonoBehaviour
              */
             if (horizontalMovement != 0)
             {
-                // if player presses on a key to move left or right, add velocity
-                rb.velocity = new Vector2(horizontalMovement * currentSpeed, rb.velocity.y);
-
-                if (playerObstacleCollision.isOnIce)
+                switch (playerObstacleCollision.groundType)
                 {
-                    // constant acceleration until maximum velocity
-                    if (currentSpeedOnIce  < maxExtraSpeedOnIce)
-                    {
-                        currentSpeedOnIce += 0.2f;
-                    }
-                    // if player is on ice, make player go faster since ice has "less friction" in real life
-                    rb.velocity += new Vector2(horizontalMovement * currentSpeedOnIce, 0);
+                    case GroundType.DIRT:
+                        // if player presses on a key to move left or right, add velocity
+                        rb.velocity = new Vector2(horizontalMovement * currentSpeed, rb.velocity.y);
+                        break;
+
+                    case GroundType.ICE:
+                        // constant acceleration until maximum velocity
+                        if (currentSpeedOnIce < maxExtraSpeedOnIce)
+                        {
+                            currentSpeedOnIce += 0.2f;
+                        }
+                        rb.velocity = new Vector2(horizontalMovement * currentSpeed, rb.velocity.y);
+                        // if player is on ice, make player go faster since ice has "less friction" in real life
+                        rb.velocity += new Vector2(horizontalMovement * currentSpeedOnIce, 0);
+                        break;
                 }
                 animator.SetBool("Walking", true);
 
@@ -145,8 +150,6 @@ public class PlayerMovement : MonoBehaviour
                 {
                     // player doesnt move on dirt when horizontalMovement == 0
                     rb.velocity = new Vector2(horizontalMovement * currentSpeed, rb.velocity.y);
-
-
                 }
                 animator.SetBool("Walking", false);
             }

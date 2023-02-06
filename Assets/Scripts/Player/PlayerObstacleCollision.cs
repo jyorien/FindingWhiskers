@@ -1,6 +1,8 @@
 using System.Collections;
 using UnityEngine;
 
+public enum GroundType { NONE, DIRT, ICE }
+
 public class PlayerObstacleCollision : MonoBehaviour
 {
     [SerializeField] BoxCollider2D playerCollider;
@@ -9,18 +11,15 @@ public class PlayerObstacleCollision : MonoBehaviour
 
     private GameObject iceCubeOverlay;
 
+    public GroundType groundType = GroundType.DIRT;
+
     // keep track of whether player is frozen to activate/deactivate certain behaviours
     private bool isFrozen = false;
 
-    /* keep track of whether player is on ice.
-     * only allow this class to manage the state
-     */
-    public bool isOnIce { private set; get; }
     private void Start()
     {
         // get reference to the GameObject that shows Robin frozen
         iceCubeOverlay = gameObject.transform.GetChild(0).gameObject;
-        //rb = gameObject.GetComponent<Rigidbody2D>();
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -32,8 +31,13 @@ public class PlayerObstacleCollision : MonoBehaviour
                 Destroy(gameObject);
                 GameManager.Instance.OnGameLose();
                 break;
+            case "Ice":
+                groundType = GroundType.ICE;
+                break;
+            case "Ground":
+                groundType = GroundType.DIRT;
+                break;
         }
-        
     }
 
     private void OnCollisionStay2D(Collision2D collision)
@@ -43,19 +47,6 @@ public class PlayerObstacleCollision : MonoBehaviour
             // don't apply force when player is frozen
             case "Ice":
                 if (isFrozen) return;
-                isOnIce = true;
-
-                break;
-        }
-    }
-
-    private void OnCollisionExit2D(Collision2D collision)
-    {
-        switch (collision.collider.tag)
-        {
-            case "Ice":
-                isOnIce = false;
-
                 break;
         }
     }

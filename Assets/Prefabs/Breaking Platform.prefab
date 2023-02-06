@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 6072477048609420825}
   m_Layer: 7
   m_Name: Breaking Platform
-  m_TagString: Platform
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

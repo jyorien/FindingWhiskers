@@ -505,11 +505,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4594095206625168814, guid: f4bbd9bafd3d942b8bcf82699bed3650, type: 3}
       propertyPath: maxJumpForce
-      value: 13
+      value: 14
       objectReference: {fileID: 0}
     - target: {fileID: 4594095206625168814, guid: f4bbd9bafd3d942b8bcf82699bed3650, type: 3}
       propertyPath: minJumpForce
-      value: 13
+      value: 14
       objectReference: {fileID: 0}
     - target: {fileID: 4594095206625168814, guid: f4bbd9bafd3d942b8bcf82699bed3650, type: 3}
       propertyPath: minSizeScale
