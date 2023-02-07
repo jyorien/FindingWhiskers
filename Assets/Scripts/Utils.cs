@@ -29,9 +29,7 @@ public static class Utils
     }
 }
 
-public enum ColliderSide
+interface IDamageable
 {
-    Bottom,
-    Side,
-    Top
+    public void TakeDamage();
 }

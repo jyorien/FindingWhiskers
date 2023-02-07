@@ -35,7 +35,6 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] float maxExtraSpeedOnIce;
     private float currentSpeedOnIce = 0;
 
-
     [Header("Size Scale")]
     [SerializeField] float maxSizeScale = 1.3f;
     [SerializeField] float minSizeScale = 0.6f;
@@ -47,7 +46,6 @@ public class PlayerMovement : MonoBehaviour
     [Header("Components")]
     [SerializeField] Rigidbody2D rb;
     [SerializeField] BoxCollider2D playerCollider;
-    [SerializeField] PlayerObstacleCollision playerObstacleCollision;
     [SerializeField] Animator animator;
 
     [Header("Time to Minimum")]
@@ -78,13 +76,9 @@ public class PlayerMovement : MonoBehaviour
         if (!canMove) return;
         // get movement input to detect which direction player wants to move
         horizontalMovement = Input.GetAxisRaw("Horizontal");
-        if (IsGrounded())
-        {
-            animator.SetBool("Jumping", false);
-        } else
-        {
-            animator.SetBool("Jumping", true);
-        }
+
+        // set the jumping animation state based on whether player is touching ground
+        animator.SetBool("Jumping", PlayerObstacleCollision.bottomColliderType != BottomColliderType.FLOOR);
 
         // get whether player wants to jump
         isJump = Input.GetButtonDown("Jump");
@@ -118,7 +112,7 @@ public class PlayerMovement : MonoBehaviour
              */
             if (horizontalMovement != 0)
             {
-                switch (playerObstacleCollision.groundType)
+                switch (PlayerObstacleCollision.groundType)
                 {
                     case GroundType.DIRT:
                         // if player presses on a key to move left or right, add velocity
@@ -137,7 +131,6 @@ public class PlayerMovement : MonoBehaviour
                         break;
                 }
                 animator.SetBool("Walking", true);
-
             }
 
             // when player is not trying to move, reset velocity to 0 if on dirt
@@ -158,51 +151,8 @@ public class PlayerMovement : MonoBehaviour
 
     private void FlipHorizontally()
     {
-        isFacingRight = !isFacingRight; 
-        if (isFacingRight)
-        {
-            transform.localRotation = Quaternion.Euler(0, 0, 0);
-        } else
-        {
-            transform.localRotation = Quaternion.Euler(0, 180, 0);
-        }
-    }
-
-    private bool IsGrounded()
-    {
-        // use raycasting to do a ground check from the middle of the player to the bottom
-        // note: ground check checks for objects in "Ground" Layer (Dirt Floor, Ice)
-
-        // add extra height to detect a bit below the player
-        float heightOffset = 0.2f;
-
-        // only allow 1 result to be returned by BoxCast
-        RaycastHit2D[] raycastHits = new RaycastHit2D[1];
-
-        /* create a ContactFilter2D so that the BoxCast only detects objects on the 'Ground' layer
-         * and ignore trigger collisions so the player cannot jump when touching platforms that are in isTrigger
-         */
-        ContactFilter2D contactFilter = new ContactFilter2D();
-        contactFilter.SetLayerMask(groundLayerMask);
-        contactFilter.useTriggers = false;
-
-        Physics2D.BoxCast(playerCollider.bounds.center, playerCollider.bounds.size, 0f, Vector2.down, contactFilter, raycastHits, heightOffset);
-        // store the only result returned into a variable for easy reference
-        RaycastHit2D raycastHit2D = raycastHits[0];
-
-        Color rayColor;
-        if (raycastHit2D.collider != null)
-        {
-            rayColor = Color.red;
-        } else
-        {
-            rayColor = Color.white;
-        }
-        // draw where the BoxCast hits
-        Debug.DrawRay(playerCollider.bounds.center + new Vector3(playerCollider.bounds.extents.x, 0), Vector2.down * (playerCollider.bounds.extents.y + heightOffset), rayColor);
-        Debug.DrawRay(playerCollider.bounds.center - new Vector3(playerCollider.bounds.extents.x, 0), Vector2.down * (playerCollider.bounds.extents.y + heightOffset), rayColor);
-        Debug.DrawRay(playerCollider.bounds.center - new Vector3(playerCollider.bounds.extents.x, playerCollider.bounds.extents.y + heightOffset), Vector2.right * playerCollider.bounds.extents.x * 2, rayColor);
-        return raycastHit2D.collider != null;
+        isFacingRight = !isFacingRight;
+        transform.localRotation = isFacingRight ? Quaternion.Euler(0, 0, 0) : Quaternion.Euler(0, 180, 0);
     }
 
     private bool IsOnDirt()
@@ -251,14 +201,13 @@ public class PlayerMovement : MonoBehaviour
         if (collider && collider.tag == "Ground")
         {
           isTouchingWall = true;
-            
         }
         return isTouchingWall;
     }
  
     private void Jump()
     {
-        if (isJump && IsGrounded())
+        if (isJump && PlayerObstacleCollision.bottomColliderType == BottomColliderType.FLOOR)
         {
             rb.AddForce(Vector2.up * currentJumpForce, ForceMode2D.Impulse);
         }
@@ -271,7 +220,7 @@ public class PlayerMovement : MonoBehaviour
         /* allow player to slide down walls slowly if they are pressing movement keys while clinging onto a wall.
          * this helps with wall jumping
          */
-        if (IsTouchingWall() && !IsGrounded() && horizontalMovement != 0f)
+        if (IsTouchingWall() && PlayerObstacleCollision.bottomColliderType != BottomColliderType.FLOOR && horizontalMovement != 0f)
         {
             isWallSliding = true;
             // negative speed to slide downwards

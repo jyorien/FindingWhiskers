@@ -213,7 +213,7 @@ MonoBehaviour:
   minJumpForce: 10
   groundLayerMask:
     serializedVersion: 2
-    m_Bits: 384
+    m_Bits: 128
   maxSpeed: 12
   minSpeed: 5
   maxExtraSpeedOnIce: 5
@@ -223,14 +223,10 @@ MonoBehaviour:
   fallGravityScale: 6
   rb: {fileID: 4594095206625168812}
   playerCollider: {fileID: 8713271732185426517}
-  playerObstacleCollision: {fileID: 4594095206625168809}
   animator: {fileID: 8090339333214664656}
   timeTakenToReachMinimum: 15
   wallSlidingSpeed: 0.5
   wallCheck: {fileID: 8713271732654611806}
-  wallLayerMask:
-    serializedVersion: 2
-    m_Bits: 256
   wallJumpingPower: {x: 9, y: 12}
   wallJumpingTime: 0.5
   wallJumpingDuration: 0.4
@@ -249,6 +245,12 @@ MonoBehaviour:
   playerCollider: {fileID: 8713271732185426517}
   movement: {fileID: 4594095206625168814}
   rb: {fileID: 4594095206625168812}
+  bottomCollisionLayerMask:
+    serializedVersion: 2
+    m_Bits: 384
+  enemyLayerMask:
+    serializedVersion: 2
+    m_Bits: 256
 --- !u!61 &8713271732185426517
 BoxCollider2D:
   m_ObjectHideFlags: 0

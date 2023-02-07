@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6986799583105058314}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Player Check
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -45,7 +45,7 @@ GameObject:
   - component: {fileID: 6084242974409993846}
   - component: {fileID: 6084242974409993738}
   - component: {fileID: 4324514103978290062}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Trunk
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -162,7 +162,7 @@ MonoBehaviour:
     m_Bits: 64
   wallLayerMask:
     serializedVersion: 2
-    m_Bits: 384
+    m_Bits: 128
 --- !u!61 &6084242974409993738
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -218,7 +218,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1653032230895929994}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Wall Check
   m_TagString: Untagged
   m_Icon: {fileID: 0}
