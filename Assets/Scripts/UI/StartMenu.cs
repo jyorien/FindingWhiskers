@@ -11,7 +11,7 @@ public class StartMenu : MonoBehaviour
     {
         // start the game
         startButton.onClick.AddListener(() => {
-            GameManager.Instance.GoNextLevel();
+            GameManager.Instance.GoToLevel(1);
         });
     }
 }
