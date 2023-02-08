@@ -5,10 +5,10 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 public class GameOverUICanvas : MonoBehaviour
 {
-    [SerializeField] Button restartButton;
-    [SerializeField] Button backToMenuButton;
+    [SerializeField] private Button restartButton;
+    [SerializeField] private Button backToMenuButton;
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
         restartButton.onClick.AddListener(() =>
         {

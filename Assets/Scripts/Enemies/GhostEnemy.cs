@@ -4,19 +4,19 @@ using UnityEngine;
 
 public class GhostEnemy : MonoBehaviour, IDamageable
 {
-    [SerializeField] float moveSpeed;
-    [SerializeField] float raycastDistance;
-    [SerializeField] GameObject ghostProjectileToSpawn;
-    [SerializeField] GameObject iceCubeProjectileToSpawn;
-    [SerializeField] float projectileSpeed;
-    [SerializeField] GameObject pathToWhiskers;
+    [SerializeField] private float moveSpeed;
+    [SerializeField] private float raycastDistance;
+    [SerializeField] private GameObject ghostProjectileToSpawn;
+    [SerializeField] private GameObject iceCubeProjectileToSpawn;
+    [SerializeField] private float projectileSpeed;
+    [SerializeField] private GameObject pathToWhiskers;
     // use a LayerMask for Ghost to only detect Player in his line of sight
-    [SerializeField] LayerMask lineOfSightLayerMask;
+    [SerializeField] private LayerMask lineOfSightLayerMask;
 
     [Header("Wall Check")]
-    [SerializeField] Transform wallCheck;
+    [SerializeField] private Transform wallCheck;
     // use a LayerMask to filter by Ice layer to only return collisions with ice walls in the wall check
-    [SerializeField] LayerMask wallLayerMask;
+    [SerializeField] private LayerMask wallLayerMask;
 
     private GameObject projectileSpawnPoint;
     private IEnumerator fireAtPlayer;
@@ -32,7 +32,7 @@ public class GhostEnemy : MonoBehaviour, IDamageable
     private BoxCollider2D boxCollider2D;
 
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
         rb = gameObject.GetComponent<Rigidbody2D>();
         boxCollider2D = gameObject.GetComponent<BoxCollider2D>();
@@ -116,7 +116,7 @@ public class GhostEnemy : MonoBehaviour, IDamageable
         } 
     }
 
-    bool IsPlayerInSight()
+    private bool IsPlayerInSight()
     {
         /* draw ray from in front of Ghost and limit the ray's distance. 
          * The ray will only collide with objects in the Player layer since 
@@ -148,7 +148,7 @@ public class GhostEnemy : MonoBehaviour, IDamageable
         spriteRenderer.color = isInvincible ? new Color(255, 255, 255, 0.5f) : new Color(255, 255, 255, 1f);
     }
 
-    void FireProjectile()
+    private void FireProjectile()
     {
         // get location to spawn projectile
         Vector3 projectileSpawnPointLocation = projectileSpawnPoint.transform.position;
@@ -176,7 +176,7 @@ public class GhostEnemy : MonoBehaviour, IDamageable
         Destroy(newProjectile, 3);
     }
 
-    IEnumerator FireAtPlayer()
+    private IEnumerator FireAtPlayer()
     {
         /* add a short delay before the loop so when player jumps to re-enter the line of sight,
          * Ghost doesn't immediately start firing

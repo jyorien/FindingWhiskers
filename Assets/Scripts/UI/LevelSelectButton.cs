@@ -4,10 +4,10 @@ using UnityEngine;
 using UnityEngine.UI;
 public class LevelSelectButton : MonoBehaviour
 {
-    [SerializeField] int level;
+    [SerializeField] private int level;
     Button btn; 
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
         btn = gameObject.GetComponent<Button>();
         btn.onClick.AddListener(() =>

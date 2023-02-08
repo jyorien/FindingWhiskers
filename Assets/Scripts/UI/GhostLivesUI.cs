@@ -4,15 +4,10 @@ using UnityEngine;
 
 public class GhostLivesUI : MonoBehaviour
 {
-    [SerializeField] GameObject[] ghostLives;
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    [SerializeField] private GameObject[] ghostLives;
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
         // get how many hearts to hide
         int ghostLivesUsed = GhostEnemy.hitCount;

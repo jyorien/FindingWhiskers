@@ -4,9 +4,9 @@ using UnityEngine;
 using TMPro;
 public class GameUICanvas : MonoBehaviour
 {
-    [SerializeField] TMP_Text stopwatchText;
-    [SerializeField] TMP_Text requirementText;
-    [SerializeField] GameObject[] lives;
+    [SerializeField] private TMP_Text stopwatchText;
+    [SerializeField] private TMP_Text requirementText;
+    [SerializeField] private GameObject[] lives;
     private void Start()
     {
         // render number of lives left for the level when scene starts
@@ -15,7 +15,7 @@ public class GameUICanvas : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
         // get stopwatch timing and format every frame
         stopwatchText.text = Utils.formatMillisecondsToDisplayTime(GameManager.Instance.GetGameTimeElapsedInMilliseconds());

@@ -4,18 +4,18 @@ using UnityEngine;
 
 public class TrunkEnemy : MonoBehaviour, IDamageable
 {
-    [SerializeField] float speed;
-    [SerializeField] Transform playerCheck;
-    [SerializeField] Transform wallCheck;
-    [SerializeField] LayerMask playerLayerMask;
-    [SerializeField] LayerMask wallLayerMask;
+    [SerializeField] private float speed;
+    [SerializeField] private Transform playerCheck;
+    [SerializeField] private Transform wallCheck;
+    [SerializeField] private LayerMask playerLayerMask;
+    [SerializeField] private LayerMask wallLayerMask;
 
-    private Rigidbody2D rb;
+    private Rigidbody2D rigidBody2D;
 
     // Start is called before the first frame update
     void Start()
     {
-        rb = gameObject.GetComponent<Rigidbody2D>();
+        rigidBody2D = gameObject.GetComponent<Rigidbody2D>();
     }
 
     // Update is called once per frame
@@ -30,7 +30,7 @@ public class TrunkEnemy : MonoBehaviour, IDamageable
 
     void FixedUpdate()
     {
-        rb.velocity = -transform.right * speed;
+        rigidBody2D.velocity = -transform.right * speed;
     }
 
     public void TakeDamage()

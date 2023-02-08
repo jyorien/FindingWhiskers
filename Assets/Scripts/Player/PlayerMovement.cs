@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
+    private Rigidbody2D rigidBody2D;
+    private BoxCollider2D boxCollider2D;
+    private Animator animator;
+
     private bool isFacingRight = true;
     private float horizontalMovement;
 
@@ -24,48 +28,47 @@ public class PlayerMovement : MonoBehaviour
      * and gradually decrease to min. 
      */
     [Header("Jump")]
-    [SerializeField] float maxJumpForce;
-    [SerializeField] float minJumpForce;
-    [SerializeField] LayerMask groundLayerMask;
+    [SerializeField] private float maxJumpForce;
+    [SerializeField] private float minJumpForce;
+    [SerializeField] private LayerMask groundLayerMask;
     private bool isJump;
 
     [Header("Movement Speed")]
-    [SerializeField] float maxSpeed;
-    [SerializeField] float minSpeed;
-    [SerializeField] float maxExtraSpeedOnIce;
+    [SerializeField] private float maxSpeed;
+    [SerializeField] private float minSpeed;
+    [SerializeField] private float maxExtraSpeedOnIce;
     private float currentSpeedOnIce = 0;
 
     [Header("Size Scale")]
-    [SerializeField] float maxSizeScale = 1.3f;
-    [SerializeField] float minSizeScale = 0.6f;
+    [SerializeField] private float maxSizeScale = 1.3f;
+    [SerializeField] private float minSizeScale = 0.6f;
 
     [Header("Gravity Scale")]
-    [SerializeField] float gravityScale;
-    [SerializeField] float fallGravityScale;
-
-    [Header("Components")]
-    [SerializeField] Rigidbody2D rb;
-    [SerializeField] BoxCollider2D playerCollider;
-    [SerializeField] Animator animator;
+    [SerializeField] private float gravityScale;
+    [SerializeField] private float fallGravityScale;
 
     [Header("Time to Minimum")]
-    [SerializeField] int timeTakenToReachMinimum = 5;
+    [SerializeField] private int timeTakenToReachMinimum = 5;
 
     [Header("Wall Slide")]
-    [SerializeField] float wallSlidingSpeed = 6f;
+    [SerializeField] private float wallSlidingSpeed = 6f;
     [SerializeField] private Transform wallCheck;
     private bool isWallSliding;
 
     [Header("Wall Jump")]
-    [SerializeField] Vector2 wallJumpingPower = new Vector2(8f,12f);
-    [SerializeField] float wallJumpingTime = 0.2f;
-    [SerializeField] float wallJumpingDuration = 0.4f;
+    [SerializeField] private Vector2 wallJumpingPower = new Vector2(8f,12f);
+    [SerializeField] private float wallJumpingTime = 0.2f;
+    [SerializeField] private float wallJumpingDuration = 0.4f;
     private bool isWallJumping;
     private float wallJumpingDirection;
     private float wallJumpingCounter;
 
     private void Start()
     {
+        rigidBody2D = gameObject.GetComponent<Rigidbody2D>();
+        boxCollider2D = gameObject.GetComponent<BoxCollider2D>();
+        animator = gameObject.GetComponent<Animator>();
+
         decreaseValueAttributesOverTime = DecreaseAttributeValuesOverTime(timeTakenToReachMinimum);
         ResetToMaxAttributeValues();
     }
@@ -116,7 +119,7 @@ public class PlayerMovement : MonoBehaviour
                 {
                     case GroundType.DIRT:
                         // if player presses on a key to move left or right, add velocity
-                        rb.velocity = new Vector2(horizontalMovement * currentSpeed, rb.velocity.y);
+                        rigidBody2D.velocity = new Vector2(horizontalMovement * currentSpeed, rigidBody2D.velocity.y);
                         break;
 
                     case GroundType.ICE:
@@ -125,9 +128,9 @@ public class PlayerMovement : MonoBehaviour
                         {
                             currentSpeedOnIce += 0.2f;
                         }
-                        rb.velocity = new Vector2(horizontalMovement * currentSpeed, rb.velocity.y);
+                        rigidBody2D.velocity = new Vector2(horizontalMovement * currentSpeed, rigidBody2D.velocity.y);
                         // if player is on ice, make player go faster since ice has "less friction" in real life
-                        rb.velocity += new Vector2(horizontalMovement * currentSpeedOnIce, 0);
+                        rigidBody2D.velocity += new Vector2(horizontalMovement * currentSpeedOnIce, 0);
                         break;
                 }
                 animator.SetBool("Walking", true);
@@ -142,7 +145,7 @@ public class PlayerMovement : MonoBehaviour
                 if (IsOnDirt())
                 {
                     // player doesnt move on dirt when horizontalMovement == 0
-                    rb.velocity = new Vector2(horizontalMovement * currentSpeed, rb.velocity.y);
+                    rigidBody2D.velocity = new Vector2(horizontalMovement * currentSpeed, rigidBody2D.velocity.y);
                 }
                 animator.SetBool("Walking", false);
             }
@@ -173,7 +176,7 @@ public class PlayerMovement : MonoBehaviour
         contactFilter.SetLayerMask(groundLayerMask);
         contactFilter.useTriggers = false;
 
-        Physics2D.BoxCast(playerCollider.bounds.center, playerCollider.bounds.size, 0f, Vector2.down, contactFilter, raycastHits, heightOffset);
+        Physics2D.BoxCast(boxCollider2D.bounds.center, boxCollider2D.bounds.size, 0f, Vector2.down, contactFilter, raycastHits, heightOffset);
         // store the only result returned into a variable for easy reference
         RaycastHit2D raycastHit2D = raycastHits[0];
 
@@ -209,10 +212,10 @@ public class PlayerMovement : MonoBehaviour
     {
         if (isJump && PlayerObstacleCollision.bottomColliderType == BottomColliderType.FLOOR)
         {
-            rb.AddForce(Vector2.up * currentJumpForce, ForceMode2D.Impulse);
+            rigidBody2D.AddForce(Vector2.up * currentJumpForce, ForceMode2D.Impulse);
         }
         // to achieve faster falling, change gravity to a higher value than when jumping up
-        rb.gravityScale = rb.velocity.y > 0 ? rb.gravityScale : fallGravityScale;
+        rigidBody2D.gravityScale = rigidBody2D.velocity.y > 0 ? rigidBody2D.gravityScale : fallGravityScale;
     }
 
     private void WallSlide()
@@ -224,7 +227,7 @@ public class PlayerMovement : MonoBehaviour
         {
             isWallSliding = true;
             // negative speed to slide downwards
-            rb.velocity = new Vector2(rb.velocity.x, Mathf.Clamp(rb.velocity.y, -wallSlidingSpeed, float.MaxValue));
+            rigidBody2D.velocity = new Vector2(rigidBody2D.velocity.x, Mathf.Clamp(rigidBody2D.velocity.y, -wallSlidingSpeed, float.MaxValue));
         } else
         {
             isWallSliding = false;
@@ -254,7 +257,7 @@ public class PlayerMovement : MonoBehaviour
         if (isJump && wallJumpingCounter > 0f)
         {
             isWallJumping = true;
-            rb.velocity = new Vector2(wallJumpingDirection * wallJumpingPower.x, wallJumpingPower.y);
+            rigidBody2D.velocity = new Vector2(wallJumpingDirection * wallJumpingPower.x, wallJumpingPower.y);
             // set to 0 to prevent wall jumping more than once without touching another wall
             wallJumpingCounter = 0f;
 

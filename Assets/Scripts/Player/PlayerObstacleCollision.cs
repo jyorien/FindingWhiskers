@@ -6,14 +6,13 @@ public enum BottomColliderType { NONE, FLOOR, ENEMY }
 
 public class PlayerObstacleCollision : MonoBehaviour
 {
-    [SerializeField] BoxCollider2D playerCollider;
-    [SerializeField] PlayerMovement movement;
-    [SerializeField] Rigidbody2D rb;
+    private BoxCollider2D boxCollider2D;
+    [SerializeField] private PlayerMovement movement;
 
     // to filter what player can detect from the ground check
-    [SerializeField] LayerMask bottomCollisionLayerMask;
+    [SerializeField] private LayerMask bottomCollisionLayerMask;
     // to filter enemies when detecting for enemies
-    [SerializeField] LayerMask enemyLayerMask;
+    [SerializeField] private LayerMask enemyLayerMask;
 
     public static BottomColliderType bottomColliderType { get; private set; }
     public static GroundType groundType { get; private set; }
@@ -26,6 +25,7 @@ public class PlayerObstacleCollision : MonoBehaviour
 
     private void Start()
     {
+        boxCollider2D = gameObject.GetComponent<BoxCollider2D>();
         // get reference to the GameObject that shows Robin frozen
         iceCubeOverlay = gameObject.transform.GetChild(0).gameObject;
     }
@@ -168,7 +168,7 @@ public class PlayerObstacleCollision : MonoBehaviour
         contactFilter.useTriggers = false;
 
         // draw a box below the player with a small height offset to detect incoming colliders with the ground or enemies
-        Physics2D.BoxCast(playerCollider.bounds.center, playerCollider.bounds.size, 0f, Vector2.down, contactFilter, raycastHits, heightOffset);
+        Physics2D.BoxCast(boxCollider2D.bounds.center, boxCollider2D.bounds.size, 0f, Vector2.down, contactFilter, raycastHits, heightOffset);
 
         // store the only result returned into a variable for easy reference
         RaycastHit2D raycastHit2D = raycastHits[0];
@@ -176,9 +176,9 @@ public class PlayerObstacleCollision : MonoBehaviour
         Color rayColor = raycastHit2D.collider != null ? Color.red : Color.white;
 
         // draw where the BoxCast hits for debugging purposes
-        Debug.DrawRay(playerCollider.bounds.center + new Vector3(playerCollider.bounds.extents.x, 0), Vector2.down * (playerCollider.bounds.extents.y + heightOffset), rayColor);
-        Debug.DrawRay(playerCollider.bounds.center - new Vector3(playerCollider.bounds.extents.x, 0), Vector2.down * (playerCollider.bounds.extents.y + heightOffset), rayColor);
-        Debug.DrawRay(playerCollider.bounds.center - new Vector3(playerCollider.bounds.extents.x, playerCollider.bounds.extents.y + heightOffset), Vector2.right * playerCollider.bounds.extents.x * 2, rayColor);
+        Debug.DrawRay(boxCollider2D.bounds.center + new Vector3(boxCollider2D.bounds.extents.x, 0), Vector2.down * (boxCollider2D.bounds.extents.y + heightOffset), rayColor);
+        Debug.DrawRay(boxCollider2D.bounds.center - new Vector3(boxCollider2D.bounds.extents.x, 0), Vector2.down * (boxCollider2D.bounds.extents.y + heightOffset), rayColor);
+        Debug.DrawRay(boxCollider2D.bounds.center - new Vector3(boxCollider2D.bounds.extents.x, boxCollider2D.bounds.extents.y + heightOffset), Vector2.right * boxCollider2D.bounds.extents.x * 2, rayColor);
 
         if (raycastHit2D.collider != null)
         {
@@ -201,15 +201,15 @@ public class PlayerObstacleCollision : MonoBehaviour
         contactFilter.useTriggers = false;
 
         // draw a horizontal line across the player with a small width offset to detect incoming collisions with enemies
-        Physics2D.Linecast(new Vector3(playerCollider.bounds.center.x - playerCollider.bounds.extents.x - widthOffset, playerCollider.bounds.center.y, 0),
-            new Vector3(playerCollider.bounds.center.x + playerCollider.bounds.extents.x + widthOffset, playerCollider.bounds.center.y, 0), contactFilter, lineCastHits);
+        Physics2D.Linecast(new Vector3(boxCollider2D.bounds.center.x - boxCollider2D.bounds.extents.x - widthOffset, boxCollider2D.bounds.center.y, 0),
+            new Vector3(boxCollider2D.bounds.center.x + boxCollider2D.bounds.extents.x + widthOffset, boxCollider2D.bounds.center.y, 0), contactFilter, lineCastHits);
 
         // store the only result returned into a variable for easy reference
         RaycastHit2D lineCastHit = lineCastHits[0];
 
         // draw where LineCast hits for debugging purposes
-        Debug.DrawLine(new Vector3(playerCollider.bounds.center.x - playerCollider.bounds.extents.x - widthOffset, playerCollider.bounds.center.y, 0),
-            new Vector3(playerCollider.bounds.center.x + playerCollider.bounds.extents.x + widthOffset, playerCollider.bounds.center.y, 0), Color.red);
+        Debug.DrawLine(new Vector3(boxCollider2D.bounds.center.x - boxCollider2D.bounds.extents.x - widthOffset, boxCollider2D.bounds.center.y, 0),
+            new Vector3(boxCollider2D.bounds.center.x + boxCollider2D.bounds.extents.x + widthOffset, boxCollider2D.bounds.center.y, 0), Color.red);
 
         if (lineCastHit.collider != null)
         {
@@ -218,14 +218,14 @@ public class PlayerObstacleCollision : MonoBehaviour
         return null;
     }
 
-    IEnumerator FreezePlayer()
+    private IEnumerator FreezePlayer()
     {
         SetFreeze(true);
         yield return new WaitForSeconds(2);
         SetFreeze(false);
     }
 
-    void SetFreeze(bool isFreeze)
+    private void SetFreeze(bool isFreeze)
     {
         // update frozen state
         isFrozen = isFreeze;

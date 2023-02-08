@@ -5,10 +5,10 @@ using UnityEngine.UI;
 using TMPro;
 public class LevelCompleteUICanvas : MonoBehaviour
 {
-    [SerializeField] TMP_Text levelCompleteText;
-    [SerializeField] TMP_Text timeTakenText;
-    [SerializeField] TMP_Text personalBestTimeText;
-    [SerializeField] Button btnContinue;
+    [SerializeField] private TMP_Text levelCompleteText;
+    [SerializeField] private TMP_Text timeTakenText;
+    [SerializeField] private TMP_Text personalBestTimeText;
+    [SerializeField] private Button btnContinue;
 
     private void Start()
     {

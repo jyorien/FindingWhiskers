@@ -5,9 +5,9 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 public class GameCompleteUICanvas : MonoBehaviour
 {
-    [SerializeField] Button btnBackToMenu;
+    [SerializeField] private Button btnBackToMenu;
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
         btnBackToMenu.onClick.AddListener(() =>
         {

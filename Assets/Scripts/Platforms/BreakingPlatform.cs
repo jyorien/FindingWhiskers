@@ -4,16 +4,16 @@ using UnityEngine;
 
 public class BreakingPlatform : MonoBehaviour
 {
-    BoxCollider2D platformCollider;
-    SpriteRenderer spriteRenderer;
-    Animator animator;
+    private BoxCollider2D platformCollider;
+    private SpriteRenderer spriteRenderer;
+    private Animator animator;
 
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
-        platformCollider = GetComponent<BoxCollider2D>();
-        spriteRenderer = GetComponent<SpriteRenderer>();
-        animator = GetComponent<Animator>();
+        platformCollider = gameObject.GetComponent<BoxCollider2D>();
+        spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
+        animator = gameObject.GetComponent<Animator>();
 
         // make collider isTrigger to let player pass through
         platformCollider.isTrigger = true;
@@ -42,7 +42,7 @@ public class BreakingPlatform : MonoBehaviour
         }
     }
 
-    IEnumerator BreakPlatform()
+    private IEnumerator BreakPlatform()
     {
         animator.SetBool("Breaking", true);
         // break platform after a second
@@ -54,7 +54,7 @@ public class BreakingPlatform : MonoBehaviour
         SetPlatformActive(true);
     }
 
-    void SetPlatformActive(bool isActive)
+    private void SetPlatformActive(bool isActive)
     {
         // set state of collider and sprite to give platform's "breaking" effect
         platformCollider.enabled = isActive;

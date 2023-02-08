@@ -5,9 +5,9 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 public class StartMenu : MonoBehaviour
 {
-    [SerializeField] Button startButton;
+    [SerializeField] private Button startButton;
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
         // start the game
         startButton.onClick.AddListener(() => {

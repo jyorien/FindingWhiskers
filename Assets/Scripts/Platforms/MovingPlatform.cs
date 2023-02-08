@@ -5,14 +5,14 @@ using UnityEngine;
 public class MovingPlatform : MonoBehaviour
 {
     // can select Horizontal / Vertical movement in inspector
-    [SerializeField] Axis axis;
+    [SerializeField] private Axis axis;
 
     // adjust how fast the platform moves in inspector
-    [SerializeField] float speed;
+    [SerializeField] private float speed;
 
     /* store whether the platform should move forward or backward
     to keep within the boundaries of the start and end point */
-    bool isReverse = false;
+    private bool isReverse = false;
 
     private void Update()
     {
