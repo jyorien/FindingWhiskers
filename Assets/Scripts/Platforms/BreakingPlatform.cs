@@ -29,7 +29,7 @@ public class BreakingPlatform : MonoBehaviour
         /* only enable collider for player to stand on platform if player is walking horizontally (zero y velocity)
          * or falling downwards (negative y velocity)
          */
-        if (yVelocityOfIncomingCollider <= 0 && yPositionOfIncomingCollider > yPositionOffPlatform)
+        if (yVelocityOfIncomingCollider < 0 && yPositionOfIncomingCollider > yPositionOffPlatform)
         {
             switch (collision.tag)
             {
