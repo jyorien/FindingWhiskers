@@ -1,6 +1,8 @@
 using UnityEngine;
 
-// this class stores helper mthods that are used by multiple classes
+/// <summary>
+/// Utils stores helper methods that are used by multiple classes
+/// </summary>
 public static class Utils
 {
     public static string formatMillisecondsToDisplayTime(long milliseconds)

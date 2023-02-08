@@ -7,39 +7,46 @@ public class GameUICanvas : MonoBehaviour
     [SerializeField] private TMP_Text stopwatchText;
     [SerializeField] private TMP_Text requirementText;
     [SerializeField] private GameObject[] lives;
+    [SerializeField] private LivesManagerSO livesManager;
+    [SerializeField] private TimeManagerSO timeManager;
+    [SerializeField] private LevelDataSO levelData;
+
+    private void Awake()
+    {
+        livesManager.OnLivesChanged.AddListener(DisplayLivesLeft);
+    }
+
     private void Start()
     {
-        // render number of lives left for the level when scene starts
-        int livesLeft = GameManager.Instance.livesLeft;
-        DisplayLivesLeft(livesLeft);
+        DisplayLivesLeft(livesManager.Lives);
+    }
+
+    private void OnDestroy()
+    {
+        livesManager.OnLivesChanged.RemoveListener(DisplayLivesLeft);
     }
 
     // Update is called once per frame
     private void Update()
     {
         // get stopwatch timing and format every frame
-        stopwatchText.text = Utils.formatMillisecondsToDisplayTime(GameManager.Instance.GetGameTimeElapsedInMilliseconds());
-        if (GameManager.Instance.isLevelCompleteRequirementMet)
+        stopwatchText.text = Utils.formatMillisecondsToDisplayTime(timeManager.GetTiming());
+        if (levelData.isLevelCompleteRequirementMet)
         {
             requirementText.text = "1 / 1";
-        } else
+        }
+        else
         {
             requirementText.text = "0 / 1";
         }
     }
 
-    public void DisplayLivesLeft(int livesLeft)
+    private void DisplayLivesLeft(int livesLeft)
     {
-        // get how many hearts to hide
-        int livesUsed = 3 - livesLeft;
-
-        // in case lives go over 3, set it to 3 to avoid making index out of bounds
-        if (livesUsed > 3) livesUsed = 3;
-
-        // disable the hearts based on index
-        for (int i = 0; i < livesUsed; i++)
+        // enable or disable the hearts based on number of lives left
+        for (int i = 0; i < livesManager.MaxLives; i++)
         {
-            lives[i].SetActive(false);
+            lives[i].SetActive(i < livesLeft);
         }
     }
 }

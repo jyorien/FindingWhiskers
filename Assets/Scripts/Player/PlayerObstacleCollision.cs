@@ -7,7 +7,11 @@ public enum BottomColliderType { NONE, FLOOR, ENEMY }
 public class PlayerObstacleCollision : MonoBehaviour
 {
     private BoxCollider2D boxCollider2D;
+    private GameObject iceCubeOverlay;
+
     [SerializeField] private PlayerMovement movement;
+    [SerializeField] private LivesManagerSO livesManager;
+    [SerializeField] private LevelDataSO levelData;
 
     // to filter what player can detect from the ground check
     [SerializeField] private LayerMask bottomCollisionLayerMask;
@@ -17,7 +21,6 @@ public class PlayerObstacleCollision : MonoBehaviour
     public static BottomColliderType bottomColliderType { get; private set; }
     public static GroundType groundType { get; private set; }
 
-    private GameObject iceCubeOverlay;
 
 
     // keep track of whether player is frozen to activate/deactivate certain behaviours
@@ -59,8 +62,7 @@ public class PlayerObstacleCollision : MonoBehaviour
         Collider2D enemy = DetectEnemyCollider();
         if (enemy != null)
         {
-            Destroy(gameObject);
-            GameManager.Instance.OnGameLose();
+            OnHit();
         }
 
         /* since all the enemies implemet IDamageable, we just need to call TakeDamage() when the player bounces on top of any enemy
@@ -79,8 +81,7 @@ public class PlayerObstacleCollision : MonoBehaviour
         {
             // if player collides with an instant-death obstacle, restart level
             case "InstantDeath":
-                Destroy(gameObject);
-                GameManager.Instance.OnGameLose();
+                OnHit();
                 break;
             case "Ice":
                 groundType = GroundType.ICE;
@@ -109,18 +110,14 @@ public class PlayerObstacleCollision : MonoBehaviour
         switch (collision.tag)
         {
             case "EndPole":
-                // only complete level if player collected clue / defeated boss
-                if (GameManager.Instance.isLevelCompleteRequirementMet)
-                {
-                    GameManager.Instance.OnGameWin();
-                    // disable player from moving when they finish the level
-                    movement.canMove = false;
-                }
+                // disable player from moving when they finish the level
+                movement.canMove = false;
+                levelData.TriggerOnWin();
                 break;
 
             case "Clue":
                 // flag as clue collected
-                GameManager.Instance.isLevelCompleteRequirementMet = true;
+                levelData.isLevelCompleteRequirementMet = true;
                 // destroy the GameObject since we don't need it anymore
                 Destroy(collision.gameObject);
                 break;
@@ -137,8 +134,7 @@ public class PlayerObstacleCollision : MonoBehaviour
                  * as it might be unfair
                  */
                 if (isFrozen) return;
-                Destroy(gameObject);
-                GameManager.Instance.OnGameLose();
+                OnHit();
                 break;
             case "Freeze":
                 // destroy ice cube projectile on touch
@@ -231,6 +227,11 @@ public class PlayerObstacleCollision : MonoBehaviour
         isFrozen = isFreeze;
         movement.canMove = !isFreeze;
         iceCubeOverlay.SetActive(isFreeze);
+    }
+
+    private void OnHit() {
+        Destroy(gameObject);
+        livesManager.DecreaseLife();
     }
 }
 

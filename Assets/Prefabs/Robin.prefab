@@ -221,9 +221,6 @@ MonoBehaviour:
   minSizeScale: 0.6
   gravityScale: 4
   fallGravityScale: 6
-  rb: {fileID: 4594095206625168812}
-  playerCollider: {fileID: 8713271732185426517}
-  animator: {fileID: 8090339333214664656}
   timeTakenToReachMinimum: 15
   wallSlidingSpeed: 0.5
   wallCheck: {fileID: 8713271732654611806}
@@ -242,9 +239,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6834f93dc1ea140f096266761e19adbe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerCollider: {fileID: 8713271732185426517}
   movement: {fileID: 4594095206625168814}
-  rb: {fileID: 4594095206625168812}
+  livesManager: {fileID: 11400000, guid: 6a43854085c82416da799c83d2013302, type: 2}
+  levelData: {fileID: 11400000, guid: f541d314af8b6479293ca2876209ff9c, type: 2}
   bottomCollisionLayerMask:
     serializedVersion: 2
     m_Bits: 384

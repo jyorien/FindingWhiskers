@@ -920,6 +920,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   restartButton: {fileID: 2079924340}
   backToMenuButton: {fileID: 1098593660}
+  levelData: {fileID: 11400000, guid: f541d314af8b6479293ca2876209ff9c, type: 2}
 --- !u!1 &2079924338
 GameObject:
   m_ObjectHideFlags: 0

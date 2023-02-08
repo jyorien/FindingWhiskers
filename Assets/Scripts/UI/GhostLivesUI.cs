@@ -5,25 +5,24 @@ using UnityEngine;
 public class GhostLivesUI : MonoBehaviour
 {
     [SerializeField] private GameObject[] ghostLives;
+    [SerializeField] private LivesManagerSO ghostLivesManager;
 
-    // Update is called once per frame
-    private void Update()
+    private void Awake()
     {
-        // get how many hearts to hide
-        int ghostLivesUsed = GhostEnemy.hitCount;
+        ghostLivesManager.OnLivesChanged.AddListener(DisplayGhostLivesLeft);
+    }
 
-        // in case lives go over 3, set it to 3 to avoid making index out of bounds
-        if (ghostLivesUsed > 3) ghostLivesUsed = 3;
+    private void OnDestroy()
+    {
+        ghostLivesManager.OnLivesChanged.RemoveListener(DisplayGhostLivesLeft);
+    }
 
-        // loop thrice as Ghost has 3 lives
-        for (int i = 0; i < 3; i++)
+    private void DisplayGhostLivesLeft(int livesLeft)
+    {
+        // enable or disable the hearts based on number of lives left
+        for (int i = 0; i < ghostLivesManager.MaxLives; i++)
         {
-            // hide hearts based on hit count
-            if (i < ghostLivesUsed)
-            {
-                ghostLives[i].SetActive(false);
-
-            }
+            ghostLives[i].SetActive(i < livesLeft);
         }
     }
 }

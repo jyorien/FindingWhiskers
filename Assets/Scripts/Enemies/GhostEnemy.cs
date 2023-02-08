@@ -4,12 +4,14 @@ using UnityEngine;
 
 public class GhostEnemy : MonoBehaviour, IDamageable
 {
+    [SerializeField] private LivesManagerSO ghostLivesManager;
+    [SerializeField] private LevelDataSO levelData;
+
     [SerializeField] private float moveSpeed;
     [SerializeField] private float raycastDistance;
     [SerializeField] private GameObject ghostProjectileToSpawn;
     [SerializeField] private GameObject iceCubeProjectileToSpawn;
     [SerializeField] private float projectileSpeed;
-    [SerializeField] private GameObject pathToWhiskers;
     // use a LayerMask for Ghost to only detect Player in his line of sight
     [SerializeField] private LayerMask lineOfSightLayerMask;
 
@@ -23,10 +25,7 @@ public class GhostEnemy : MonoBehaviour, IDamageable
     private bool isFiring;
     private Rigidbody2D rb;
     private SpriteRenderer spriteRenderer;
-    // keep track of how many times the player hit Ghost
-    public static int hitCount { get; private set; }
-    // Ghost will be given 3 lives
-    private const int livesCount = 3;
+
     // keep track of whether Ghost can be damaged
     private bool isInvincible = false;
     private BoxCollider2D boxCollider2D;
@@ -34,11 +33,13 @@ public class GhostEnemy : MonoBehaviour, IDamageable
     // Start is called before the first frame update
     private void Start()
     {
+        ghostLivesManager.OnLivesChanged.AddListener(HandleLivesChanged);
+        ghostLivesManager.ResetLives();
+
         rb = gameObject.GetComponent<Rigidbody2D>();
         boxCollider2D = gameObject.GetComponent<BoxCollider2D>();
         spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
-        // initialise variable to avoid null pointer
-        hitCount = 0;
+
         // store the projectile spawn point's gameObject so we can access its position later
         projectileSpawnPoint = gameObject.transform.GetChild(0).gameObject;
     }
@@ -50,6 +51,11 @@ public class GhostEnemy : MonoBehaviour, IDamageable
             // flip the horizontal direction if Ghost bumps into ice wall
             transform.rotation = transform.rotation * Quaternion.Euler(0, 180, 0);
         }
+    }
+
+    private void OnDestroy()
+    {
+        ghostLivesManager.OnLivesChanged.RemoveListener(HandleLivesChanged);
     }
 
     private void FixedUpdate()
@@ -101,19 +107,18 @@ public class GhostEnemy : MonoBehaviour, IDamageable
         if (!isInvincible)
         {
             StartCoroutine(MakeInvincible());
-            /* if Ghost gets hit 3 times, the platforms leading to whiskers show up
-             * for the player to complete the level
-             */
-            hitCount += 1;
-
-            // if Ghost has been defeated
-            if (hitCount > livesCount - 1)
-            {
-                Destroy(gameObject, 0.1f);
-                GameManager.Instance.isLevelCompleteRequirementMet = true;
-                pathToWhiskers.SetActive(true);
-            }
+            ghostLivesManager.DecreaseLife();
         } 
+    }
+
+    private void HandleLivesChanged(int livesLeft)
+    {
+        // if Ghost has been defeated
+        if (livesLeft < 1)
+        {
+            Destroy(gameObject, 0.1f);
+            levelData.isLevelCompleteRequirementMet = true;
+        }
     }
 
     private bool IsPlayerInSight()

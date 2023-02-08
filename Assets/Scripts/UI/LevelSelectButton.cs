@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 public class LevelSelectButton : MonoBehaviour
 {
     [SerializeField] private int level;
@@ -12,7 +13,7 @@ public class LevelSelectButton : MonoBehaviour
         btn = gameObject.GetComponent<Button>();
         btn.onClick.AddListener(() =>
         {
-            GameManager.Instance.GoToLevel(level);
+            SceneManager.LoadScene($"Level {level}");
         });
     }
 }

@@ -129,9 +129,11 @@ MonoBehaviour:
   iceCubeProjectileToSpawn: {fileID: 1425879238570738911, guid: 3b7bdeaa8ee2f46dcb9af9ba45590224, type: 3}
   projectileSpeed: 100
   pathToWhiskers: {fileID: 0}
+  ghostLivesManager: {fileID: 11400000, guid: 422ff8483307945ea80dc3f1af8517b9, type: 2}
   lineOfSightLayerMask:
     serializedVersion: 2
     m_Bits: 64
+  levelData: {fileID: 11400000, guid: f541d314af8b6479293ca2876209ff9c, type: 2}
   wallCheck: {fileID: 8475951562311330499}
   wallLayerMask:
     serializedVersion: 2

@@ -662,6 +662,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 023f7db2eb0464d48ade2921814f8e86, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  timeManager: {fileID: 11400000, guid: 6a60e91e73a7e4b3996b75a195e38c91, type: 2}
+  levelData: {fileID: 11400000, guid: f541d314af8b6479293ca2876209ff9c, type: 2}
   levelCompleteText: {fileID: 370848231}
   timeTakenText: {fileID: 1359070273}
   personalBestTimeText: {fileID: 442323076}

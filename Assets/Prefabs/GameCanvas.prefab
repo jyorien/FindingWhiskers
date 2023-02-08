@@ -119,9 +119,12 @@ MonoBehaviour:
   stopwatchText: {fileID: 3229392983342786959}
   requirementText: {fileID: 3258778239520647186}
   lives:
-  - {fileID: 3229392982126277974}
-  - {fileID: 3229392983321422865}
   - {fileID: 3229392982198704568}
+  - {fileID: 3229392983321422865}
+  - {fileID: 3229392982126277974}
+  livesManager: {fileID: 11400000, guid: 6a43854085c82416da799c83d2013302, type: 2}
+  timeManager: {fileID: 11400000, guid: 6a60e91e73a7e4b3996b75a195e38c91, type: 2}
+  levelData: {fileID: 11400000, guid: f541d314af8b6479293ca2876209ff9c, type: 2}
 --- !u!1001 &529713909342686265
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -355,9 +358,17 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 3229392982498550126}
     m_Modifications:
+    - target: {fileID: 4853014568485995633, guid: 255081c1d82f74322a0f5706f508af26, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4853014569102798049, guid: 255081c1d82f74322a0f5706f508af26, type: 3}
       propertyPath: m_Name
       value: Lives
+      objectReference: {fileID: 0}
+    - target: {fileID: 4853014569102798049, guid: 255081c1d82f74322a0f5706f508af26, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4853014569102798050, guid: 255081c1d82f74322a0f5706f508af26, type: 3}
       propertyPath: m_Pivot.x
@@ -441,6 +452,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4853014569102798050, guid: 255081c1d82f74322a0f5706f508af26, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4853014569610883544, guid: 255081c1d82f74322a0f5706f508af26, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4853014569697860918, guid: 255081c1d82f74322a0f5706f508af26, type: 3}
+      propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
