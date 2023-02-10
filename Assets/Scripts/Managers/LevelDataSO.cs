@@ -1,8 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
+/// <summary>
+/// This ScriptableObject centralises data about the levels as it is being used by multple classes
+/// </summary>
 [CreateAssetMenu(fileName = "LevelDataSO", menuName = "ScriptableObjects/Level Data")]
 public class LevelDataSO: ScriptableObject
 {

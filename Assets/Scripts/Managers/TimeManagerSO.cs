@@ -1,8 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Events;
 using System.Diagnostics;
+
+/// <summary>
+/// This ScriptableObject centralises data about the StopWatch used throughout the levels as the data is being used by multiple classes
+/// </summary>
 [CreateAssetMenu(fileName = "TimeManagerSO", menuName = "ScriptableObjects/Time Manager")]
 public class TimeManagerSO : ScriptableObject
 {

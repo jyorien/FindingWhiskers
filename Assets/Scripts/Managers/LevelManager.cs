@@ -1,7 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+
 /// <summary>
 /// LevelManager manages the events emitted from the player's LivesManager and TimeManager ScriptableObjects.
 /// It also handles the state in the level such as the current level number, and saving the player's personal best timing

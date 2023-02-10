@@ -1,7 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+
+/// <summary>
+/// This ScriptableObject manages the lives in the game. There are two instances being used by the player and Ghost separately.
+/// </summary>
 [CreateAssetMenu(fileName = "LivesManagerSO", menuName = "ScriptableObjects/Lives Manager")]
 public class LivesManagerSO : ScriptableObject
 {

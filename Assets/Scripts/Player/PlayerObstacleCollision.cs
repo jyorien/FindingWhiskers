@@ -1,30 +1,45 @@
-using System.Collections;
 using UnityEngine;
 
-public enum GroundType { NONE, DIRT, ICE }
-public enum BottomColliderType { NONE, FLOOR, ENEMY }
-
+/// <summary>
+/// Handles the player's collision detection and response to the game's obstacles
+/// </summary>
 public class PlayerObstacleCollision : MonoBehaviour
 {
     private BoxCollider2D boxCollider2D;
     private GameObject iceCubeOverlay;
 
-    [SerializeField] private PlayerMovement movement;
+    [SerializeField] private PlayerAttributesManager attributesManager;
+
+    [Header("Scriptable Objects")]
+    [SerializeField] private PlayerAttributesDataSO attributesData;
     [SerializeField] private LivesManagerSO livesManager;
     [SerializeField] private LevelDataSO levelData;
 
+    [Header("Components")]
+    [SerializeField] private Transform wallCheck;
+
+    [Header("Layer Masks")]
     // to filter what player can detect from the ground check
     [SerializeField] private LayerMask bottomCollisionLayerMask;
     // to filter enemies when detecting for enemies
     [SerializeField] private LayerMask enemyLayerMask;
+    // to filter by Ground only while doing a dirt check
+    [SerializeField] private LayerMask groundLayerMask;
 
+    public static bool isTouchingWall { get; private set; }
+    // stores the type of collider the player is standing on
     public static BottomColliderType bottomColliderType { get; private set; }
-    public static GroundType groundType { get; private set; }
+    // stores the type of collider that last triggered the player's OnCollisionEnter2D method
+    // so that Jumping State knows how to handle the player's x velocity in air
+    public static GroundType lastTouchedGroundType { get; private set; }
+    // stores the type of collider that is triggering the player's OnCollisionStay2D method
+    // so that the Player States know how to handle the x velocity
+    public static GroundType currentGroundType { get; private set; }
 
-
-
-    // keep track of whether player is frozen to activate/deactivate certain behaviours
-    private bool isFrozen = false;
+    private void Awake()
+    {
+        attributesData.OnFrozenStateChanged.AddListener(SetIceCubeOverlayState);
+    }
 
     private void Start()
     {
@@ -58,6 +73,8 @@ public class PlayerObstacleCollision : MonoBehaviour
             bottomColliderType = BottomColliderType.NONE;
         }
 
+        CheckWall();
+
         // if player bumps into enemy on the sides, player loses
         Collider2D enemy = DetectEnemyCollider();
         if (enemy != null)
@@ -75,6 +92,11 @@ public class PlayerObstacleCollision : MonoBehaviour
         }
     }
 
+    private void OnDestroy()
+    {
+        attributesData.OnFrozenStateChanged.RemoveListener(SetIceCubeOverlayState);
+    }
+
     private void OnCollisionEnter2D(Collision2D collision)
     {
         switch (collision.collider.tag)
@@ -84,11 +106,11 @@ public class PlayerObstacleCollision : MonoBehaviour
                 OnHit();
                 break;
             case "Ice":
-                groundType = GroundType.ICE;
+                lastTouchedGroundType = GroundType.ICE;
                 break;
             case "Ground":
             case "Platform":
-                groundType = GroundType.DIRT;
+                lastTouchedGroundType = GroundType.DIRT;
                 break;
         }
     }
@@ -97,9 +119,15 @@ public class PlayerObstacleCollision : MonoBehaviour
     {
         switch (collision.collider.tag)
         {
-            // don't apply force when player is frozen
             case "Ice":
-                if (isFrozen) return;
+                currentGroundType = GroundType.ICE;
+                break;
+            case "Ground":
+            case "Platform":
+                currentGroundType = GroundType.DIRT;
+                break;
+            default:
+                currentGroundType = GroundType.NONE;
                 break;
         }
     }
@@ -111,7 +139,6 @@ public class PlayerObstacleCollision : MonoBehaviour
         {
             case "EndPole":
                 // disable player from moving when they finish the level
-                movement.canMove = false;
                 levelData.TriggerOnWin();
                 break;
 
@@ -124,25 +151,76 @@ public class PlayerObstacleCollision : MonoBehaviour
 
             case "Campfire":
                 // player regains max attributes
-                movement.ResetToMaxAttributeValues();
+                attributesManager.ResetToMaxAttributeValues();
                 break;
 
             case "InstantDeath":
                 // only projectiles have InstantDeath tag as trigger, hence destroy projectile on touch
                 Destroy(collision.gameObject);
-                /* when frozen, don't allow player to lose from touching ghost projectiles
-                 * as it might be unfair
-                 */
-                if (isFrozen) return;
+
+                // when frozen, don't allow player to lose from touching ghost projectiles as it might be unfair
+                if (attributesData.isFrozen) return;
                 OnHit();
                 break;
+
             case "Freeze":
                 // destroy ice cube projectile on touch
                 Destroy(collision.gameObject);
+
                 // don't allow the freezing effect to stack
-                if (isFrozen) return;
-                StartCoroutine(FreezePlayer());
+                if (attributesData.isFrozen) return;
+                attributesData.ChangeFrozenState(true);
                 break;
+        }
+    }
+
+    /// <summary>
+    /// Use raycasting to do a ground check from the middle of the player to the bottom and filter by "Ground" tag to only return true
+    /// if a Dirt Floor or Dirt Wall was detected.
+    /// </summary>
+    public bool IsOnDirt()
+    {
+        // add extra height to detect a bit below the player
+        float heightOffset = 0.2f;
+
+        // only allow 1 result to be returned by BoxCast
+        RaycastHit2D[] raycastHits = new RaycastHit2D[1];
+
+        /* create a ContactFilter2D so that the BoxCast only detects objects on the 'Ground' layer
+         * and ignore trigger collisions so the player cannot jump when touching platforms that are in isTrigger
+         */
+        ContactFilter2D contactFilter = new ContactFilter2D();
+        contactFilter.SetLayerMask(groundLayerMask);
+        contactFilter.useTriggers = false;
+
+        Physics2D.BoxCast(boxCollider2D.bounds.center, boxCollider2D.bounds.size, 0f, Vector2.down, contactFilter, raycastHits, heightOffset);
+        // store the only result returned into a variable for easy reference
+        RaycastHit2D raycastHit2D = raycastHits[0];
+
+        // to avoid NullPointerException, check whether collider is null first
+        if (raycastHit2D.collider != null)
+        {
+            return raycastHit2D.collider.tag == "Ground" || raycastHit2D.collider.tag == "Platform";
+        }
+        else
+        {
+            // if null, immediately return false as player is definitely not on dirt
+            return false;
+        }
+    }
+
+    private void CheckWall()
+    {
+        isTouchingWall = false;
+        /* determine if player is touching wall by checking colliders within a circlular area of Wall Check's transform.
+         * detects walls based on their layer
+         */
+        Collider2D collider = Physics2D.OverlapCircle(wallCheck.position, 0.2f, groundLayerMask);
+
+        // We do not want player to wall slide or jump off ice or platforms, so make sure object in "Ground" layer is labelled "Ground" as all the dirt walls are tagged that
+        if (collider && collider.tag == "Ground")
+        {
+            isTouchingWall = true;
         }
     }
 
@@ -214,19 +292,10 @@ public class PlayerObstacleCollision : MonoBehaviour
         return null;
     }
 
-    private IEnumerator FreezePlayer()
+    private void SetIceCubeOverlayState(bool isFrozen)
     {
-        SetFreeze(true);
-        yield return new WaitForSeconds(2);
-        SetFreeze(false);
-    }
-
-    private void SetFreeze(bool isFreeze)
-    {
-        // update frozen state
-        isFrozen = isFreeze;
-        movement.canMove = !isFreeze;
-        iceCubeOverlay.SetActive(isFreeze);
+       
+       iceCubeOverlay.SetActive(isFrozen);
     }
 
     private void OnHit() {

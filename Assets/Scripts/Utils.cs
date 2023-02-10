@@ -35,3 +35,6 @@ interface IDamageable
 {
     public void TakeDamage();
 }
+
+public enum GroundType { NONE, DIRT, ICE }
+public enum BottomColliderType { NONE, FLOOR, ENEMY }
