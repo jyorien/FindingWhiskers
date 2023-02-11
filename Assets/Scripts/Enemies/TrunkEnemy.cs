@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class TrunkEnemy : MonoBehaviour, IDamageable
@@ -33,23 +31,6 @@ public class TrunkEnemy : MonoBehaviour, IDamageable
         rigidBody2D.velocity = -transform.right * speed;
     }
 
-    public void TakeDamage()
-    {
-        Destroy(gameObject, 0.1f);
-    }
-
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawCube(playerCheck.position,new Vector3(2f,0.1f,0));
-    }
-
-    private bool IsTouchingWall()
-    {
-        // determine if player is touching wall by checking colliders within a circlular area of Wall Check's transform.
-        return Physics2D.OverlapCircle(wallCheck.position, 0.2f, wallLayerMask);
-    }
-
     private void OnCollisionEnter2D(Collision2D collision)
     {
         switch (collision.collider.tag)
@@ -57,9 +38,23 @@ public class TrunkEnemy : MonoBehaviour, IDamageable
             case "Wall":
             case "InstantDeath":
             case "Ice":
-                // flip the horizontal direction if Trunk bumps into wall or spikes
+                // flip the horizontal direction if Trunk bumps into walls or spikes
                 transform.rotation = transform.rotation * Quaternion.Euler(0, 180, 0);
                 break;
         }
+    }
+
+    public void TakeDamage()
+    {
+        Destroy(gameObject, 0.1f);
+    }
+
+    /// <summary>
+    /// Determine if player is touching wall by checking colliders within a circlular area of Wall Check's transform.
+    /// </summary>
+    /// <returns>Returns true if Trunk collides with a wall infront</returns>
+    private bool IsTouchingWall()
+    {
+        return Physics2D.OverlapCircle(wallCheck.position, 0.2f, wallLayerMask);
     }
 }

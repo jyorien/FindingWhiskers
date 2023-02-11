@@ -1,38 +1,46 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class GhostEnemy : MonoBehaviour, IDamageable
 {
-    [SerializeField] private LivesManagerSO ghostLivesManager;
-    [SerializeField] private LevelDataSO levelData;
-
+    [Header("Ghost Attributes")]
     [SerializeField] private float moveSpeed;
     [SerializeField] private float raycastDistance;
+    // use a LayerMask for Ghost to only detect Player in his line of sight
+    [SerializeField] private LayerMask lineOfSightLayerMask;
+
+    [Header("Projectiles")]
     [SerializeField] private GameObject ghostProjectileToSpawn;
     [SerializeField] private GameObject iceCubeProjectileToSpawn;
     [SerializeField] private float projectileSpeed;
-    // use a LayerMask for Ghost to only detect Player in his line of sight
-    [SerializeField] private LayerMask lineOfSightLayerMask;
+    // keep a reference to the coroutine that continuously fires projectiles so we can start and stop the same instance
+    private IEnumerator fireAtPlayer;
+    private bool isFiring;
 
     [Header("Wall Check")]
     [SerializeField] private Transform wallCheck;
     // use a LayerMask to filter by Ice layer to only return collisions with ice walls in the wall check
     [SerializeField] private LayerMask wallLayerMask;
 
+    [Header("Scriptable Objects")]
+    // manage Ghost's lives in a ScriptableObject
+    [SerializeField] private LivesManagerSO ghostLivesManager;
+    // get reference to level data so Ghost can update the level complete requirement status
+    [SerializeField] private LevelDataSO levelData;
+
+    // component references
     private GameObject projectileSpawnPoint;
-    private IEnumerator fireAtPlayer;
-    private bool isFiring;
     private Rigidbody2D rb;
+    private BoxCollider2D boxCollider2D;
     private SpriteRenderer spriteRenderer;
 
     // keep track of whether Ghost can be damaged
     private bool isInvincible = false;
-    private BoxCollider2D boxCollider2D;
 
     // Start is called before the first frame update
     private void Start()
     {
+        // subscribe to changes in Ghost's lives
         ghostLivesManager.OnLivesChanged.AddListener(HandleLivesChanged);
         ghostLivesManager.ResetLives();
 
@@ -40,7 +48,7 @@ public class GhostEnemy : MonoBehaviour, IDamageable
         boxCollider2D = gameObject.GetComponent<BoxCollider2D>();
         spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
 
-        // store the projectile spawn point's gameObject so we can access its position later
+        // store the Projectile Spawn Point's GameObject so we can access its position later
         projectileSpawnPoint = gameObject.transform.GetChild(0).gameObject;
     }
 
@@ -51,11 +59,6 @@ public class GhostEnemy : MonoBehaviour, IDamageable
             // flip the horizontal direction if Ghost bumps into ice wall
             transform.rotation = transform.rotation * Quaternion.Euler(0, 180, 0);
         }
-    }
-
-    private void OnDestroy()
-    {
-        ghostLivesManager.OnLivesChanged.RemoveListener(HandleLivesChanged);
     }
 
     private void FixedUpdate()
@@ -87,11 +90,31 @@ public class GhostEnemy : MonoBehaviour, IDamageable
         }
     }
 
+    private void OnDestroy()
+    {
+        ghostLivesManager.OnLivesChanged.RemoveListener(HandleLivesChanged);
+    }
+
+    public void TakeDamage()
+    {
+        // make Ghost invincible for a few seconds when hit so that player does not continuously bounce on Ghost to win
+        // update the ScriptableObject for UI to update and for the Path to Whiskers platform to know whether to enable itself.
+        if (!isInvincible)
+        {
+            StartCoroutine(MakeInvincible());
+            ghostLivesManager.DecreaseLife();
+        }
+    }
+
+    /// <summary>
+    /// Determine if player is touching ice wall by checking colliders within a circlular area of Wall Check's transform and checking if the tag is "Ice".
+    /// </summary>
+    /// <returns>Returns true if Trunk collides with an ice wall infront.</returns>
     private bool IsTouchingIceWall()
     {
         bool isTouchIceWall = false;
-        // determine if player is touching wall by checking colliders within a circlular area of Wall Check's transform.
         Collider2D collider = Physics2D.OverlapCircle(wallCheck.position, 0.2f, wallLayerMask);
+
         if (collider != null)
         {
             if (collider.tag == "Ice")
@@ -102,33 +125,18 @@ public class GhostEnemy : MonoBehaviour, IDamageable
         return isTouchIceWall;
     }
 
-    public void TakeDamage()
-    {
-        if (!isInvincible)
-        {
-            StartCoroutine(MakeInvincible());
-            ghostLivesManager.DecreaseLife();
-        } 
-    }
-
-    private void HandleLivesChanged(int livesLeft)
-    {
-        // if Ghost has been defeated
-        if (livesLeft < 1)
-        {
-            Destroy(gameObject, 0.1f);
-            levelData.isLevelCompleteRequirementMet = true;
-        }
-    }
-
+    /// <summary>
+    /// Determine if player is in front of Ghost by casting a ray with a fixed distance infront of Ghost.
+    /// </summary>
+    /// <returns></returns>
     private bool IsPlayerInSight()
     {
-        /* draw ray from in front of Ghost and limit the ray's distance. 
-         * The ray will only collide with objects in the Player layer since 
+        /* the ray will only collide with objects in the Player layer since 
          * we only want the Ghost to be hostile when the player is in the Ghost's line of sight 
          */
         RaycastHit2D hit2d = Physics2D.Raycast(transform.position, -transform.right, raycastDistance, lineOfSightLayerMask);
-        if (hit2d.collider !=  null)
+        // if hit, draw a red line between Ghost and the player for debugging purposes
+        if (hit2d.collider != null)
         {
             Debug.DrawLine(transform.position, hit2d.point, Color.red);
             return true;
@@ -136,6 +144,20 @@ public class GhostEnemy : MonoBehaviour, IDamageable
         return false;
     }
 
+    private void HandleLivesChanged(int livesLeft)
+    {
+        // if Ghost has been defeated
+        if (livesLeft < 1)
+        {
+            // destroy Ghost's GameObject and flag the Level Complete Requirement as true so other listeners can handle the change
+            Destroy(gameObject, 0.1f);
+            levelData.isLevelCompleteRequirementMet = true;
+        }
+    }
+
+    /// <summary>
+    /// Temporarily make Ghost invincible by disabling the collider to prevent Ghost from taking damage.
+    /// </summary>
     private IEnumerator MakeInvincible()
     {
         SetInvincibility(true);
@@ -146,13 +168,20 @@ public class GhostEnemy : MonoBehaviour, IDamageable
         boxCollider2D.enabled = true;
     }
 
+    /// <summary>
+    /// This updates the Ghost invincibility state. It also updates the sprite's alpha as feedback to show whether Ghost can be damaged.
+    /// </summary>
+    /// <param name="state">Determines the value of the sprite's alpha based on whether Ghost is invincible</param>
     private void SetInvincibility(bool state)
     {
-        // change alpha to make it seem transparent as a visual indicator that it cannot take damge
+        // change alpha to make it seem transparent as a visual indicator that it cannot take damage
         isInvincible = state;
         spriteRenderer.color = isInvincible ? new Color(255, 255, 255, 0.5f) : new Color(255, 255, 255, 1f);
     }
 
+    /// <summary>
+    /// Handles creating and destroying a new projectile that spawns from the Ghost's Projectile Spawn Point
+    /// </summary>
     private void FireProjectile()
     {
         // get location to spawn projectile
@@ -171,16 +200,19 @@ public class GhostEnemy : MonoBehaviour, IDamageable
                 break;
         }
 
-        // add force to push projectile forward
         Rigidbody2D projectileRb = newProjectile.GetComponent<Rigidbody2D>();
 
-        // shoot projectile with force in the direction Ghost is facing
+        // add force to shoot projectile in the direction Ghost is facing
         projectileRb.AddForce(-transform.right * projectileSpeed);
         
         // destroy projectile after a few seconds to avoid keeping too many unused GameObjects
         Destroy(newProjectile, 3);
     }
 
+    /// <summary>
+    /// Continuously fires a new projectile after every delay
+    /// </summary>
+    /// <returns></returns>
     private IEnumerator FireAtPlayer()
     {
         /* add a short delay before the loop so when player jumps to re-enter the line of sight,
@@ -190,7 +222,7 @@ public class GhostEnemy : MonoBehaviour, IDamageable
         // keep firing infinitely with a set delay
         while (true)
         {
-            // randomly spawn normal or ice cube projectile every 1.5s until coroutine gets stopped
+            // randomly spawn normal or ice cube projectile every 1.5s
             FireProjectile();
             yield return new WaitForSeconds(1.5f);
         }
