@@ -1,25 +1,23 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class MovingPlatform : MonoBehaviour
+public class MovingPlatform : Platform
 {
-    // can select Horizontal / Vertical movement in inspector
+    // can select Horizontal / Vertical movement in inspector to make the platform move in that axis
     [SerializeField] private Axis axis;
-
-    // adjust how fast the platform moves in inspector
+    // adjust in inspector how fast the platform moves 
     [SerializeField] private float speed;
 
     /* store whether the platform should move forward or backward
-    to keep within the boundaries of the start and end point */
+     * to keep within the boundaries of the start and end point
+     */
     private bool isReverse = false;
 
     private void Update()
     {
-        // determines if platform moves forward or backward
+        // determines the speed and direction of the moving platform
         float velocity = isReverse ? speed * -1 : speed;
 
-        // platform is only allowed to move around the x or y axis
+        // platform is only allowed to move around either the x or y axis
         switch (axis)
         {
             case Axis.Horizontal:
@@ -31,43 +29,22 @@ public class MovingPlatform : MonoBehaviour
         }
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    protected override void OnPlayerStandingOnPlatform(Collider2D collision)
     {
-        float yVelocityOfIncomingCollider = collision.rigidbody.velocity.y;
-        float yPositionOfIncomingCollider = collision.transform.position.y;
-
-        float yPositionOffPlatform = gameObject.transform.position.y;
-
-        /* only set player's parent to platform if player is walking horizontally (zero y velocity)
-         * or falling downwards(negative y velocity)
-         */
-        if (yVelocityOfIncomingCollider <= 0 && yPositionOfIncomingCollider > yPositionOffPlatform)
-        {
-            switch (collision.collider.tag)
-            {
-                // make player move with platform
-                case "Player":
-                    collision.collider.transform.SetParent(transform);
-                    break;
-            }
-            
-        }
+        // allow player's transform to move with the platform 
+        collision.transform.SetParent(transform);
     }
 
-    private void OnCollisionExit2D(Collision2D collision)
+    protected override void OnPlayerLeavesPlatform(Collision2D collision)
     {
-        switch (collision.collider.tag)
-        {
-            /* detach player from platform
-            and let the player go back to moving independently */
-            case "Player":
-                collision.collider.transform.SetParent(null);
-                break;
-        }
+        // un-parent player from platform and let the player go back to moving independently
+        collision.collider.transform.SetParent(null);
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    protected override void OnTriggerEnter2D(Collider2D collision)
     {
+        base.OnTriggerEnter2D(collision);
+
         // store into variable for easy reference
         string collisionName = collision.name;
 
@@ -77,7 +54,6 @@ public class MovingPlatform : MonoBehaviour
             isReverse = !isReverse;
         }
     }
-
 }
 
 // create enum to get dropdown list in inspector
