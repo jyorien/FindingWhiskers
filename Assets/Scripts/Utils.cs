@@ -5,8 +5,14 @@ using UnityEngine;
 /// </summary>
 public static class Utils
 {
-    public static string formatMillisecondsToDisplayTime(long milliseconds)
+    /// <summary>
+    /// Formats milliseconds into mm:ss:msmsms format
+    /// </summary>
+    /// <param name="milliseconds">The milliseconds to be formatted</param>
+    /// <returns>Returns a string with the milliseconds formatted as mm:ss:msmsms</returns>
+    public static string FormatMillisecondsToDisplayTime(long milliseconds)
     {
+        // convert milliseconds to seconds, minutes and milliseconds
         int seconds = (int)(milliseconds / 1000) % 60;
         int minutes = (int)(milliseconds / 1000) / 60;
         int remainingMilliseconds = (int)milliseconds % 1000;
@@ -16,23 +22,37 @@ public static class Utils
         return formattedTime;
     }
 
+    /// <summary>
+    /// Save best timing into PlayerPrefs based on which level the player completed.
+    /// </summary>
+    /// <param name="currentLevel">The level the timing is supposed to be saved for</param>
+    /// <param name="timing">The timing to be saved</param>
     public static void SaveLevelBestTiming(int currentLevel, int timing)
     {
-        // save best timing into PlayerPrefs based on which level the player completed
         string keyName = $"Level{currentLevel}BestTiming";
         PlayerPrefs.SetInt(keyName, timing);
     }
 
+    /// <summary>
+    /// Retrieve best timing based on which level the player completed
+    /// </summary>
+    /// <param name="currentLevel">The level to retrieve best timing for</param>
+    /// <returns></returns>
     public static int GetLevelBestTiming(int currentLevel)
     {
-        // retrieve best timing based on which level the player completed
         string keyName = $"Level{currentLevel}BestTiming";
         return PlayerPrefs.GetInt(keyName);
     }
 }
 
+/// <summary>
+/// This interface is to be implemented by scripts that can be damaged by the player
+/// </summary>
 interface IDamageable
 {
+    /// <summary>
+    /// This gets called when the player collides with the GameObject that implements this method
+    /// </summary>
     public void TakeDamage();
 }
 

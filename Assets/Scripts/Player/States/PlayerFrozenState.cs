@@ -1,9 +1,8 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// This state happens when Ghost freezes the player.
+/// This state happens when Ghost freezes the player. The player will not be allowed to move at all.
 /// Player transitions to Standing state after the freeze timer.
 /// </summary>
 public class PlayerFrozenState : PlayerBaseState
@@ -19,11 +18,12 @@ public class PlayerFrozenState : PlayerBaseState
 
     public override void UpdateState(PlayerStateManager stateManager)
     {
+        // no code to handle inputs as player cannot move when frozen
     }
 
     public override void FixedUpdateState(PlayerStateManager stateManager)
     {
-
+        // no code to handle inputs as player cannot move when frozen
     }
 
     public override void ExitState(PlayerStateManager stateManager)
@@ -31,6 +31,10 @@ public class PlayerFrozenState : PlayerBaseState
         stateManager.animator.SetBool("Standing", false);
     }
 
+    /// <summary>
+    /// Starts the freeze timer and changes the frozen state to false when the timer is up.
+    /// It automatically changes to Standing State when timer is up.
+    /// </summary>
     public IEnumerator Freeze(PlayerStateManager stateManager)
     {
         yield return new WaitForSeconds(2);

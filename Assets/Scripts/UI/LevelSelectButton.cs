@@ -3,8 +3,9 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 public class LevelSelectButton : MonoBehaviour
 {
+    // set the level to load from inspector to reuse the script in multiple buttons
     [SerializeField] private int level;
-    Button btn; 
+    private Button btn; 
     // Start is called before the first frame update
     private void Start()
     {

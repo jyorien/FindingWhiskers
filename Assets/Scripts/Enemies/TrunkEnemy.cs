@@ -21,13 +21,14 @@ public class TrunkEnemy : MonoBehaviour, IDamageable
     {
         if (IsTouchingWall())
         {
-            // flip the horizontal direction if Trunk bumps into wall or spikes
+            // flip the horizontal direction if Trunk bumps into walls or spikes
             transform.rotation = transform.rotation * Quaternion.Euler(0, 180, 0);
         }
     }
 
     void FixedUpdate()
     {
+        // move forward in the direction Trunk is facing
         rigidBody2D.velocity = -transform.right * speed;
     }
 

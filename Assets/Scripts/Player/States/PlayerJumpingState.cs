@@ -20,7 +20,6 @@ public class PlayerJumpingState : PlayerBaseState
 
     public override void UpdateState(PlayerStateManager stateManager)
     {
-
         // if the player is not facing where they are supposed to, flip the GameObject horizontally
         if (stateManager.isFacingRight && stateManager.horizontalMovement < 0f ||
             !stateManager.isFacingRight && stateManager.horizontalMovement > 0f)
@@ -70,6 +69,7 @@ public class PlayerJumpingState : PlayerBaseState
 
     public override void ExitState(PlayerStateManager stateManager)
     {
+        // make sure gravity scale is reset to normal when exiting the state
         stateManager.rigidBody2D.gravityScale = stateManager.playerAttributes.gravityScale;
         stateManager.animator.SetBool("Jumping", false);
     }

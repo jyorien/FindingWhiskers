@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// This state happens when the player presses jump while in the Wall SLiding state.
+/// This state happens when the player presses jump while in the Wall Sliding state.
 /// It handles making the player jump diagionally upwards in the opposite direction that they are facing when sliding against a wall.
 /// Player can only transition to Standing or Wall Sliding state from here.
 /// </summary>

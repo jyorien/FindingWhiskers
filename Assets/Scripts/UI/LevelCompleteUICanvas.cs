@@ -6,8 +6,11 @@ using UnityEngine.SceneManagement;
 using TMPro;
 public class LevelCompleteUICanvas : MonoBehaviour
 {
-    [SerializeField] TimeManagerSO timeManager;
-    [SerializeField] LevelDataSO levelData;
+    [Header("Scriptable Objects")]
+    [SerializeField] private TimeManagerSO timeManager;
+    [SerializeField] private LevelDataSO levelData;
+
+    [Header("Components")]
     [SerializeField] private TMP_Text levelCompleteText;
     [SerializeField] private TMP_Text timeTakenText;
     [SerializeField] private TMP_Text personalBestTimeText;
@@ -15,10 +18,11 @@ public class LevelCompleteUICanvas : MonoBehaviour
 
     private void Start()
     {
+        // get data to display and format the data
         int lastLevelPlayed = levelData.currentLevel;
         int personalBest = Utils.GetLevelBestTiming(lastLevelPlayed);
-        string personalBestTiming = Utils.formatMillisecondsToDisplayTime(personalBest);
-        string levelTiming = Utils.formatMillisecondsToDisplayTime(timeManager.GetTiming());
+        string personalBestTiming = Utils.FormatMillisecondsToDisplayTime(personalBest);
+        string levelTiming = Utils.FormatMillisecondsToDisplayTime(timeManager.GetTiming());
 
         // format text and display on screen
         levelCompleteText.text = $"Level {lastLevelPlayed} Complete";

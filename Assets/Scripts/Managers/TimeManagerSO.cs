@@ -15,8 +15,8 @@ public class TimeManagerSO : ScriptableObject
 
     public void StartTimer()
     {
-        // check whether timer is running because we want to keep track of the time player takes to beat a level within three lives
-        // we do not want the timer to reset every time the scene reloads when player loses a life
+        // check whether timer is running because we want to keep track of the time the player takes to beat a level within three lives
+        // we do not want the timer to reset every time the scene reloads when player dies but has lives remaining
         if (!timer.IsRunning)
         {
             timer.Start();

@@ -9,7 +9,7 @@ public class LivesManagerSO : ScriptableObject
 {
     public readonly int MaxLives = 3;
     public int Lives { get; private set; }
-    // let other classes know if player lost a life or if lives are reset
+    // let other classes know if a life is lost or if lives are reset
     public UnityEvent<int> OnLivesChanged;
 
     private void OnEnable()

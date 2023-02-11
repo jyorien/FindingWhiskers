@@ -28,7 +28,6 @@ public class BreakingPlatform : Platform
     /// <summary>
     /// Breaks and respawns the platform after a delay.
     /// </summary>
-    /// <returns></returns>
     private IEnumerator BreakPlatform()
     {
         animator.SetBool("Breaking", true);

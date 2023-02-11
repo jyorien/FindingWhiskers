@@ -13,8 +13,11 @@ public class LevelManager : MonoBehaviour
 
     private void Awake()
     {
+        // always reset this state to false when a level is loaded
+        // because the player might have died after collecting a clue and the ScriptableObject persists state even when scene reloads
         levelData.isLevelCompleteRequirementMet = false;
 
+        // if the player loses all three lives or completes a level, the data in the ScriptableObjects need to be reset for the new level being loaded
         if (levelData.isLevelNeedReset)
         {
             levelData.isLevelNeedReset = false;
@@ -22,16 +25,21 @@ public class LevelManager : MonoBehaviour
             timeManager.ResetTimer();
         }
 
+        // subscribe to the events from the ScriptableObjects
         livesManager.OnLivesChanged.AddListener(HandleLivesChanged);
         levelData.OnWin.AddListener(OnWin);
 
+        // start the timer when level loads
+        // the method handles whether to start the timer or do nothing if there is a timer already running
         timeManager.StartTimer();
+        // the level number corresponds to the scene's build index
         levelData.currentLevel = SceneManager.GetActiveScene().buildIndex;
 
     }
 
     private void OnDestroy()
     {
+        // stop subscribing to the events
         livesManager.OnLivesChanged.RemoveListener(HandleLivesChanged);
         levelData.OnWin.RemoveListener(OnWin);
     }
@@ -62,7 +70,7 @@ public class LevelManager : MonoBehaviour
         timeManager.StopTimer();
         long elapsedTimeInMilliseconds = timeManager.GetTiming();
 
-        // check if user beat their personal best or does not have one yet, if so store new personal best
+        // store new personal best if user beat their personal best or does not have one yet 
         if (elapsedTimeInMilliseconds < Utils.GetLevelBestTiming(levelData.currentLevel) ||
             Utils.GetLevelBestTiming(levelData.currentLevel) == 0)
         {

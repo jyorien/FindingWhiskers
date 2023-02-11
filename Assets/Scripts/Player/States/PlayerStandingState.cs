@@ -1,9 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// This is the default state when the player is not pressing any button.
+/// This is the Finite State Machine's initial state.
+/// The state happens when the player is standing on ground and not pressing any keys.
 /// Player can only transition to Walking or Jumping state from here.
 /// </summary>
 public class PlayerStandingState : PlayerBaseState
@@ -12,6 +11,7 @@ public class PlayerStandingState : PlayerBaseState
     {
         stateManager.animator.SetBool("Standing", true);
         // when player is not pressing any movement buttons, reset the extra speed added for the acceleration on ice
+        // so that player can accelerate again when they start to move on ice
         stateManager.playerAttributes.currentSpeedOnIce = 0;
     }
 
@@ -40,7 +40,6 @@ public class PlayerStandingState : PlayerBaseState
         {
             stateManager.rigidBody2D.velocity = new Vector2(0, stateManager.rigidBody2D.velocity.y);
         }
-
     }
 
     public override void ExitState(PlayerStateManager stateManager)

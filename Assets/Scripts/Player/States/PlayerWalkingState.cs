@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
@@ -28,7 +26,7 @@ public class PlayerWalkingState : PlayerBaseState
             stateManager.ChangeState(stateManager.standingState);
         }
 
-        // if the player presses the jump button or walks off the floor, change to Jumping state
+        // if the player presses the jump button or walks off ground, change to Jumping state
         if (stateManager.isJumpButtonPressed ||
             PlayerObstacleCollision.bottomColliderType == BottomColliderType.NONE)
         {
@@ -50,13 +48,13 @@ public class PlayerWalkingState : PlayerBaseState
 
         switch (PlayerObstacleCollision.currentGroundType)
         {
-            // on dirt ground, if player presses on a key to move horizontally, add velocity based on  the current velocity in the ScriptableObject
+            // on dirt ground, if player presses on a key to move horizontally, add velocity based on the current velocity in the ScriptableObject
             case GroundType.DIRT:
                 stateManager.rigidBody2D.velocity = new Vector2(stateManager.horizontalMovement * stateManager.playerAttributes.currentSpeed, stateManager.rigidBody2D.velocity.y);
                 break;
 
             // on ice ground, if player presses on a key to move horizontally, accelerate the player until they reach maximum velocity defined by the ScriptableObject.
-            // this is to simulate ice having "less friction" in rael life
+            // this is to simulate ice having "less friction" in real life
             case GroundType.ICE:
                 // constant acceleration until maximum velocity
                 if (stateManager.playerAttributes.currentSpeedOnIce < stateManager.playerAttributes.maxExtraSpeedOnIce)

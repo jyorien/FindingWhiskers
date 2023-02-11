@@ -22,7 +22,7 @@ public abstract class Platform : MonoBehaviour
 
     protected virtual void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.tag == "Player")
+        if (collision.CompareTag("Player"))
         {
             float yVelocityOfIncomingCollider = collision.attachedRigidbody.velocity.y;
             float yPositionOfIncomingCollider = collision.attachedRigidbody.position.y;
@@ -51,14 +51,14 @@ public abstract class Platform : MonoBehaviour
     }
 
     /// <summary>
-    /// This method provides a callback to its subclasses to handle the event when the player stands on top of the platform.
+    /// This method provides a callback to the subclasses to handle the event when the player stands on top of the platform.
     /// </summary>
     /// <param name="collision">Exposes the player's collider for the subclass to handle.</param>
     ///
     protected abstract void OnPlayerStandingOnPlatform(Collider2D collision);
 
     /// <summary>
-    /// This method provides a callback to its subclasses to handle the event when the player leaves the platform.
+    /// This method provides a callback to the subclasses to handle the event when the player leaves the platform.
     /// </summary>
     /// <param name="collision">Exposes information about the collision for subclass to handle.</param>
     protected abstract void OnPlayerLeavesPlatform(Collision2D collision);

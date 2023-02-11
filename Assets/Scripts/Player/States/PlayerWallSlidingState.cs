@@ -25,6 +25,8 @@ public class PlayerWallSlidingState : PlayerBaseState
 
     public override void FixedUpdateState(PlayerStateManager stateManager)
     {
+        // if player touches the floor or is trying to move in the opposite direction that they are facing,
+        // change state based on whether player is pressing the horizontal movement button
         if (PlayerObstacleCollision.bottomColliderType == BottomColliderType.FLOOR ||
             (stateManager.horizontalMovement > 0 && !stateManager.isFacingRight) ||
              (stateManager.horizontalMovement < 0 && stateManager.isFacingRight))
@@ -43,10 +45,10 @@ public class PlayerWallSlidingState : PlayerBaseState
                 stateManager.rigidBody2D.velocity = new Vector2(stateManager.rigidBody2D.velocity.x, Mathf.Clamp(stateManager.rigidBody2D.velocity.y, -stateManager.playerAttributes.wallSlidingSpeed, float.MaxValue));
             } else
             {
+                // change to Jumping State if player is in air and is trying to move in the oppsite direction that they are facing
                 stateManager.ChangeState(stateManager.jumpingState);
             }
         }
-        
     }
 
     public override void ExitState(PlayerStateManager stateManager)

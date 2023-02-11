@@ -17,11 +17,16 @@ public class GhostLivesUI : MonoBehaviour
         ghostLivesManager.OnLivesChanged.RemoveListener(DisplayGhostLivesLeft);
     }
 
+    /// <summary>
+    /// Enables or disables the hearts based on number of lives left.
+    /// </summary>
+    /// <param name="livesLeft">Number of lives to display</param>
     private void DisplayGhostLivesLeft(int livesLeft)
     {
-        // enable or disable the hearts based on number of lives left
         for (int i = 0; i < ghostLivesManager.MaxLives; i++)
         {
+            // display the heart if current index is less than the number of lives to display
+            // otherwise hide the heart
             ghostLives[i].SetActive(i < livesLeft);
         }
     }
