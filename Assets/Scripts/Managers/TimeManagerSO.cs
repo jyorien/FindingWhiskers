@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Diagnostics;
 
 /// <summary>
-/// This ScriptableObject centralises data about the StopWatch used throughout the levels as the data is being used by multiple classes
+/// This ScriptableObject centralises data about the StopWatch used throughout the levels as the data is being used by multiple classes.
 /// </summary>
 [CreateAssetMenu(fileName = "TimeManagerSO", menuName = "ScriptableObjects/Time Manager")]
 public class TimeManagerSO : ScriptableObject

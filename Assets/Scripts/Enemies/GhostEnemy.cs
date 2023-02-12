@@ -109,7 +109,7 @@ public class GhostEnemy : MonoBehaviour, IDamageable
     }
 
     /// <summary>
-    /// Determine if player is touching an ice wall by checking colliders within a circlular area of Wall Check's transform and checking if the tag is "Ice".
+    /// Determine if player is touching an ice wall by checking colliders within a circlular area of the Wall Check GameObject's transform and checking if the tag is "Ice".
     /// </summary>
     /// <returns>Returns true if Trunk collides with an ice wall in front.</returns>
     private bool IsTouchingIceWall()
@@ -119,7 +119,7 @@ public class GhostEnemy : MonoBehaviour, IDamageable
 
         if (collider != null)
         {
-            if (collider.tag == "Ice")
+            if (collider.CompareTag("Ice"))
             {
                 isTouchIceWall = true;
             }
@@ -130,12 +130,11 @@ public class GhostEnemy : MonoBehaviour, IDamageable
     /// <summary>
     /// Determine if player is in front of Ghost by casting a ray with a fixed distance in the direction Ghost is facing.
     /// </summary>
-    /// <returns>Returns whether player is in Ghost's line of sight</returns>
+    /// <returns>Returns whether player is in Ghost's line of sight.</returns>
     private bool IsPlayerInSight()
     {
-        /* the ray will only collide with objects in the Player layer since 
-         * we only want the Ghost to be hostile when the player is in the Ghost's line of sight 
-         */
+        // the ray will only collide with objects in the Player layer since 
+        // we only want the Ghost to be hostile when the player is in the Ghost's line of sight 
         RaycastHit2D hit2d = Physics2D.Raycast(transform.position, -transform.right, raycastDistance, lineOfSightLayerMask);
         if (hit2d.collider != null)
         {
@@ -174,7 +173,7 @@ public class GhostEnemy : MonoBehaviour, IDamageable
     /// <summary>
     /// This updates the Ghost invincibility state. It also updates the sprite's alpha as feedback to show whether Ghost can be damaged.
     /// </summary>
-    /// <param name="state">Determines whether Ghost is invincible</param>
+    /// <param name="state">Determines whether Ghost is invincible.</param>
     private void SetInvincibility(bool state)
     {
         // change alpha to make it seem transparent as a visual indicator that it cannot take damage
@@ -183,7 +182,7 @@ public class GhostEnemy : MonoBehaviour, IDamageable
     }
 
     /// <summary>
-    /// Handles creating and destroying a new projectile that spawns from the Ghost's Projectile Spawn Point
+    /// Handles creating and destroying a new projectile that spawns from the Ghost's Projectile Spawn Point.
     /// </summary>
     private void FireProjectile()
     {
@@ -217,9 +216,8 @@ public class GhostEnemy : MonoBehaviour, IDamageable
     /// </summary>
     private IEnumerator FireAtPlayer()
     {
-        /* add a short delay before the loop so when player jumps to re-enter the line of sight,
-         * Ghost doesn't immediately start firing
-         */
+        // add a short delay before the loop so when player jumps to re-enter the line of sight,
+        // Ghost doesn't immediately start firing
         yield return new WaitForSeconds(0.5f);
         // keep firing infinitely with a set delay
         while (true)

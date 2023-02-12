@@ -7,9 +7,8 @@ public class MovingPlatform : Platform
     // adjust in inspector how fast the platform moves 
     [SerializeField] private float speed;
 
-    /* store whether the platform should move forward or backward
-     * to keep within the boundaries of the start and end point
-     */
+    // store whether the platform should move forward or backward
+    // to keep within the boundaries of the start and end point
     private bool isReverse = false;
 
     private void Update()

@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.Events;
 
 /// <summary>
-/// This ScriptableObject centralises data about the current level as it is being used by multple classes
+/// This ScriptableObject centralises data about the current level as it is being used by multple classes.
 /// </summary>
 [CreateAssetMenu(fileName = "LevelDataSO", menuName = "ScriptableObjects/Level Data")]
 public class LevelDataSO: ScriptableObject
@@ -30,5 +30,4 @@ public class LevelDataSO: ScriptableObject
             OnWin.Invoke();
         }
     }
-
 }

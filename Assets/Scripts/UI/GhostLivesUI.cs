@@ -23,7 +23,7 @@ public class GhostLivesUI : MonoBehaviour
     /// <param name="livesLeft">Number of lives to display</param>
     private void DisplayGhostLivesLeft(int livesLeft)
     {
-        for (int i = 0; i < ghostLivesManager.MaxLives; i++)
+        for (int i = 0; i < ghostLivesManager.maxLives; i++)
         {
             // display the heart if current index is less than the number of lives to display
             // otherwise hide the heart

@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.Events;
 
 /// <summary>
-/// Holds data about the player that needs to be constant as well as data about the player that need to be communicated between different classes
+/// Holds data about the player that needs to be constant as well as data about the player that need to be communicated between different classes.
 /// </summary>
 [CreateAssetMenu(fileName = "PlayerAttributesDataSO", menuName = "ScriptableObjects/Player Attributes Data")]
 public class PlayerAttributesDataSO : ScriptableObject

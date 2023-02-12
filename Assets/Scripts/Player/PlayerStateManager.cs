@@ -4,6 +4,7 @@ using UnityEngine;
 ///  This class acts as the player's Finite State Machine and holds all the possible states the player can be in.
 ///  It is responsible for allowing the states to change between one another.
 ///  It is also responsible for holding and exposing components and data that the states need.
+///  Finite State Machine implementation reference: https://youtu.be/Vt8aZDPzRjI
 /// </summary>
 public class PlayerStateManager : MonoBehaviour
 {

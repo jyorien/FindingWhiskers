@@ -17,7 +17,7 @@ public class PlayerAttributesManager : MonoBehaviour
     [Header("Scriptable Objects")]
     [SerializeField] private PlayerAttributesDataSO playerAttributes;
 
-    // store max and min attributes
+    // store max and min value of attributes that will decrease over time
     // player will always start off with max values and gradually decrease to min
 
     [Header("Jump")]

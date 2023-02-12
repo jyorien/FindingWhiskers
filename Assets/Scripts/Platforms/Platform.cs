@@ -29,9 +29,8 @@ public abstract class Platform : MonoBehaviour
 
             float yPositionOffPlatform = gameObject.transform.position.y;
 
-            /* only enable collider for player to stand on platform if player is falling downwards (negative y velocity)
-             * and the player is above the platform (player's y position greater than platform's y position)
-             */
+            // only enable collider for player to stand on platform if player is falling downwards (negative y velocity)
+            // and the player is above the platform (player's y position greater than platform's y position)
             if (yVelocityOfIncomingCollider < 0 && yPositionOfIncomingCollider > yPositionOffPlatform)
             {
                 platformCollider.isTrigger = false;

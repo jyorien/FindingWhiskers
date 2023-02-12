@@ -24,7 +24,7 @@ public class GameUICanvas : MonoBehaviour
     {
         // the lives do not update when the player starts a level since updating the lives is event-driven,
         // hence this forces the number lives to display when level starts
-        DisplayLivesLeft(livesManager.Lives);
+        DisplayLivesLeft(livesManager.lives);
     }
 
     private void OnDestroy()
@@ -50,12 +50,12 @@ public class GameUICanvas : MonoBehaviour
     /// <summary>
     /// Enables or disables the hearts based on number of lives left.
     /// </summary>
-    /// <param name="livesLeft">Number of lives to display</param>
+    /// <param name="livesLeft">Number of lives to display.</param>
     private void DisplayLivesLeft(int livesLeft)
     {
         // display the heart if current index is less than the number of lives to display
         // otherwise hide the heart
-        for (int i = 0; i < livesManager.MaxLives; i++)
+        for (int i = 0; i < livesManager.maxLives; i++)
         {
             lives[i].SetActive(i < livesLeft);
         }

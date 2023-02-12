@@ -60,7 +60,7 @@ public class PlayerObstacleCollision : MonoBehaviour
         // so that the player states in the Finite State Machine can have a reference to whether player is touching a wall
         CheckWall();
 
-        // if player bumps into enemy on the sides of the player collider, player loses
+        // if player bumps into enemy on the sides of the player collider, player gets hit and loses a life
         Collider2D enemy = DetectEnemyCollider();
         if (enemy != null)
         {
@@ -153,9 +153,9 @@ public class PlayerObstacleCollision : MonoBehaviour
     }
 
     /// <summary>
-    /// Set the Ice Cube Overlay's display state to show whether the player is frozen
+    /// Set the Ice Cube Overlay's display state to show whether the player is frozen.
     /// </summary>
-    /// <param name="isFrozen">Determines whether to show the Ice Cube Overlay</param>
+    /// <param name="isFrozen">Determines whether to show the Ice Cube Overlay.</param>
     private void SetIceCubeOverlayState(bool isFrozen)
     {
         iceCubeOverlay.SetActive(isFrozen);
@@ -225,10 +225,10 @@ public class PlayerObstacleCollision : MonoBehaviour
     }
 
     /// <summary>
-    /// Creates a ContactFilter2D that ignores trigger collisions and filters layers defined by the layerMask parameter
+    /// Creates a ContactFilter2D that ignores trigger collisions and filters layers defined by the layerMask parameter.
     /// </summary>
-    /// <param name="layerMask">The LayerMask to set in the ContactFilter2D</param>
-    /// <returns>Returns a ContactFilter2D that ignores trigger collisions and filters by the LayerMask given as parameter</returns>
+    /// <param name="layerMask">The LayerMask to set in the ContactFilter2D.</param>
+    /// <returns>Returns a ContactFilter2D that ignores trigger collisions and filters by the LayerMask given as parameter.</returns>
     private ContactFilter2D CreateContactFilter2D(LayerMask layerMask)
     {
         ContactFilter2D contactFilter2D = new ContactFilter2D();
@@ -245,7 +245,7 @@ public class PlayerObstacleCollision : MonoBehaviour
         isTouchingWall = false;
         Collider2D collider = Physics2D.OverlapCircle(wallCheck.position, 0.2f, groundLayerMask);
 
-        // we do not want player to wall slide or jump off ice or platforms, so make sure object in "Ground" layer is labelled "Ground" as all the dirt walls are tagged that
+        // we do not want player to wall slide or jump off ice or platforms, so make sure object in "Ground" layer is tagged "Ground" as all the dirt walls are tagged that
         if (collider && collider.tag == "Ground")
         {
             isTouchingWall = true;

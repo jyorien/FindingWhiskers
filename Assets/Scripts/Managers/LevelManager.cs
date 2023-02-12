@@ -30,11 +30,10 @@ public class LevelManager : MonoBehaviour
         levelData.OnWin.AddListener(OnWin);
 
         // start the timer when level loads
-        // the method handles whether to start the timer or do nothing if there is a timer already running
+        // StartTimer() will handle whether to start the timer or do nothing if there is a timer already running
         timeManager.StartTimer();
         // the level number corresponds to the scene's build index
         levelData.currentLevel = SceneManager.GetActiveScene().buildIndex;
-
     }
 
     private void OnDestroy()
@@ -58,16 +57,25 @@ public class LevelManager : MonoBehaviour
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
     }
+
+    /// <summary>
+    /// Gets called when player touches the End Pole with the Level Complete Requirement met.
+    /// It updates the level's best timing if needed, and adds the Level Complete scene to the currently loaded scene.
+    /// </summary>
     private void OnWin()
     {
+        timeManager.StopTimer();
         SavePersonalBestTiming();
         SceneManager.LoadScene("Level Complete", LoadSceneMode.Additive);
 
     }
 
+    /// <summary>
+    /// Retrieves the level's best timing to compare with the player's current timing for the level.
+    /// If the player completed the level in less time, it updates the player's best timing in PlayerPrefs.
+    /// </summary>
     private void SavePersonalBestTiming()
-    {
-        timeManager.StopTimer();
+    {   
         long elapsedTimeInMilliseconds = timeManager.GetTiming();
 
         // store new personal best if user beat their personal best or does not have one yet 

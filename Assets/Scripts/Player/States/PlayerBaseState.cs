@@ -1,7 +1,7 @@
 using UnityEngine;
 
 /// <summary>
-/// This is the base state that the other player states must inherit from
+/// This is the base state that the other player states must inherit from.
 /// </summary>
 public abstract class PlayerBaseState
 {
@@ -23,6 +23,5 @@ public abstract class PlayerBaseState
     /// <summary>
     /// This gets called whenever the Finite Sate Machine exits the state to transition into a new state.
     /// </summary>
-    /// <param name="stateManager"></param>
     public abstract void ExitState(PlayerStateManager stateManager);
 }

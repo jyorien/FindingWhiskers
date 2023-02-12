@@ -51,7 +51,7 @@ public class TrunkEnemy : MonoBehaviour, IDamageable
     }
 
     /// <summary>
-    /// Determine if player is touching wall by checking colliders within a circlular area of Wall Check's transform.
+    /// Determine if player is touching wall by checking colliders within a circlular area of Wall Check GameObject's transform.
     /// </summary>
     /// <returns>Returns true if Trunk collides with a wall infront</returns>
     private bool IsTouchingWall()

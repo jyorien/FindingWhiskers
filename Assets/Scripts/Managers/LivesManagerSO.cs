@@ -7,8 +7,8 @@ using UnityEngine.Events;
 [CreateAssetMenu(fileName = "LivesManagerSO", menuName = "ScriptableObjects/Lives Manager")]
 public class LivesManagerSO : ScriptableObject
 {
-    public readonly int MaxLives = 3;
-    public int Lives { get; private set; }
+    public readonly int maxLives = 3;
+    public int lives { get; private set; }
     // let other classes know if a life is lost or if lives are reset
     public UnityEvent<int> OnLivesChanged;
 
@@ -17,14 +17,21 @@ public class LivesManagerSO : ScriptableObject
         ResetLives();
     }
 
+    /// <summary>
+    /// Resets the current number of lives to the max number of lives and notifies listeners of the change
+    /// </summary>
     public void ResetLives()
     {
-        Lives = MaxLives;
-        OnLivesChanged.Invoke(Lives);
+        lives = maxLives;
+        OnLivesChanged.Invoke(lives);
     }
+
+    /// <summary>
+    /// Decreases the current number of lives and notifies listeners of the change
+    /// </summary>
     public void DecreaseLife()
     {
-        Lives -= 1;
-        OnLivesChanged.Invoke(Lives);
+        lives -= 1;
+        OnLivesChanged.Invoke(lives);
     }
 }

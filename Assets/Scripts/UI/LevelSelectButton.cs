@@ -12,6 +12,7 @@ public class LevelSelectButton : MonoBehaviour
         btn = gameObject.GetComponent<Button>();
         btn.onClick.AddListener(() =>
         {
+            // load the level based on value in inspector
             SceneManager.LoadScene($"Level {level}");
         });
     }
